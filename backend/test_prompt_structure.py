@@ -27,7 +27,7 @@ import app.services.copilot_service as copilot_mod
 
 CAPTURED_PROMPTS: list[str] = []
 
-def _mock_search(db, query, limit, distance_threshold=0.80, document_ids=None, user_id=None):
+def _mock_search(db, query, limit, distance_threshold=0.80, document_ids=None, user_id=None, **kwargs):
     if document_ids and 25 in document_ids:
         return [{"document_id": 25, "document_title": "Doc 25", "document_filename": "doc25.pdf",
                  "chunk_index": i, "content": f"content-25-{i}", "distance": 0.20} for i in range(4)]
@@ -41,7 +41,7 @@ def _mock_search(db, query, limit, distance_threshold=0.80, document_ids=None, u
                  "chunk_index": 0, "content": "content-99-0", "distance": 0.40}]
     return []
 
-async def _capturing_copilot(question, context):
+async def _capturing_copilot(question, context, **kwargs):
     CAPTURED_PROMPTS.append(question)
     return "[MOCK LLM RESPONSE]"
 
@@ -250,10 +250,10 @@ async def test_evidence_embedded_in_prompt():
     # Extend mock to handle doc 98
     import app.services.rag_service as _rm
     original_search = _rm.search_similar_chunks
-    def _mock5(db, query, limit, distance_threshold=0.80, document_ids=None):
+    def _mock5(db, query, limit, distance_threshold=0.80, document_ids=None, user_id=None, **kwargs):
         if document_ids and 98 in document_ids:
             return []
-        return _mock_search(db, query, limit, distance_threshold, document_ids)
+        return _mock_search(db, query, limit, distance_threshold, document_ids, user_id=user_id, **kwargs)
     _rm.search_similar_chunks = _mock5
 
     CAPTURED_PROMPTS.clear()
@@ -265,9 +265,11 @@ async def test_evidence_embedded_in_prompt():
         return "[MOCK]"
 
     rag_mod.ask_copilot_with_context = _capture
-    await compare_documents(db=None, question="Compare these documents", documents=docs, limit=5)
-    rag_mod.ask_copilot_with_context = _capturing_copilot
-    _rm.search_similar_chunks = original_search
+    try:
+        await compare_documents(db=None, question="Compare these documents", documents=docs, limit=5)
+    finally:
+        rag_mod.ask_copilot_with_context = _capturing_copilot
+        _rm.search_similar_chunks = original_search
 
     reduce_prompt = CAPTURED_PROMPTS[-1]
     reduce_ctx = CAPTURED_CONTEXTS[-1]

@@ -33,6 +33,12 @@ class Settings:
     ollama_model: str = os.getenv("OLLAMA_MODEL", "llama3.2")
     llm_provider: str = os.getenv("LLM_PROVIDER", "mock")  # "mock" or "ollama"
 
+    # LangGraph Multi-Agent Configuration
+    langgraph_max_retries: int = int(os.getenv("LANGGRAPH_MAX_RETRIES", "2"))
+    langgraph_node_timeout_seconds: float = float(
+        os.getenv("LANGGRAPH_NODE_TIMEOUT", "60.0")
+    )
+
     # Embeddings
     embedding_model: str = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
 

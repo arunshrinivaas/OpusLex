@@ -169,59 +169,59 @@ async def test_agent_cannot_access_other_investigation_documents(mock_db, mock_i
 
 
 @pytest.mark.asyncio
-async def test_concurrent_agent_executions_safe_lifecycle():
+async def test_concurrent_agent_executions_safe_lifecycle(monkeypatch):
     from app.services.agent_service import _run_agent_llm
     from app.services.copilot_service import SessionEventType
+    from app.config import settings
     import asyncio
-    
-    # We mock CopilotClient to track start/stop/create_session
-    # and simulate delay to force concurrency overlap.
+
+    # Ensure live provider branch is exercised
+    monkeypatch.setattr(settings, "llm_provider", "copilot")
+    monkeypatch.setattr(settings, "demo_mode", False)
+
+    # We mock CopilotClient to track session creation and concurrency overlap
     class MockSession:
         def __init__(self):
             self.events = []
-            
+
         def on(self, handler):
             self.handler = handler
-            
+
         async def send(self, prompt):
             # Simulate a delayed response from the LLM
             await asyncio.sleep(0.1)
-            class MockData: content = '{"finding": "done"}'
-            class MockEvent: type = SessionEventType.ASSISTANT_MESSAGE; data = MockData()
+            class MockData:
+                content = '{"finding": "done"}'
+            class MockEvent:
+                type = SessionEventType.ASSISTANT_MESSAGE
+                data = MockData()
             self.handler(MockEvent())
-            
-            class MockIdle: type = SessionEventType.SESSION_IDLE
+
+            class MockIdle:
+                type = SessionEventType.SESSION_IDLE
             self.handler(MockIdle())
-            
+
         async def disconnect(self):
             pass
 
     class MockCopilotClient:
         def __init__(self):
-            self.is_started = False
-            self.is_stopped = False
-            
-        async def start(self):
-            self.is_started = True
-            
-        async def create_session(self, **kwargs):
-            return MockSession()
-            
-        async def stop(self):
-            self.is_stopped = True
+            self.session_count = 0
 
-    with patch("app.services.agent_service.CopilotClient", return_value=MockCopilotClient()) as mock_client_cls:
+        async def create_session(self, **kwargs):
+            self.session_count += 1
+            return MockSession()
+
+    mock_client = MockCopilotClient()
+    with patch("app.services.copilot_service.get_client", return_value=mock_client):
         # Run two agent LLMs concurrently
         task1 = asyncio.create_task(_run_agent_llm("test1"))
         task2 = asyncio.create_task(_run_agent_llm("test2"))
-        
+
         # Await both to finish
         results = await asyncio.gather(task1, task2)
-        
-        # If they shared a singleton client, one would stop the client
-        # while the other was still sleeping/running.
-        # Since we patched the class constructor, it should have been called twice,
-        # meaning two distinct clients were created.
-        assert mock_client_cls.call_count == 2
+
+        # Both sessions should be created concurrently without colliding
+        assert mock_client.session_count == 2
         assert results[0] == '{"finding": "done"}'
         assert results[1] == '{"finding": "done"}'

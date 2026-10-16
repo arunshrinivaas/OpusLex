@@ -5,7 +5,7 @@ from app.services.rag_service import build_rag_context
 
 def test_retrieval_coverage():
     # Mock search_similar_chunks
-    def mock_search_similar_chunks(db, query, limit, document_ids=None, user_id=None):
+    def mock_search_similar_chunks(db, query, limit, document_ids=None, user_id=None, **kwargs):
         if document_ids == [1]:
             return [{"document_id": 1, "document_title": "Doc 1", "document_filename": "doc1.txt", "chunk_index": 0, "distance": 0.1, "content": "chunk 1"}]
         elif document_ids == [2]:
@@ -35,7 +35,7 @@ def test_retrieval_coverage():
 
         # C. 5 attached documents -> retrieval result contains evidence from all documents when each has relevant matching chunks.
         #    Wait, doc 3 has no chunks. Let's make doc 6 have chunks.
-        def mock_search_5_docs(db, query, limit, document_ids=None, user_id=None):
+        def mock_search_5_docs(db, query, limit, document_ids=None, user_id=None, **kwargs):
             return [{"document_id": document_ids[0], "document_title": f"Doc {document_ids[0]}", "document_filename": f"doc{document_ids[0]}.txt", "chunk_index": 0, "distance": 0.1, "content": f"chunk {document_ids[0]}"}]
 
         with patch("app.services.rag_service.search_similar_chunks", side_effect=mock_search_5_docs) as mock_search_5:
@@ -53,7 +53,7 @@ def test_retrieval_coverage():
 
         # E. investigation_id=None preserves existing global retrieval behavior.
         # To test this, we check if search_similar_chunks was called ONCE with document_ids=None
-        def mock_global(db, query, limit, document_ids=None, user_id=None):
+        def mock_global(db, query, limit, document_ids=None, user_id=None, **kwargs):
             assert document_ids is None
             return [{"document_id": 99, "document_title": "Global Doc", "document_filename": "global.txt", "chunk_index": 0, "distance": 0.1, "content": "global chunk"}]
         

@@ -3,6 +3,8 @@ fastapi==0.141.1
 github-copilot-sdk==1.0.13
 google-auth==2.40.1
 httpx==0.28.1
+langchain-core==1.6.11
+langgraph==1.2.15
 pgvector==0.5.0
 psycopg==3.3.5
 psycopg-binary==3.3.5
