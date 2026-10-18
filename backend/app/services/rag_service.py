@@ -51,30 +51,28 @@ def _format_chunks(rows) -> str:
 
 
 # ──────────────────────────────────────────────────────────────────
-# ATS scoring rubric (transparent, deterministic, applied equally to
-# every document so the reduce call can reference consistent scores).
+# Regulatory & Policy compliance assessment rubric
 # ──────────────────────────────────────────────────────────────────
-_ATS_RUBRIC = """\
-ATS PROFILE ASSESSMENT RUBRIC (score each dimension 0-2):
+_COMPLIANCE_RUBRIC = """\
+COMPLIANCE COVERAGE RUBRIC (score each dimension 0-2):
   0 = not found in retrieved evidence
   1 = partially evidenced
   2 = clearly evidenced
 
 Dimensions:
-  1. Formatting / readability  — clear sections, standard headings
-  2. Section completeness      — education, skills, experience, projects present
-  3. Role clarity              — stated objective or role alignment visible
-  4. Technical keyword density — relevant technical terms for a software/tech role
-  5. Project / experience depth — internship or project detail level
-  6. Quantified achievements   — numbers, metrics, outcomes present
-  7. Education clarity         — degree, institution, year clearly stated
+  1. Scope & Objective Clarity — explicit purpose, applicability, and boundary definition
+  2. Mandates & Rule Specification — concrete obligations, prohibitions, or standards
+  3. Roles & Governance Structure — defined responsibilities, stewards, or oversight bodies
+  4. Operational Controls & Safeguards — technical/process controls, encryption, retention, or audits
+  5. Incident & Breach Protocols — defined escalation, breach response, or remediation steps
+  6. Documentation & Evidence Rigor — recordkeeping, logs, or attestation requirements
+  7. Verification & Auditability — review schedules, monitoring, or independent audit criteria
 
 Sum the 7 dimensions (max 14). Report the numeric subscores and total.
 Important limitations:
-  - These scores are based only on retrieved text chunks, not the full document.
-  - A low score may reflect sparse retrieval, not a poor resume.
-  - Do NOT claim scores predict hiring outcome or salary ("CTC").
-  - Instead phrase as: "profile alignment with competitive software-engineer roles"."""
+  - These scores are based only on retrieved text chunks, not necessarily the full document.
+  - A lower score may reflect sparse retrieval rather than non-compliance.
+  - Do NOT claim operational compliance without supporting operational evidence."""
 
 
 async def _map_single_document(
@@ -84,7 +82,7 @@ async def _map_single_document(
     question: str,
 ) -> str:
     """
-    MAP phase: generate a structured analysis for ONE document.
+    MAP phase: generate a structured compliance analysis for ONE document.
 
     The LLM receives ONLY the chunks belonging to this document.
     It does NOT see any other document's evidence.
@@ -98,7 +96,7 @@ async def _map_single_document(
         else "0 chunks retrieved — respond with explicit no-evidence statement"
     )
 
-    map_prompt = f"""You are a document analyst. Analyse ONLY the following single document.
+    map_prompt = f"""You are a regulatory and compliance analyst. Analyse ONLY the following single document.
 Do NOT compare with other documents — that step comes later.
 
 DOCUMENT IDENTITY:
@@ -138,37 +136,37 @@ Produce exactly the following sections. Each section header must appear verbatim
 
 Document {label} — {doc['filename']} (ID {doc['id']})
 
-EDUCATION
+PURPOSE & SCOPE
 <evidence-based summary or "not found in retrieved evidence">
 
-TECHNICAL SKILLS
-<evidence-based summary or "not found in retrieved evidence">
+KEY MANDATES & COMPLIANCE REQUIREMENTS
+<evidence-based summary of requirements or "not found in retrieved evidence">
 
-EXPERIENCE / INTERNSHIPS
-<evidence-based summary or "not found in retrieved evidence">
+GOVERNANCE & ROLES
+<evidence-based summary of responsible parties or "not found in retrieved evidence">
 
-PROJECTS
-<evidence-based summary or "not found in retrieved evidence">
+CONTROLS & SAFEGUARDS
+<evidence-based summary of safeguards or "not found in retrieved evidence">
 
-STRENGTHS (based on retrieved evidence only)
-<evidence-based bullet points>
+EVIDENCED STRENGTHS
+<evidence-based bullet points citing sources>
 
-GAPS / WEAKNESSES (based on retrieved evidence only)
+GAPS / UNADDRESSED REQUIREMENTS
 <evidence-based bullet points, or "none identified in retrieved evidence">
 
-{_ATS_RUBRIC}
+{_COMPLIANCE_RUBRIC}
 
-ATS PROFILE SCORE for Document {label}:
-  1. Formatting / readability  : [0|1|2] — <one-line justification>
-  2. Section completeness      : [0|1|2] — <one-line justification>
-  3. Role clarity              : [0|1|2] — <one-line justification>
-  4. Technical keyword density : [0|1|2] — <one-line justification>
-  5. Project / experience depth: [0|1|2] — <one-line justification>
-  6. Quantified achievements   : [0|1|2] — <one-line justification>
-  7. Education clarity         : [0|1|2] — <one-line justification>
+COMPLIANCE COVERAGE SCORE for Document {label}:
+  1. Scope & Objective Clarity         : [0|1|2] — <one-line justification>
+  2. Mandates & Rule Specification     : [0|1|2] — <one-line justification>
+  3. Roles & Governance Structure      : [0|1|2] — <one-line justification>
+  4. Operational Controls & Safeguards : [0|1|2] — <one-line justification>
+  5. Incident & Breach Protocols       : [0|1|2] — <one-line justification>
+  6. Documentation & Evidence Rigor    : [0|1|2] — <one-line justification>
+  7. Verification & Auditability       : [0|1|2] — <one-line justification>
   
-ATS_SCORE: X/14
-NOTE: Score reflects only retrieved evidence ({chunk_count} chunk(s)). Not a hiring prediction.
+COMPLIANCE_SCORE: X/14
+NOTE: Score reflects retrieved evidence ({chunk_count} chunk(s)). Does not guarantee complete operational compliance.
 """
 
     print(f"[MAP:{label}] Sending to LLM — doc_id={doc['id']}  chunks={chunk_count}")
@@ -284,18 +282,14 @@ async def compare_documents(
     print("\n[DIAG:MAP_RESULT]")
     for i, (doc, analysis) in enumerate(zip(documents, map_analyses)):
         lbl = _LABELS[i] if i < len(_LABELS) else str(i)
-        # Extract the exact ATS_SCORE line, e.g. "ATS_SCORE: 12/14"
-        total_match = _re.search(r'ATS_SCORE:\s*(\d+)/14', analysis)
-        ats_total = total_match.group(0) if total_match else 'NOT FOUND'
-        # Extract each dimension score line (looks for "1. … : [N]")
+        total_match = _re.search(r'COMPLIANCE_SCORE:\s*(\d+)/14', analysis)
+        score_total = total_match.group(0) if total_match else 'NOT FOUND'
         dim_matches = _re.findall(r'(\d+\.\s+[^:]+):\s*(\[?\d+\]?)', analysis)
         print(f"  label        = {lbl}")
         print(f"  filename     = {doc['filename']!r}")
         print(f"  analysis_len = {len(analysis)}")
-        print(f"  ATS TOTAL    = {ats_total}")
-        print(f"  ATS dims     = {dim_matches[:7]}")
-        print(f"  '/14' in analysis = {'/14' in analysis}")
-        print(f"  'ATS' in analysis = {'ATS' in analysis}")
+        print(f"  SCORE TOTAL  = {score_total}")
+        print(f"  Score dims   = {dim_matches[:7]}")
         print()
 
     # ──────────────────────────────────────────────────────────────
@@ -333,9 +327,9 @@ async def compare_documents(
         )
     identity_block = "\n".join(identity_lines)
 
-    reduce_prompt = f"""You are a research assistant performing a final cross-document comparison.
+    reduce_prompt = f"""You are a senior regulatory compliance auditor performing a comprehensive cross-document regulatory comparison.
 You have received {doc_count} pre-analysed document summaries below.
-Your job is to synthesise them into one structured comparison.
+Your job is to synthesise them into an executive-ready regulatory comparison report.
 
 ORIGINAL QUESTION:
 {question}
@@ -344,25 +338,22 @@ DOCUMENT IDENTITY (mandatory — do not alter):
 {identity_block}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-MANDATORY RULES
+MANDATORY AUDIT RULES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-R1. You MUST produce a section for EVERY document: {all_labels}
+R1. You MUST include EVERY document: {all_labels}
     Do NOT skip, merge, or omit any document.
 
 R2. Use ONLY information present in the document analyses below.
-    Do NOT add external knowledge or invent facts.
+    Do NOT add external unverified assumptions or invent facts.
 
 R3. When evidence is sparse or absent for a document, say so
     explicitly — do not silently suppress that document.
 
-R4. Do NOT claim that scores predict hiring outcome or actual salary.
-    Phrase as "profile alignment with competitive roles" instead.
+R4. Distinguish clearly between policy-to-policy alignment and verified operational compliance.
+    Do NOT claim operational compliance without supporting operational evidence.
 
-R5. Do NOT produce an unsupported overall ranking or declare a single winner
-    unless the retrieved evidence and rubric scores clearly support it.
-
-R6. Cite sources using [Source: filename, Chunk: N] exactly as they
+R5. Cite sources using [Source: filename, Chunk: N] exactly as they
     appear in the document analyses.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -375,47 +366,27 @@ DOCUMENT ANALYSES (input only — do not reproduce verbatim)
 REQUIRED OUTPUT STRUCTURE — follow exactly
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-─────────────────────────────────────────────────────
-DOCUMENT-BY-DOCUMENT ANALYSIS
-─────────────────────────────────────────────────────
-Produce one section per document in order {all_labels}.
-Each section must be present. Do not merge sections.
+### EXECUTIVE SUMMARY
+A concise, high-level synthesis of regulatory alignment, standard coverage, and key takeaways across ALL {doc_count} documents ({all_labels}).
 
-For each document include:
-- Key education
-- Technical skills highlighted
-- Experience / internship depth
-- Project highlights
-- Strengths
-- Gaps / weaknesses
-- ATS profile score (reproduce from the MAP analysis above)
+### DOCUMENT-BY-DOCUMENT COMPLIANCE SUMMARY
+Produce a section for EVERY document in order {all_labels}:
+- **Document {all_labels[0]}**: Core mandates, stated controls, verified coverage, and missing operational evidence. Include the Compliance Score from the MAP analysis.
 
-─────────────────────────────────────────────────────
-CROSS-DOCUMENT COMPARISON
-─────────────────────────────────────────────────────
+### MATERIAL CONFLICTS & REGULATORY DIVERGENCES
+Explicitly highlight contradictions, differing thresholds, conflicting timelines, or jurisdiction mismatches between the documents. Attribute each difference clearly (e.g. Document A vs Document B).
 
-SIMILARITIES
-List what ALL {doc_count} documents share.
+### EVIDENCE GAPS & UNADDRESSED RISKS
+Detail where regulatory obligations lack evidentiary verification or where operational practices cannot be verified from the documents.
 
-DIFFERENCES
-List where they diverge. Attribute each difference to Document A/B/C/…
+### CROSS-DOCUMENT COMPLIANCE MATRIX
+| Document | Policy / Standard | Evidenced Posture | Compliance Score | Key Material Gap |
+|----------|-------------------|-------------------|------------------|------------------|
+(one row per document; include all {doc_count} documents)
 
-ATS SCORE SUMMARY TABLE
-| Document | Score/14 | Notes |
-|----------|----------|-------|
-(one row per document; include all {doc_count})
-Reminder: scores reflect retrieved evidence only — not a hiring prediction.
-
-PROFILE ALIGNMENT ASSESSMENT
-For each document, state how well it aligns with competitive software-engineer
-roles based ONLY on the evidence. Do NOT assert a specific hiring probability.
-
-─────────────────────────────────────────────────────
-CONCLUSION
-─────────────────────────────────────────────────────
-A concise, evidence-based conclusion referencing ALL {doc_count} documents ({all_labels}).
-State any meaningful differentiators and limitations of this evidence-only comparison.
-Do NOT omit any document from the conclusion."""
+### PRIORITIZED ACTIONS & RECOMMENDATIONS
+Concrete, prioritized remedial actions for the legal and compliance team to resolve identified conflicts and gaps.
+"""
 
     # ──────────────────────────────────────────────────────────────
     # [DIAG:REDUCE_INPUT] — confirm what reaches the REDUCE call

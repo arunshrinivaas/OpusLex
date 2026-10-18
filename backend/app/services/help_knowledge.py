@@ -66,8 +66,9 @@ KNOWLEDGE_TOPICS = [
         "id": "documents",
         "title": "Document Upload & Indexing",
         "keywords": [
-            "upload", "document", "documents", "attach document", "upload documents",
-            "pdf", "index", "chunk", "embeddings", "knowledge base"
+            "upload document", "upload documents", "how to upload", "how do i upload",
+            "attach document", "uploading documents", "upload pdf", "indexing documents",
+            "chunking", "process documents"
         ],
         "summary": (
             "OpusLex allows you to upload documents directly from your device into the Document Library "
@@ -134,6 +135,45 @@ KNOWLEDGE_TOPICS = [
             "• Alternative: You can directly upload documents from your computer at any time."
         ),
     },
+    {
+        "id": "password_policy",
+        "title": "Password Requirements & Strong Password Guidance",
+        "keywords": [
+            "strong password", "password requirement", "password requirements", "password criteria",
+            "password rules", "password length", "password policy", "password strength", "password format",
+            "secure password", "good password"
+        ],
+        "summary": (
+            "### OpusLex Password Requirements & Security Best Practices\n\n"
+            "**1. Enforced Product Rules:**\n"
+            "• **Minimum Length:** OpusLex strictly enforces a minimum of 8 characters for local account passwords (validated via backend schema and API verification).\n"
+            "• **Current Password Verification:** When changing a password, the system verifies your existing password before committing changes.\n"
+            "• **Uniqueness:** The new password must be distinct from your current password.\n"
+            "• **OAuth Single Sign-On:** If you signed in via Google OAuth or Apple Sign-In and do not have a local password, authentication is managed directly by your external identity provider.\n\n"
+            "**2. Recommended Security Practices (Distinguished from Enforced Rules):**\n"
+            "• **Length & Complexity:** While 8 characters is the enforced minimum, 12 to 16+ characters are strongly recommended for higher entropy against brute-force attacks.\n"
+            "• **Character Diversity:** Mix uppercase letters, lowercase letters, numbers, and symbols/special characters (!@#$%^&*).\n"
+            "• **Avoid Predictable Patterns:** Do not use dictionary words, sequential characters, or credentials shared with other accounts.\n"
+            "• **Two-Factor Authentication (2FA):** Enable TOTP authenticator app verification under Settings > Security for comprehensive account defense."
+        ),
+    },
+    {
+        "id": "password_change",
+        "title": "Password Change & Account Security Navigation",
+        "keywords": [
+            "change password", "reset password", "update password", "how to change password",
+            "where do i change password", "modify password", "change credentials"
+        ],
+        "summary": (
+            "To change your password in OpusLex:\n"
+            "1. Open Settings from the navigation sidebar.\n"
+            "2. Select the 'Security' tab.\n"
+            "3. Under 'Change Password', enter your Current Password.\n"
+            "4. Enter your New Password (minimum 8 characters) and confirm it.\n"
+            "5. Click 'Update Password'.\n\n"
+            "Note: The backend verifies your current password before updating. If you signed in with Google OAuth or Apple Sign-In and do not have a local password, your credentials are authenticated by your external identity provider."
+        ),
+    },
 ]
 
 
@@ -198,16 +238,16 @@ FAQ_SUGGESTIONS_TEXT = (
 )
 
 _FAQ_INTENT_PATTERNS = [
-    r"help.*with.*faq",
-    r"show.*faq",
-    r"list.*faq",
-    r"view.*faq",
+    r"\bhelp\b.*\bwith\b.*\bfaq\b",
+    r"\bshow\b.*\bfaq\b",
+    r"\blist\b.*\bfaq\b",
+    r"\bview\b.*\bfaq\b",
     r"^faq(s)?$",
-    r"what.*(can|do).*you.*help.*with",
-    r"how.*can.*you.*help",
-    r"suggest.*(questions|topics|queries)",
-    r"what.*(should|can).*i.*ask",
-    r"suggested.*questions",
+    r"\bwhat\b.*\b(can|do)\b.*\byou\b.*\bhelp\b.*\bwith\b",
+    r"\bhow\b.*\bcan\b.*\byou\b.*\bhelp\b",
+    r"\bsuggest\b.*\b(questions|topics|queries)\b",
+    r"\bwhat\b.*\b(should|can)\b.*\bi\b.*\bask\b",
+    r"\bsuggested\b.*\bquestions\b",
 ]
 
 
@@ -227,6 +267,18 @@ def generate_knowledge_answer(query: str) -> str:
     """
     if is_faq_suggestion_intent(query):
         return FAQ_SUGGESTIONS_TEXT
+
+    # Explicit password disambiguation check
+    from app.services.intent_service import classify_password_query
+    pwd_type = classify_password_query(query)
+    if pwd_type == "policy":
+        for t in KNOWLEDGE_TOPICS:
+            if t["id"] == "password_policy":
+                return t["summary"]
+    elif pwd_type == "change":
+        for t in KNOWLEDGE_TOPICS:
+            if t["id"] == "password_change":
+                return t["summary"]
 
     relevant = find_relevant_product_knowledge(query)
 

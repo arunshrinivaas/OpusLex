@@ -22,7 +22,7 @@ from app.config import settings
 logger = logging.getLogger(__name__)
 
 
-def _generate_mock_agent_response(prompt: str) -> str:
+def _generate_mock_agent_response(prompt: str, question: str | None = None) -> str:
     """
     Deterministic mock response generator for Agent runs in test/demo environments.
     Extracts structured chunk metadata from prompt context and produces strictly
@@ -31,9 +31,67 @@ def _generate_mock_agent_response(prompt: str) -> str:
     import re
 
     # Extract user question and context
-    q_match = re.search(r"User question:\s*\n(.*?)\n\nDocument context:", prompt, re.DOTALL)
-    question = q_match.group(1).strip() if q_match else ""
+    if not question:
+        q_match = re.search(r"User question:\s*\n(.*?)\n\nDocument context:", prompt, re.DOTALL)
+        if q_match:
+            question = q_match.group(1).strip()
+        else:
+            q_match2 = re.search(r"Assess this:\s*(.*)", prompt, re.DOTALL)
+            question = q_match2.group(1).strip() if q_match2 else prompt.strip()
     lower_q = question.lower()
+
+    # 0. Check for identity inquiry ("What's AI Assistant's name?", "Who are you?", etc.)
+    from app.services.intent_service import extract_identity_or_name_query, evaluate_arithmetic_query, classify_query
+    is_id, target = extract_identity_or_name_query(question)
+    if is_id:
+        if target == "assistant_name":
+            finding = (
+                "The OpusLex AI Assistant is named Themis. In this investigation workspace, I operate as an autonomous "
+                "AI Compliance Agent capable of auditing attached documents, identifying regulatory conflicts, "
+                "detecting unverified evidence gaps, and recommending remediation actions."
+            )
+        else:
+            finding = (
+                "I am Themis, your AI personal assistant in OpusLex. In this workspace, I operate as an autonomous "
+                "AI Compliance Agent capable of auditing attached documents, identifying regulatory conflicts, "
+                "detecting unverified evidence gaps, and recommending remediation actions."
+            )
+        return json.dumps({
+            "finding": finding,
+            "evidence": [],
+            "conflicts": [],
+            "evidence_gaps": [],
+            "applicable_requirements": [],
+            "suggested_actions": [],
+            "citations": [],
+        })
+
+    is_calc, calc_exp, _ = evaluate_arithmetic_query(question)
+    if is_calc and calc_exp:
+        return json.dumps({
+            "finding": calc_exp,
+            "evidence": [],
+            "conflicts": [],
+            "evidence_gaps": [],
+            "applicable_requirements": [],
+            "suggested_actions": [],
+            "citations": [],
+        })
+
+    # Check for general knowledge query without document scope
+    gen_check = classify_query(question)
+    if gen_check["intent"] == "general_knowledge" and not gen_check.get("document_mention") and not gen_check.get("clause_mention"):
+        from app.services.copilot_service import _generate_general_mock_response
+        gen_ans = _generate_general_mock_response(question)
+        return json.dumps({
+            "finding": gen_ans,
+            "evidence": [],
+            "conflicts": [],
+            "evidence_gaps": [],
+            "applicable_requirements": [],
+            "suggested_actions": [],
+            "citations": [],
+        })
 
     c_match = re.search(r"Document context:\s*\n(.*)", prompt, re.DOTALL)
     context = c_match.group(1).strip() if c_match else ""
@@ -1131,26 +1189,47 @@ async def run_compliance_investigation(
             }
         )
 
-    # Explicit handling for insufficient evidence on empty document scope
+    # Check document scope: only refuse document-specific queries when no documents are attached
     if not document_ids:
-        agent_run.status = "completed"
-        agent_run.finding = (
-            "No documents are currently attached to this investigation. "
-            "I cannot answer this question because there is no relevant evidence in the attached investigation documents. "
-            "I am a Compliance Investigation Agent and am restricted to reasoning only from the provided investigation documents. "
-            "For general legal questions, please use the Research Assistant."
+        from app.services.intent_service import evaluate_arithmetic_query, classify_query
+        is_calc, _, _ = evaluate_arithmetic_query(question)
+        gen_check = classify_query(question)
+        lower_q = question.lower()
+        
+        # Determine if the query specifically targets attached document clauses or agreements
+        is_doc_specific = (
+            gen_check["intent"] == "document_rag"
+            and (
+                bool(gen_check.get("document_mention"))
+                or bool(gen_check.get("clause_mention"))
+                or any(w in lower_q for w in ["clause", "attached agreement", "this contract", "the agreement", "the document", "in this investigation", "attached document", "uploaded document", "attached policy"])
+            )
         )
-        agent_run.risk_score = 0
-        agent_run.risk_level = "Low"
-        agent_run.evidence = []
-        agent_run.conflicts = []
-        agent_run.evidence_gaps = []
-        agent_run.applicable_requirements = []
-        agent_run.suggested_actions = []
-        agent_run.citations = []
-        db.commit()
-        db.refresh(agent_run)
-        return agent_run
+
+        if is_doc_specific:
+            agent_run.status = "completed"
+            agent_run.finding = (
+                "No documents are currently attached to this investigation. "
+                "I cannot answer this document-specific question because there is no relevant evidence in the attached investigation documents. "
+                "I am a Compliance Investigation Agent and am restricted to reasoning only from the provided investigation documents. "
+                "For general legal questions, please use the Research Assistant."
+            )
+            agent_run.risk_score = 0
+            agent_run.risk_level = "Low"
+            agent_run.evidence = []
+            agent_run.conflicts = []
+            agent_run.evidence_gaps = []
+            agent_run.applicable_requirements = []
+            agent_run.suggested_actions = []
+            agent_run.citations = []
+            if hasattr(db, "commit"):
+                db.commit()
+            if hasattr(db, "refresh"):
+                try:
+                    db.refresh(agent_run)
+                except Exception:
+                    pass
+            return agent_run
 
     # 4. Delegate Orchestration to LangGraph Multi-Agent Workflow
     from app.ai.graph import compliance_graph

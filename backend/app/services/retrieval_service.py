@@ -1,3 +1,5 @@
+from typing import Any, Optional
+
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
@@ -101,8 +103,15 @@ def search_similar_chunks(
         print(f"[DIAG:retrieval]   doc={r['document_id']}  chunk={r['chunk_index']}  dist={r['distance']:.4f}  passes_threshold={r['distance'] <= distance_threshold}")
 
     # ---------------------------------------------------------
-    # PASS 1 — With threshold (unchanged existing behavior)
-    # ---------------------------------------------------------
+    import re
+    clause_match = re.search(r"\b(?:clause|section|article)\s*(\d+(?:\.\d+)*)\b", query, re.IGNORECASE)
+    clause_num = clause_match.group(1) if clause_match else None
+
+    # Keyword / Clause boosted retrieval
+    clause_case = ""
+    if clause_num:
+        clause_case = "CASE WHEN document_chunks.content ILIKE :clause_kw THEN 0 ELSE 1 END,"
+        base_params["clause_kw"] = f"%{clause_num}%"
 
     sql_with_threshold = text(f"""
         SELECT
@@ -117,16 +126,19 @@ def search_similar_chunks(
         JOIN documents
             ON documents.id = document_chunks.document_id
         WHERE document_chunks.embedding IS NOT NULL
-          AND document_chunks.embedding <=> CAST(:query_embedding AS vector) <= :distance_threshold
+          AND (
+            document_chunks.embedding <=> CAST(:query_embedding AS vector) <= :distance_threshold
+            {f"OR document_chunks.content ILIKE :clause_kw" if clause_num else ""}
+          )
           {document_filter}
-        ORDER BY document_chunks.embedding <=> CAST(:query_embedding AS vector)
+        ORDER BY {clause_case} document_chunks.embedding <=> CAST(:query_embedding AS vector)
         LIMIT :limit
     """)
 
     params_pass1 = {**base_params, "distance_threshold": distance_threshold}
     rows = db.execute(sql_with_threshold, params_pass1).mappings().all()
 
-    print(f"[DIAG:retrieval] Pass-1 (with threshold={distance_threshold}) → {len(rows)} rows")
+    print(f"[DIAG:retrieval] Pass-1 (with threshold={distance_threshold}, clause={clause_num}) → {len(rows)} rows")
 
     if rows:
         return rows
@@ -181,3 +193,36 @@ def search_similar_chunks(
 
     print(f"[DIAG:retrieval] Pass-1 returned 0 rows (global RAG) → returning []")
     return rows
+
+
+def get_investigation_document_ids(db: Session, investigation_id: int, investigation: Any = None) -> list[int]:
+    """Retrieve document IDs associated with an investigation."""
+    if investigation is not None and hasattr(investigation, "documents") and investigation.documents:
+        return [d.id for d in investigation.documents if hasattr(d, "id")]
+    from app.models.investigation_document import InvestigationDocument
+    from sqlalchemy import select
+    raw_doc_ids = db.scalars(
+        select(InvestigationDocument.document_id).where(
+            InvestigationDocument.investigation_id == investigation_id
+        )
+    ).all()
+    return list(raw_doc_ids)
+
+
+def get_investigation_documents_metadata(db: Session, investigation_id: int, investigation: Any = None) -> list[dict[str, Any]]:
+    """Retrieve metadata for documents associated with an investigation."""
+    if investigation is not None and hasattr(investigation, "documents") and investigation.documents:
+        return [
+            {
+                "id": getattr(d, "id", None),
+                "title": getattr(d, "title", getattr(d, "filename", "Document")),
+                "filename": getattr(d, "filename", "Document.pdf"),
+            }
+            for d in investigation.documents
+        ]
+    doc_ids = get_investigation_document_ids(db, investigation_id, investigation)
+    if not doc_ids:
+        return []
+    from app.models.document import Document
+    docs = db.query(Document).filter(Document.id.in_(doc_ids)).all()
+    return [{"id": d.id, "title": d.title, "filename": d.filename} for d in docs]
