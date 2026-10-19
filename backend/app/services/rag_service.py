@@ -211,8 +211,8 @@ async def compare_documents(
     # ──────────────────────────────────────────────────────────────
     # RETRIEVAL — one independent call per document
     # ──────────────────────────────────────────────────────────────
-    from app.services.embedding_service import generate_embedding
-    query_embedding = generate_embedding(question)
+    from app.services.embedding_service import generate_embedding_async
+    query_embedding = await generate_embedding_async(question)
 
     per_doc_chunks: list[list] = []
     for doc in documents:
@@ -455,33 +455,20 @@ def build_rag_context(
     limit: int = 5,
     document_ids: list[int] | None = None,
     user_id: int | None = None,
+    query_embedding: list[float] | None = None,
 ) -> tuple[str, list[dict]]:
-    from app.services.embedding_service import generate_embedding
-    query_embedding = generate_embedding(query)
+    if query_embedding is None:
+        from app.services.embedding_service import generate_embedding
+        query_embedding = generate_embedding(query)
 
-    if document_ids is not None:
-        results = []
-        for doc_id in document_ids:
-            doc_results = search_similar_chunks(
-                db=db,
-                query=query,
-                limit=limit,
-                document_ids=[doc_id],
-                user_id=user_id,
-                query_embedding=query_embedding,
-            )
-            results.extend(doc_results)
-        # Optional: Sort combined results by distance to prioritize most relevant overall
-        results.sort(key=lambda x: x["distance"])
-    else:
-        results = search_similar_chunks(
-            db=db,
-            query=query,
-            limit=limit,
-            document_ids=document_ids,
-            user_id=user_id,
-            query_embedding=query_embedding,
-        )
+    results = search_similar_chunks(
+        db=db,
+        query=query,
+        limit=limit,
+        document_ids=document_ids,
+        user_id=user_id,
+        query_embedding=query_embedding,
+    )
 
     if not results:
         return (
@@ -528,12 +515,16 @@ async def answer_with_rag(
     user_id: int | None = None,
     strict_grounding: bool = True,
 ) -> dict:
+    from app.services.embedding_service import generate_embedding_async
+    query_embedding = await generate_embedding_async(question)
+
     context, sources = build_rag_context(
         db=db,
         query=question,
         limit=limit,
         document_ids=document_ids,
         user_id=user_id,
+        query_embedding=query_embedding,
     )
 
     answer = await ask_copilot_with_context(

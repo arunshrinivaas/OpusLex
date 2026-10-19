@@ -13,16 +13,32 @@ _client_loop: Optional[asyncio.AbstractEventLoop] = None
 _client_lock: Optional[asyncio.Lock] = None
 
 
+async def reset_client() -> None:
+    global _client, _client_loop
+    if _client is not None:
+        try:
+            await asyncio.wait_for(_client.stop(), timeout=3.0)
+        except Exception:
+            pass
+        _client = None
+    _client_loop = None
+
+
 async def get_client() -> CopilotClient:
     global _client, _client_loop, _client_lock
     current_loop = asyncio.get_running_loop()
     if _client_lock is None or _client_loop != current_loop:
         _client_lock = asyncio.Lock()
     async with _client_lock:
-        if _client is None or _client_loop != current_loop or current_loop.is_closed():
+        client_disconnected = False
+        if _client is not None:
+            state = getattr(_client, "_state", None)
+            if state is not None and state != "connected":
+                client_disconnected = True
+        if _client is None or client_disconnected or _client_loop != current_loop or current_loop.is_closed():
             if _client is not None:
                 try:
-                    await _client.stop()
+                    await asyncio.wait_for(_client.stop(), timeout=3.0)
                 except Exception:
                     pass
             _client = CopilotClient()
@@ -51,7 +67,7 @@ def _generate_general_mock_response(question: str) -> str:
                 "assist with legal and compliance research, manage investigations, and execute authorized workspace tools."
             )
         return (
-            "I am Themis, your AI personal assistant in OpusLex. "
+            "I am Themis, OpusLex's integrated AI assistant. "
             "I can handle general knowledge and technical questions, programming, writing, reasoning, "
             "as well as authorized workspace operations like searching compliance documents and managing investigations."
         )
@@ -533,10 +549,19 @@ async def stream_copilot_with_context(
     # 2. Live Copilot execution
     c = await get_client()
 
-    session = await c.create_session(
-        model="auto",
-        streaming=True,
-    )
+    try:
+        session = await c.create_session(
+            model="auto",
+            streaming=True,
+        )
+    except (BrokenPipeError, ConnectionResetError, RuntimeError) as e:
+        logger.warning(f"[COPILOT] Session creation encountered {type(e).__name__} ({e}); resetting client and retrying once...")
+        await reset_client()
+        c = await get_client()
+        session = await c.create_session(
+            model="auto",
+            streaming=True,
+        )
 
     queue: asyncio.Queue[tuple[str, Any]] = asyncio.Queue()
 
@@ -630,7 +655,7 @@ Document context:
         raise RuntimeError("Copilot API failed: Request timed out after 60 seconds.")
     finally:
         try:
-            await session.disconnect()
+            await asyncio.wait_for(session.disconnect(), timeout=5.0)
         except Exception:
             pass
 

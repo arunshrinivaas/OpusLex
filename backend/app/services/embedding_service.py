@@ -10,6 +10,9 @@ MODEL_NAME = "all-MiniLM-L6-v2"
 model = SentenceTransformer(MODEL_NAME)
 
 
+import asyncio
+
+
 def generate_embedding(text: str) -> list[float]:
     embedding = model.encode(
         text,
@@ -17,6 +20,11 @@ def generate_embedding(text: str) -> list[float]:
     )
 
     return embedding.tolist()
+
+
+async def generate_embedding_async(text: str) -> list[float]:
+    """Asynchronously generates normalized embeddings off the main event loop thread."""
+    return await asyncio.to_thread(generate_embedding, text)
 
 
 def embed_document_chunks(

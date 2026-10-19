@@ -746,9 +746,10 @@ def parse_intent_and_action(
 
     if intent == "identity":
         themis_identity = (
-            "I am Themis, your personal AI assistant within OpusLex. "
+            "I am Themis, OpusLex's integrated AI assistant. "
             "I can assist with general reasoning, analysis, research, coding, and technical questions, "
-            "as well as orchestrating authorized compliance investigations, document analysis, and platform actions across OpusLex."
+            "as well as orchestrating authorized compliance investigations, reviewing evidence, searching knowledge documents, "
+            "and executing platform actions across OpusLex according to your configured permission level."
         )
         action = AssistantActionSchema(
             id=str(uuid.uuid4()),
@@ -1082,9 +1083,10 @@ def _execute_action_impl(
 
     elif action_type == "identity":
         ans = payload.get("answer") or (
-            "I am Themis, your personal AI assistant within OpusLex. "
+            "I am Themis, OpusLex's integrated AI assistant. "
             "I can assist with general reasoning, analysis, research, coding, and technical questions, "
-            "as well as orchestrating authorized compliance investigations, document analysis, and platform actions across OpusLex."
+            "as well as orchestrating authorized compliance investigations, reviewing evidence, searching knowledge documents, "
+            "and executing platform actions across OpusLex according to your configured permission level."
         )
         return True, ans, {"answer": ans, "identity": "Themis"}
 
@@ -2093,12 +2095,15 @@ async def stream_assistant_message(
         yield {"event": "start", "data": {"conversation_id": conv_id, "status": "thinking", "action": action_dict}}
         q_text = action.payload.get("question", message)
         doc_ids = safe_context.document_ids if safe_context else None
+        from app.services.embedding_service import generate_embedding_async
+        query_embedding = await generate_embedding_async(q_text)
         context_str, sources = build_rag_context(
             db=db,
             query=q_text,
             limit=5,
             document_ids=doc_ids,
             user_id=user_id,
+            query_embedding=query_embedding,
         )
         if sources:
             yield {"event": "sources", "data": {"sources": sources}}

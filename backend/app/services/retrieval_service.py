@@ -77,31 +77,7 @@ def search_similar_chunks(
     print(f"[DIAG:retrieval] base_params['document_ids'] = {base_params.get('document_ids')!r}")
 
     # ---------------------------------------------------------
-    # [DIAG] Run WITHOUT the threshold first to see raw distances
-    # ---------------------------------------------------------
-    sql_no_threshold = text(f"""
-        SELECT
-            document_chunks.id,
-            document_chunks.document_id,
-            document_chunks.chunk_index,
-            document_chunks.embedding <=> CAST(:query_embedding AS vector) AS distance
-        FROM document_chunks
-        { "JOIN documents ON documents.id = document_chunks.document_id" if user_id is not None else "" }
-        WHERE document_chunks.embedding IS NOT NULL
-          {document_filter}
-        ORDER BY document_chunks.embedding <=> CAST(:query_embedding AS vector)
-        LIMIT 10
-    """)
-    diag_params = {"query_embedding": str(query_embedding)}
-    if document_ids:
-        diag_params["document_ids"] = document_ids
-    if user_id is not None:
-        diag_params["user_id"] = user_id
-    diag_rows = db.execute(sql_no_threshold, diag_params).mappings().all()
-    print(f"[DIAG:retrieval] Raw distances (no threshold, {len(diag_rows)} rows):")
-    for r in diag_rows:
-        print(f"[DIAG:retrieval]   doc={r['document_id']}  chunk={r['chunk_index']}  dist={r['distance']:.4f}  passes_threshold={r['distance'] <= distance_threshold}")
-
+    # Production Vector Retrieval (with threshold, ranking, and limits)
     # ---------------------------------------------------------
     import re
     clause_match = re.search(r"\b(?:clause|section|article)\s*(\d+(?:\.\d+)*)\b", query, re.IGNORECASE)
