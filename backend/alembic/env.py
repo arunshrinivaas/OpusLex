@@ -44,6 +44,7 @@ from app.models.document_chunk import DocumentChunk
 from app.models.investigation import Investigation
 from app.models.investigation_query import InvestigationQuery
 from app.models.agent_run import AgentRun  # noqa: F401
+from app.models.assistant import AssistantPreference, AssistantAuditLog  # noqa: F401
 
 
 target_metadata = Base.metadata

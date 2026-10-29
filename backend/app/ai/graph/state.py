@@ -40,7 +40,12 @@ class AgentWorkflowState(TypedDict, total=False):
     target_document_ids: list[int]
     document_metadata: list[dict[str, Any]]  # id, filename, title
 
-    # Intent Classification
+    # Intent Classification & Task Routing
+    task_type: str  # "general", "rag", "tool", "hybrid"
+    tool_name: str | None
+    tool_args: dict[str, Any] | None
+    tool_result: dict[str, Any] | None
+    general_answer: str | None
     query_intent: str
     is_cross_doc: bool
     is_conflict_only: bool

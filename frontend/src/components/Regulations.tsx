@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Gavel, Search, Plus, X, ChevronDown, ChevronUp } from "lucide-react"
 
 const API = "http://127.0.0.1:8000"
@@ -18,18 +19,28 @@ type LoadState = "loading" | "empty" | "error" | "ok"
 
 const STATUS_OPTIONS = ["Active", "Inactive", "Repealed", "Draft"]
 
-function statusBadge(status: string) {
+function statusBadge(status: string, t: any) {
     let colorClass = "status-progress"
-    if (status === "Active") colorClass = "status-compliant"
-    if (status === "Inactive") colorClass = "status-progress"
-    if (status === "Repealed") colorClass = "status-non-compliant"
-    if (status === "Draft") colorClass = "status-risk"
+    let statusLabel = status
+    if (status === "Active") {
+        colorClass = "status-compliant"
+        statusLabel = t("investigations.statuses.active", "Active")
+    } else if (status === "Inactive") {
+        colorClass = "status-progress"
+        statusLabel = t("common.waived", "Inactive")
+    } else if (status === "Repealed") {
+        colorClass = "status-non-compliant"
+        statusLabel = t("investigations.statuses.closed", "Repealed")
+    } else if (status === "Draft") {
+        colorClass = "status-risk"
+        statusLabel = t("common.inProgress", "Draft")
+    }
 
     return (
         <div className="status-dot-wrapper" title={status}>
             <div className="status-dot-container">
                 <div className={`status-dot ${colorClass}`} />
-                <span className="status-label">{status}</span>
+                <span className="status-label">{statusLabel}</span>
             </div>
         </div>
     )
@@ -42,6 +53,7 @@ function CreateRegulationModal({
     onClose: () => void
     onCreated: () => void
 }) {
+    const { t } = useTranslation()
     const [form, setForm] = useState({
         title: "",
         issuing_authority: "",
@@ -92,7 +104,7 @@ function CreateRegulationModal({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20">
             <div className="w-full max-w-lg rounded-xl border border-neutral-200 bg-white shadow-xl">
                 <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-4">
-                    <h2 className="text-sm font-semibold text-neutral-900">Add Regulation</h2>
+                    <h2 className="text-sm font-semibold text-neutral-900">{t("regulations.addRegulation", "Add Regulation")}</h2>
                     <button onClick={onClose} className="rounded p-1 text-neutral-400 hover:bg-neutral-100">
                         <X size={14} />
                     </button>
@@ -103,7 +115,7 @@ function CreateRegulationModal({
                     )}
                     <div>
                         <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                            Title *
+                            {t("compliance.fieldTitle", "Title *")}
                         </label>
                         <input
                             required
@@ -116,7 +128,7 @@ function CreateRegulationModal({
                     <div className="grid grid-cols-2 gap-3">
                         <div>
                             <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                                Issuing Authority *
+                                {t("regulations.columns.authority", "Issuing Authority")} *
                             </label>
                             <input
                                 required
@@ -128,7 +140,7 @@ function CreateRegulationModal({
                         </div>
                         <div>
                             <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                                Jurisdiction *
+                                {t("regulations.columns.jurisdiction", "Jurisdiction")} *
                             </label>
                             <input
                                 required
@@ -142,7 +154,7 @@ function CreateRegulationModal({
                     <div className="grid grid-cols-2 gap-3">
                         <div>
                             <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                                Status
+                                {t("compliance.fieldStatus", "Status")}
                             </label>
                             <select
                                 value={form.status}
@@ -156,7 +168,7 @@ function CreateRegulationModal({
                         </div>
                         <div>
                             <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                                Effective Date
+                                {t("regulations.columns.effectiveDate", "Effective Date")}
                             </label>
                             <input
                                 type="date"
@@ -168,7 +180,7 @@ function CreateRegulationModal({
                     </div>
                     <div>
                         <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                            Description
+                            {t("compliance.fieldDescription", "Description")}
                         </label>
                         <textarea
                             rows={3}
@@ -184,14 +196,14 @@ function CreateRegulationModal({
                             onClick={onClose}
                             className="rounded-lg px-3 py-1.5 text-xs text-neutral-500 hover:bg-neutral-50"
                         >
-                            Cancel
+                            {t("common.cancel", "Cancel")}
                         </button>
                         <button
                             type="submit"
                             disabled={saving}
                             className="rounded-lg bg-neutral-900 px-4 py-1.5 text-xs text-white disabled:opacity-50 hover:bg-neutral-700"
                         >
-                            {saving ? "Saving…" : "Add Regulation"}
+                            {saving ? t("common.saving", "Saving…") : t("regulations.addRegulation", "Add Regulation")}
                         </button>
                     </div>
                 </form>
@@ -201,6 +213,7 @@ function CreateRegulationModal({
 }
 
 function RegulationCard({ regulation }: { regulation: Regulation }) {
+    const { t } = useTranslation()
     const [expanded, setExpanded] = useState(false)
 
     return (
@@ -218,7 +231,7 @@ function RegulationCard({ regulation }: { regulation: Regulation }) {
                             <p className="text-sm font-semibold text-neutral-900 truncate">{regulation.title}</p>
                         </div>
                         <div className="flex items-start justify-end gap-1 shrink-0">
-                            {statusBadge(regulation.status)}
+                            {statusBadge(regulation.status, t)}
                         </div>
                     </div>
                     <div className="mt-1 flex items-center gap-3 text-xs text-neutral-400 flex-wrap">
@@ -228,7 +241,7 @@ function RegulationCard({ regulation }: { regulation: Regulation }) {
                         {regulation.effective_date && (
                             <>
                                 <span>·</span>
-                                <span>Effective {new Date(regulation.effective_date).toLocaleDateString()}</span>
+                                <span>{t("regulations.columns.effectiveDate", "Effective Date")}: {new Date(regulation.effective_date).toLocaleDateString()}</span>
                             </>
                         )}
                     </div>
@@ -249,6 +262,7 @@ function RegulationCard({ regulation }: { regulation: Regulation }) {
 }
 
 function Regulations() {
+    const { t } = useTranslation()
     const [regulations, setRegulations] = useState<Regulation[]>([])
     const [total, setTotal] = useState(0)
     const [loadState, setLoadState] = useState<LoadState>("loading")
@@ -304,11 +318,11 @@ function Regulations() {
 
             <header className="flex shrink-0 items-center justify-between border-b border-neutral-200 px-6 py-4">
                 <div>
-                    <h1 className="text-xl font-semibold text-neutral-900">Regulation Repository</h1>
+                    <h1 className="text-xl font-semibold text-neutral-900">{t("regulations.title", "Regulations Library")}</h1>
                     <p className="mt-1 text-sm text-neutral-500">
-                        Regulations tracked in this workspace.
+                        {t("regulations.subtitle", "Browse and manage global regulatory frameworks and statutory mandates.")}
                         {loadState === "ok" && (
-                            <span className="ml-1 text-neutral-400">({total} total)</span>
+                            <span className="ml-1 text-neutral-400">({total} {t("compliance.total", "Total").toLowerCase()})</span>
                         )}
                     </p>
                 </div>
@@ -317,7 +331,7 @@ function Regulations() {
                     className="flex items-center gap-1.5 rounded-lg bg-neutral-900 px-3 py-2 text-xs font-medium text-white hover:bg-neutral-700"
                 >
                     <Plus size={12} />
-                    Add Regulation
+                    {t("regulations.addRegulation", "Add Regulation")}
                 </button>
             </header>
 
@@ -329,7 +343,7 @@ function Regulations() {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         className="flex-1 bg-transparent text-xs outline-none placeholder:text-neutral-400"
-                        placeholder="Search regulations…"
+                        placeholder={t("regulations.searchPlaceholder", "Search regulations…")}
                     />
                     {search && (
                         <button onClick={() => setSearch("")}>
@@ -342,7 +356,7 @@ function Regulations() {
                     onChange={(e) => setStatusFilter(e.target.value)}
                     className="rounded-lg border border-neutral-200 bg-white px-2 py-2 text-xs text-neutral-600 outline-none"
                 >
-                    <option value="">All statuses</option>
+                    <option value="">{t("common.allStatuses", "All statuses")}</option>
                     {STATUS_OPTIONS.map((s) => (
                         <option key={s} value={s}>
                             {s}
@@ -353,7 +367,7 @@ function Regulations() {
                     value={jurisdictionFilter}
                     onChange={(e) => setJurisdictionFilter(e.target.value)}
                     className="rounded-lg border border-neutral-200 px-2 py-2 text-xs text-neutral-600 outline-none placeholder:text-neutral-400 w-36"
-                    placeholder="Jurisdiction…"
+                    placeholder={`${t("regulations.columns.jurisdiction", "Jurisdiction")}…`}
                 />
             </div>
 
@@ -361,20 +375,20 @@ function Regulations() {
             <div className="flex-1 overflow-y-auto p-6">
                 {loadState === "loading" && (
                     <div className="flex h-full items-center justify-center text-sm text-neutral-400">
-                        Loading regulations…
+                        {t("common.loading", "Loading regulations…")}
                     </div>
                 )}
 
                 {loadState === "error" && (
                     <div className="flex h-full flex-col items-center justify-center text-center">
                         <Gavel size={36} className="mb-3 text-neutral-200" />
-                        <p className="text-sm font-medium text-neutral-700">Could not load regulations</p>
+                        <p className="text-sm font-medium text-neutral-700">{t("common.error", "Something went wrong.")}</p>
                         <p className="mt-1 text-xs text-neutral-400">{error}</p>
                         <button
                             onClick={fetchRegulations}
                             className="mt-4 rounded-lg border border-neutral-200 px-3 py-1.5 text-xs text-neutral-600 hover:bg-neutral-50"
                         >
-                            Retry
+                            {t("common.retry", "Retry")}
                         </button>
                     </div>
                 )}
@@ -384,13 +398,13 @@ function Regulations() {
                         <Gavel size={36} className="mb-3 text-neutral-200" />
                         <h3 className="text-sm font-medium text-neutral-700">
                             {search || statusFilter || jurisdictionFilter
-                                ? "No regulations match your filters"
-                                : "No regulations yet"}
+                                ? t("compliance.emptyFilterTitle", "No obligations match your filters")
+                                : t("compliance.emptyTitle", "No regulations yet")}
                         </h3>
                         <p className="mt-1 text-xs text-neutral-400">
                             {search || statusFilter || jurisdictionFilter
-                                ? "Try adjusting your search or filters."
-                                : "Add your first regulation to start tracking compliance obligations."}
+                                ? t("compliance.emptyDesc", "Try adjusting your search or filters.")
+                                : t("compliance.emptyDesc", "Add your first regulation to start tracking compliance obligations.")}
                         </p>
                         {!search && !statusFilter && !jurisdictionFilter && (
                             <button
@@ -398,7 +412,7 @@ function Regulations() {
                                 className="mt-4 flex items-center gap-1.5 rounded-lg bg-neutral-900 px-3 py-1.5 text-xs text-white hover:bg-neutral-700"
                             >
                                 <Plus size={12} />
-                                Add Regulation
+                                {t("regulations.addRegulation", "Add Regulation")}
                             </button>
                         )}
                     </div>

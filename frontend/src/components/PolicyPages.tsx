@@ -1,25 +1,29 @@
 import { ArrowLeft } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { OpusLexBrand } from "./OpusLexBrand";
 
-const PolicyLayout = ({ title, children, onBack }: { title: string; children: React.ReactNode; onBack: () => void }) => (
-    <div className="min-h-screen bg-white text-neutral-900 flex flex-col">
-        <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-neutral-100 px-6 py-4 flex items-center justify-between">
-            <button onClick={onBack} className="flex items-center gap-2 text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">
-                <ArrowLeft size={16} />
-                Back
-            </button>
-            <div className="scale-75 origin-right">
-                <OpusLexBrand variant="dark" className="w-[120px]" />
-            </div>
-        </header>
-        <main className="flex-1 max-w-3xl w-full mx-auto p-6 sm:p-12 md:p-16">
-            <h1 className="text-3xl font-semibold tracking-tight mb-8">{title}</h1>
-            <div className="prose prose-neutral max-w-none text-sm leading-relaxed space-y-6">
-                {children}
-            </div>
-        </main>
-    </div>
-);
+const PolicyLayout = ({ title, children, onBack }: { title: string; children: React.ReactNode; onBack: () => void }) => {
+    const { t } = useTranslation();
+    return (
+        <div className="min-h-screen bg-white text-neutral-900 dark:bg-[#0d0d0d] dark:text-[#ececec] flex flex-col transition-colors">
+            <header className="sticky top-0 z-10 bg-white/80 dark:bg-[#171717]/80 backdrop-blur-md border-b border-neutral-100 dark:border-[#262626] px-6 py-4 flex items-center justify-between">
+                <button onClick={onBack} className="flex items-center gap-2 text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors">
+                    <ArrowLeft size={16} />
+                    {t("common.back", "Back")}
+                </button>
+                <div className="scale-75 origin-right">
+                    <OpusLexBrand className="w-[120px]" />
+                </div>
+            </header>
+            <main className="flex-1 max-w-3xl w-full mx-auto p-6 sm:p-12 md:p-16">
+                <h1 className="text-3xl font-semibold tracking-tight mb-8 text-neutral-900 dark:text-white">{title}</h1>
+                <div className="prose prose-neutral dark:prose-invert max-w-none text-sm leading-relaxed space-y-6">
+                    {children}
+                </div>
+            </main>
+        </div>
+    );
+};
 
 export const TermsPage = ({ onBack }: { onBack: () => void }) => (
     <PolicyLayout title="Terms of Service" onBack={onBack}>

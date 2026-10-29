@@ -1,0 +1,568 @@
+{
+  "nav": {
+    "home": "الرئيسية",
+    "regulations": "اللوائح التنظيمية",
+    "compliance": "الامتثال",
+    "policies": "السياسات",
+    "research": "الأبحاث",
+    "agents": "وكلاء الذكاء الاصطناعي",
+    "investigations": "التحقيقات",
+    "integrations": "التكاملات",
+    "audit": "التدقيق والنتائج",
+    "reports": "التقارير",
+    "governance": "الحوكمة",
+    "settings": "الإعدادات",
+    "help": "المساعدة"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "categories": {
+      "app": "التطبيق",
+      "account": "الحساب",
+      "data_privacy": "البيانات والخصوصية",
+      "integrations": "التكاملات",
+      "advanced": "متقدم"
+    },
+    "tabs": {
+      "appearance": "المظهر",
+      "general": "عام",
+      "accessibility": "إمكانية الوصول",
+      "notifications": "الإشعارات",
+      "profile": "الملف الشخصي",
+      "security": "الأمان وتسجيل الدخول",
+      "data": "إدارة البيانات",
+      "storage": "التخزين",
+      "language": "اللغة",
+      "privacy": "الخصوصية",
+      "integrations": "التكاملات",
+      "advanced": "متقدم",
+      "workspace": "مساحة العمل",
+      "navigation": "التنقل",
+      "assistant": "المساعد الذكي"
+    },
+    "appearance": {
+      "headerTitle": "المظهر",
+      "headerSub": "تخصيص مظهر OpusLex على جهازك.",
+      "fontSize": {
+        "title": "حجم الخط",
+        "description": "اختر حجم خط نصوص التطبيق. يحافظ المقياس على التسلسل الهرمي الطباعي.",
+        "current": "الحالي:"
+      },
+      "density": {
+        "title": "الكثافة",
+        "description": "التحكم في المساحة المخصصة لعناصر واجهة المستخدم."
+      },
+      "theme": {
+        "title": "السمة",
+        "description": "حدد سمة الألوان المفضلة لديك.",
+        "comingSoon": "قريبًا",
+        "light": "فاتح",
+        "dark": "داكن",
+        "auto": "تلقائي",
+        "lightDesc": "واجهة فاتحة نظيفة وعالية الوضوح.",
+        "darkDesc": "لوحة داكنة مريحة تقلل من إجهاد العين.",
+        "autoDesc": "يتزامن تلقائيًا مع مظهر نظام التشغيل لديك.",
+        "autoDescription": "يتبع مظهر النظام"
+      }
+    },
+    "general": {
+      "headerTitle": "عام",
+      "headerSub": "تكوين سلوك التطبيق العام.",
+      "landing": {
+        "title": "قسم الهبوط الافتراضي",
+        "description": "اختر القسم الذي يفتح مباشرة بعد تسجيل الدخول.",
+        "takesEffect": "يسري المفعول عند تسجيل الدخول التالي."
+      }
+    },
+    "accessibility": {
+      "headerTitle": "إمكانية الوصول",
+      "headerSub": "تعديل الواجهة لتناسب احتياجاتك.",
+      "reduceMotion": {
+        "label": "تقليل الحركة",
+        "description": "تقليل الرسوم المتحركة والانتقالات في جميع أنحاء التطبيق."
+      },
+      "largerTargets": {
+        "label": "أهداف نقر أكبر",
+        "description": "زيادة المساحة التفاعلية لعناصر التحكم لسهولة النقر."
+      },
+      "highContrast": {
+        "label": "تباين عالٍ",
+        "description": "زيادة تباين النصوص والحدود عبر التطبيق."
+      },
+      "osPreference": "يحترم تقليل الحركة أيضًا تفضيلات نظام التشغيل لديك."
+    },
+    "language": {
+      "headerTitle": "اللغة",
+      "headerSub": "إدارة لغة العرض للتطبيق. يدعم أكثر من 110 لغة مع إمكانية التحديد بالنص الأصلي.",
+      "english": "الإنجليزية",
+      "spanish": "الإسبانية",
+      "active": "نشط",
+      "select": "اختر اللغة",
+      "searchPlaceholder": "ابحث في أكثر من 110 لغة بالاسم الإنجليزي أو الأصلي...",
+      "coverageFull": "ترجمة كاملة",
+      "coveragePriority": "حزمة ذات أولوية",
+      "coverageFallback": "الرجوع للإنجليزية (الترجمة قيد التنفيذ)",
+      "catalogCount": "{{count}} لغة متاحة",
+      "noResults": "لم يتم العثور على لغات مطابقة."
+    },
+    "assistant": {
+      "headerTitle": "المساعد الذكي",
+      "headerSub": "تكوين مساعد الذكاء الاصطناعي الصوتي والنصي واختصارات لوحة المفاتيح ومستويات الصلاحيات.",
+      "enableTitle": "تفعيل المساعد الذكي",
+      "enableDesc": "عرض الأيقونة العائمة والسماح بالأوامر الصوتية والنصية داخل التطبيق.",
+      "permissionsTitle": "مستوى صلاحيات المساعد",
+      "permissionsDesc": "مطبق على الخادم الخلفي لمنع التعديلات غير المصرح بها.",
+      "level1": "المستوى 1: قراءة وإجابة (للقراءة فقط، دون تعديلات)",
+      "level2": "المستوى 2: اقتراح (إعداد المسودات والمقترحات دون تنفيذ)",
+      "level3": "المستوى 3: التنفيذ بعد الموافقة (يتطلب تأكيدًا صريحًا قبل الإجراءات)",
+      "level4": "المستوى 4: استقلالية محدودة (ينفذ الإجراءات منخفضة الخطورة مباشرة)",
+      "voiceTitle": "الإخراج الصوتي والكلام",
+      "voiceDesc": "تكوين الردود الصوتية المتحدثة والأصوات المتاحة بالمتصفح.",
+      "enableVoice": "تمكين الردود المنطوقة",
+      "voiceSelect": "صوت المتصفح",
+      "shortcutTitle": "اختصار التفعيل",
+      "shortcutDesc": "اختصار لوحة المفاتيح العام للتبديل السريع للمساعد.",
+      "privacyTitle": "مشاركة سياق التطبيق",
+      "privacyDesc": "السماح للمساعد بالوصول إلى بيانات التحقيق النشط لتقديم مساعدة سياقية."
+    },
+    "workspace": {
+      "headerTitle": "مساحة العمل",
+      "headerSub": "معلومات حول بيئة OpusLex النشطة الخاصة بك.",
+      "activeEnv": {
+        "title": "البيئة النشطة",
+        "description": "أنت تعمل في مساحة عمل OpusLex الموحدة.",
+        "defaultLanding": "يمكن تكوين قسم الهبوط في",
+        "generalLink": "عام"
+      },
+      "identity": {
+        "title": "هوية مساحة العمل",
+        "description": "إدارة كيفية تحديد مساحة عملك.",
+        "nameLabel": "اسم مساحة العمل",
+        "save": "حفظ",
+        "saving": "جارٍ الحفظ...",
+        "saved": "تم الحفظ",
+        "emptyError": "لا يمكن أن يكون اسم مساحة العمل فارغًا."
+      },
+      "usage": {
+        "title": "نظرة عامة على الاستخدام",
+        "description": "المقاييس الحالية لمساحة عملك.",
+        "documents": "إجمالي الوثائق",
+        "investigations": "التحقيقات النشطة",
+        "agentRuns": "إجمالي تشغيل الوكلاء",
+        "loading": "جارٍ تحميل المقاييس...",
+        "error": "فشل تحميل المقاييس."
+      }
+    },
+    "storage": {
+      "headerTitle": "التخزين",
+      "headerSub": "معلومات تخزين مساحة العمل.",
+      "summary": {
+        "title": "ملخص التخزين",
+        "totalDocuments": "إجمالي الوثائق"
+      },
+      "documents": {
+        "title": "الوثائق المرفوعة",
+        "empty": "لم يتم رفع أي وثائق بعد. ستظهر وثائق الأبحاث هنا.",
+        "deleteAction": "حذف",
+        "confirmDelete": "هل أنت متأكد من رغبتك في حذف هذه الوثيقة؟",
+        "deletedSuccess": "تم حذف الوثيقة بنجاح."
+      }
+    },
+    "security": {
+      "status": {
+        "configured": "مكوّن",
+        "notConfigured": "غير مكوّن",
+        "linked": "مرتبط",
+        "notLinked": "غير مرتبط",
+        "verified": "تم التحقق",
+        "notVerified": "لم يتم التحقق"
+      },
+      "action": {
+        "changePassword": "تغيير كلمة المرور",
+        "setPassword": "تعيين كلمة المرور",
+        "link_phone": "ربط رقم الهاتف",
+        "verify_email": "التحقق من البريد الإلكتروني"
+      }
+    }
+  },
+  "assistantUI": {
+    "title": "مساعد Themis",
+    "tooltip": "فتح Themis ({{shortcut}})",
+    "inputPlaceholder": "اسأل Themis عن اللوائح أو السياسات أو الامتثال...",
+    "send": "إرسال",
+    "listening": "Themis يستمع الآن...",
+    "stopListening": "إيقاف الاستماع",
+    "mute": "كتم الصوت",
+    "unmute": "تفعيل الصوت",
+    "clearHistory": "مسح المحادثة",
+    "close": "إغلاق",
+    "taskWorkspace": "مساحة عمل المهام",
+    "actionRequiresApproval": "مطلوب الموافقة",
+    "approveAction": "موافقة وتنفيذ",
+    "rejectAction": "إلغاء الإجراء",
+    "actionExecuted": "تم تنفيذ الإجراء بنجاح",
+    "actionDenied": "تم رفض الإجراء وفقًا لمستوى الصلاحيات",
+    "voiceUnavailable": "التعرف على الصوت غير مدعوم في هذا المتصفح. الوضع النصي نشط.",
+    "voiceDenied": "تم رفض إذن الميكروفون. يمكنك التفاعل عبر النص.",
+    "contextBadge": "السياق: {{section}}",
+    "switchToText": "الوضع النصي",
+    "switchToVoice": "الوضع الصوتي",
+    "voiceHudHint": "تحدث بشكل طبيعي إلى Themis أو انقر فوق الوضع النصي",
+    "spotlightPlaceholder": "اسأل Themis عن اللوائح أو السياسات أو الامتثال...",
+    "returnToVoice": "الوضع الصوتي",
+    "explainPage": "شرح الصفحة"
+  },
+  "common": {
+    "search": "بحث...",
+    "searchWorkspace": "بحث في مساحة العمل...",
+    "searchObligations": "بحث في الالتزامات...",
+    "add": "إضافة",
+    "create": "إنشاء",
+    "save": "حفظ",
+    "saving": "جارٍ الحفظ...",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "confirm": "تأكيد",
+    "close": "إغلاق",
+    "back": "رجوع",
+    "retry": "إعادة المحاولة",
+    "loading": "جارٍ التحميل...",
+    "error": "حدث خطأ ما.",
+    "allStatuses": "جميع الحالات",
+    "allRisks": "جميع المخاطر",
+    "compliant": "ممتثل",
+    "nonCompliant": "غير ممتثل",
+    "inProgress": "قيد التنفيذ",
+    "notStarted": "لم يبدأ",
+    "waived": "معفى",
+    "overdue": "متأخر",
+    "low": "منخفض",
+    "medium": "متوسط",
+    "high": "مرتفع",
+    "critical": "حرج",
+    "saved": "تم الحفظ"
+  },
+  "compliance": {
+    "title": "تتبع الامتثال",
+    "subtitle": "الالتزامات وحالة الامتثال الحالية لها.",
+    "addObligation": "إضافة التزام",
+    "total": "الإجمالي",
+    "score": "النتيجة",
+    "highRisk": "مخاطر عالية",
+    "emptyTitle": "لا توجد التزامات امتثال حتى الآن",
+    "emptyFilterTitle": "لا توجد التزامات مطابقة لخيارات التصفية",
+    "emptyDesc": "أضف التزامات الامتثال لتتبع المتطلبات التنظيمية وحالتها.",
+    "modalTitle": "إضافة التزام امتثال",
+    "fieldTitle": "العنوان *",
+    "fieldRegulation": "اللائحة *",
+    "fieldDepartment": "القسم *",
+    "fieldStatus": "الحالة",
+    "fieldRisk": "المخاطر",
+    "fieldDueDate": "تاريخ الاستحقاق",
+    "fieldDescription": "الوصف"
+  },
+  "auth": {
+    "welcome": "مرحبًا بك في OpusLex",
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "fullName": "الاسم الكامل",
+    "logIn": "تسجيل الدخول",
+    "logOut": "تسجيل الخروج",
+    "createAccount": "إنشاء حساب",
+    "alreadyHaveAccount": "هل لديك حساب بالفعل؟ تسجيل الدخول",
+    "dontHaveAccount": "ليس لديك حساب؟ إنشاء حساب",
+    "verifyCode": "رمز التحقق",
+    "verify": "تحقق",
+    "rememberMe": "تذكرني",
+    "forgotPassword": "هل نسيت كلمة المرور؟",
+    "continueGoogle": "المتابعة باستخدام Google",
+    "continueApple": "المتابعة باستخدام Apple",
+    "continueEmail": "المتابعة بالبريد الإلكتروني",
+    "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صالحة",
+    "passwordMinLength": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+    "passwordsDoNotMatch": "كلمات المرور غير متطابقة",
+    "termsNotice": "من خلال المتابعة، فإنك توافق على شروط الخدمة وسياسة الخصوصية الخاصة بـ OpusLex."
+  },
+  "dashboard": {
+    "welcomeBack": "مرحبًا بك مجددًا",
+    "systemOperational": "جميع الأنظمة تعمل بكفاءة",
+    "activeWorkspace": "مساحة العمل النشطة",
+    "stats": {
+      "activeInvestigations": "التحقيقات النشطة",
+      "documentsIndexed": "الوثائق المفهرسة",
+      "complianceScore": "نسبة الامتثال",
+      "recentFindings": "أحدث النتائج",
+      "totalObligations": "إجمالي الالتزامات",
+      "auditsPassed": "عمليات التدقيق الناجحة"
+    },
+    "quickLaunch": {
+      "title": "إجراءات سريعة",
+      "newInvestigation": "تحقيق جديد",
+      "uploadDocument": "رفع وثيقة",
+      "askResearch": "طلب بحث",
+      "deployAgent": "تشغيل وكيل"
+    },
+    "recentInvestigations": {
+      "title": "أحدث التحقيقات",
+      "viewAll": "عرض الكل",
+      "empty": "لا توجد تحقيقات نشطة. أنشئ تحقيقًا جديدًا للبدء."
+    },
+    "activityFeed": {
+      "title": "النشاط الأخير",
+      "empty": "لم يتم تسجيل أي نشاط مؤخرًا."
+    },
+    "topNav": {
+      "all": "الكل",
+      "reports": "التقارير",
+      "research": "الأبحاث",
+      "agents": "الوكلاء",
+      "searchPlaceholder": "ابحث في مساحة العمل، الوثائق أو الأوامر (⌘K)...",
+      "openAssistant": "فتح مساعد Themis",
+      "selectLanguage": "تغيير اللغة"
+    },
+    "notifications": {
+      "title": "الإشعارات",
+      "markAllRead": "تحديد الكل كمقروء",
+      "empty": "لا توجد إشعارات جديدة",
+      "clear": "مسح الكل"
+    },
+    "searchModal": {
+      "title": "البحث الشامل",
+      "placeholder": "ابحث في التحقيقات، الوثائق، الوكلاء أو الإعدادات...",
+      "noResults": "لم يتم العثور على نتائج لـ \"{{query}}\"",
+      "escToClose": "اضغط ESC للإغلاق"
+    },
+    "profileModal": {
+      "title": "الملف الشخصي للحساب",
+      "displayName": "الاسم الظاهر",
+      "displayNamePlaceholder": "أدخل اسمك الكامل",
+      "email": "البريد الإلكتروني (المعرف الدائم)",
+      "role": "الدور",
+      "save": "حفظ التغييرات",
+      "saving": "جارٍ الحفظ...",
+      "saved": "تم حفظ التغييرات بنجاح",
+      "emptyNameError": "لا يمكن أن يكون الاسم فارغًا."
+    }
+  },
+  "investigations": {
+    "title": "التحقيقات",
+    "subtitle": "إدارة قضايا الامتثال النشطة، ومراجعة الأدلة، وتتبع النتائج التنظيمية.",
+    "newInvestigation": "تحقيق جديد",
+    "searchPlaceholder": "ابحث في التحقيقات بالاسم أو الوصف...",
+    "filterStatus": "تصفية حسب الحالة",
+    "filterJurisdiction": "الاختصاص القضائي",
+    "allJurisdictions": "جميع الاختصاصات",
+    "columns": {
+      "title": "العنوان",
+      "status": "الحالة",
+      "risk": "مستوى المخاطر",
+      "jurisdiction": "الاختصاص القضائي",
+      "documents": "الوثائق",
+      "updated": "آخر تحديث",
+      "actions": "الإجراءات"
+    },
+    "statuses": {
+      "active": "نشط",
+      "review": "قيد المراجعة",
+      "closed": "مغلق",
+      "archived": "مؤرشف"
+    },
+    "risks": {
+      "low": "منخفض",
+      "medium": "متوسط",
+      "high": "مرتفع",
+      "critical": "حرج"
+    },
+    "modal": {
+      "createTitle": "إنشاء تحقيق جديد",
+      "titleLabel": "عنوان التحقيق *",
+      "titlePlaceholder": "مثال: المراجعة السنوية للامتثال لخصوصية البيانات",
+      "descLabel": "الوصف",
+      "descPlaceholder": "قدم نظرة عامة على النطاق والأهداف...",
+      "jurisdictionLabel": "الاختصاص القضائي",
+      "leadLabel": "المسؤول المعين",
+      "targetDateLabel": "تاريخ الإنجاز المستهدف",
+      "cancel": "إلغاء",
+      "create": "إنشاء التحقيق"
+    },
+    "details": {
+      "overview": "نظرة عامة",
+      "documents": "الوثائق المرفقة",
+      "evidence": "الأدلة والنتائج",
+      "timeline": "الجدول الزمني",
+      "notes": "ملاحظات",
+      "uploadDocument": "رفع وثيقة",
+      "generateReport": "إنشاء تقرير",
+      "noDocuments": "لم يتم إرفاق أي وثائق بهذا التحقيق بعد.",
+      "noEvidence": "لم يتم تسجيل أي أدلة حتى الآن."
+    },
+    "empty": {
+      "title": "لم يتم العثور على تحقيقات",
+      "desc": "أنشئ تحقيقك الأول لبدء تتبع قضايا الامتثال والأدلة."
+    }
+  },
+  "research": {
+    "title": "مساعد الأبحاث",
+    "subtitle": "البحث في وثائق الامتثال، وتحليل المتطلبات التنظيمية، والاستشهاد بالأدلة.",
+    "tabs": {
+      "general": "أبحاث عامة",
+      "investigation": "أبحاث التحقيق",
+      "comparison": "مقارنة تنظيمية"
+    },
+    "inputPlaceholder": "اطرح سؤالاً حول اللوائح أو السياسات أو الوثائق المرفقة...",
+    "scope": "نطاق البحث",
+    "scopeAll": "مكتبة الوثائق بأكملها",
+    "scopeInvestigation": "التحقيق المحدد",
+    "selectInvestigation": "حدد تحقيقًا...",
+    "attachedDocs": "الوثائق المرفقة ({{count}})",
+    "autoDiscovered": "تم اكتشافها من التحقيق المحدد",
+    "strictGrounding": "الاستناد الصارم للأدلة",
+    "askButton": "اسأل المساعد",
+    "stopButton": "إيقاف التوليد",
+    "clearButton": "مسح",
+    "copyButton": "نسخ الإجابة",
+    "copied": "تم النسخ!",
+    "sourcesTitle": "المصادر والاستشهادات",
+    "noSources": "لا توجد حاجة لاستشهادات مباشرة بالوثائق لهذا الاستفسار العام.",
+    "comparison": {
+      "title": "مقارنة تنظيمية بين الوثائق",
+      "subtitle": "مقارنة العقود الأساسية أو السياسات التشغيلية بالمعايير التنظيمية.",
+      "baseDoc": "الوثيقة الأساسية",
+      "selectBase": "حدد الاتفاقية أو السياسة الأساسية...",
+      "targetDocs": "الوثائق / اللوائح المستهدفة",
+      "runComparison": "تنفيذ المقارنة التنظيمية",
+      "execSummary": "الملخص التنفيذي",
+      "materialConflicts": "التعارضات الجوهرية",
+      "gaps": "الفجوات وأوجه القصور",
+      "actions": "الإجراءات ذات الأولوية",
+      "comparing": "جارٍ تحليل ومقارنة الوثائق..."
+    },
+    "empty": {
+      "title": "مساحة عمل الأبحاث جاهزة",
+      "desc": "أدخل استفسارًا أو حدد تحقيقًا لتحليل المتطلبات القانونية والامتثال."
+    }
+  },
+  "agents": {
+    "title": "وكلاء الامتثال بالذكاء الاصطناعي",
+    "subtitle": "تشغيل وكلاء مستقلين متعددين للتحقيق والتحقق وإعداد التقارير.",
+    "runAgent": "تشغيل الوكيل",
+    "stopAgent": "إيقاف الوكيل",
+    "taskLabel": "وصف المهمة",
+    "taskPlaceholder": "صف هدف التحقيق أو الأدلة المطلوب التحقق منها أو تدقيق الامتثال...",
+    "scopeLabel": "سياق التحقيق",
+    "executionTrace": "تتبع تنفيذ الوكيل",
+    "logs": "سجلات الوكيل",
+    "approvalRequired": "الموافقة مطلوبة",
+    "approve": "موافقة وتنفيذ",
+    "reject": "رفض الإجراء",
+    "statusIdle": "الوكيل خامل",
+    "statusRunning": "الوكيل قيد التنفيذ...",
+    "statusCompleted": "اكتمل التنفيذ",
+    "roles": {
+      "lead": "وكيل قيادة التحقيق",
+      "auditor": "مدقق الامتثال التنظيمي",
+      "gapAnalyzer": "محلل فجوات السياسات",
+      "evidenceVerifier": "وكيل التحقق من الأدلة"
+    }
+  },
+  "regulations": {
+    "title": "مكتبة اللوائح التنظيمية",
+    "subtitle": "استعراض وإدارة الأطر التنظيمية العالمية والالتزامات القانونية.",
+    "searchPlaceholder": "ابحث في اللوائح...",
+    "filterJurisdiction": "جميع الاختصاصات القضائية",
+    "filterSector": "جميع القطاعات",
+    "addRegulation": "إضافة لائحة",
+    "columns": {
+      "name": "اسم اللائحة",
+      "authority": "الجهة المصدرة",
+      "jurisdiction": "الاختصاص القضائي",
+      "effectiveDate": "تاريخ السريان",
+      "status": "الحالة",
+      "obligations": "الالتزامات"
+    }
+  },
+  "policies": {
+    "title": "السياسات الداخلية",
+    "subtitle": "سياسات الحوكمة المؤسسية المتوافقة مع المتطلبات القانونية.",
+    "createPolicy": "إنشاء سياسة",
+    "searchPlaceholder": "ابحث في السياسات...",
+    "uploadPolicy": "رفع سياسة",
+    "columns": {
+      "name": "عنوان السياسة",
+      "category": "الفئة",
+      "version": "الإصدار",
+      "status": "الحالة",
+      "lastReviewed": "آخر مراجعة"
+    }
+  },
+  "audit": {
+    "title": "التدقيق والنتائج",
+    "subtitle": "سجل تدقيق شامل لإجراءات المستخدمين، وعمليات الوكلاء، ونتائج الامتثال.",
+    "searchPlaceholder": "ابحث في سجل التدقيق...",
+    "export": "تصدير سجل التدقيق",
+    "columns": {
+      "timestamp": "الطابع الزمني",
+      "user": "المستخدم / الوكيل",
+      "action": "الإجراء المنفذ",
+      "target": "المورد المستهدف",
+      "severity": "درجة الأهمية",
+      "details": "تفاصيل الحدث"
+    }
+  },
+  "reports": {
+    "title": "تقارير الامتثال",
+    "subtitle": "إنشاء ومراجعة وتصدير تقارير الامتثال والتدقيق الرسمية.",
+    "generate": "إنشاء تقرير",
+    "exportPdf": "تصدير PDF",
+    "exportCsv": "تصدير CSV",
+    "templates": "قوالب التقارير"
+  },
+  "governance": {
+    "title": "الحوكمة المؤسسية",
+    "subtitle": "الإشراف على الأطر ولجان المخاطر وسير موافقات السياسات.",
+    "committees": "لجان الحوكمة",
+    "reviews": "مراجعات السياسات المعلقة"
+  },
+  "integrations": {
+    "title": "تكاملات البيانات والتخزين",
+    "subtitle": "ربط مستودعات الوثائق الخارجية والتخزين السحابي ومزودي الهوية المؤسسية.",
+    "googleDrive": "Google Drive",
+    "oneDrive": "Microsoft OneDrive / SharePoint",
+    "box": "Box Enterprise",
+    "slack": "Slack Enterprise Grid",
+    "connect": "اتصال",
+    "disconnect": "قطع الاتصال",
+    "connected": "متصل",
+    "notConnected": "غير متصل"
+  },
+  "help": {
+    "title": "المساعدة والتوثيق",
+    "subtitle": "استكشف أدلة المستخدم، والاختصارات، والأسئلة الشائعة.",
+    "searchPlaceholder": "ابحث في المقالات والأسئلة الشائعة والاختصارات...",
+    "categories": {
+      "gettingStarted": "البداية",
+      "investigations": "التحقيقات والأدلة",
+      "research": "مساعد الأبحاث",
+      "themis": "مساعد Themis الذكي",
+      "security": "الحساب والأمان"
+    },
+    "shortcutsTitle": "اختصارات لوحة المفاتيح",
+    "passwordChangeStep": "لتغيير كلمة المرور، انتقل إلى الإعدادات > الأمان وتسجيل الدخول، أو استخدم قائمة الحساب أعلى اليمين."
+  },
+  "cookies": {
+    "bannerTitle": "الخصوصية والتفضيلات",
+    "bannerDesc": "يستخدم OpusLex تخزين المتصفح الضروري للحفاظ على وظائف التطبيق الأساسية وتفضيلاتك. لم يتم تكوين أي تقنيات تتبع تحليلية اختيارية حاليًا.",
+    "customize": "تخصيص",
+    "rejectOptional": "رفض الاختياري",
+    "acceptAll": "قبول الكل",
+    "modalTitle": "تفضيلات ملفات تعريف الارتباط",
+    "necessaryTitle": "ضروري / وظيفي",
+    "alwaysActive": "نشط دائمًا",
+    "necessaryDesc": "مطلوب للوظائف الأساسية للتطبيق. يُستخدم لتخزين جلستك وتفضيلات الواجهة.",
+    "analyticsTitle": "التحليلات",
+    "notConfigured": "غير مكوّن",
+    "analyticsDesc": "لا توجد تقنيات تتبع اختيارية مكوّنة حاليًا."
+  }
+}

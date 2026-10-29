@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 import {
     ArrowUp,
     FileText,
@@ -7,12 +8,14 @@ import {
     Search,
     Share2,
     Sparkles,
+    Square,
     Trash2,
     X,
 } from "lucide-react"
+import { MarkdownRenderer } from "./common/MarkdownRenderer"
 import { normalizeApiError, safeString } from "../utils/errorUtils"
 
-const API = "http://127.0.0.1:8000"
+const API = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "")
 
 // ---------------------------------------------------------------------------
 // Types
@@ -67,6 +70,7 @@ function AttachModal({
     documents: Document[]
     onClose: () => void
 }) {
+    const { t } = useTranslation()
     const [investigations, setInvestigations] = useState<Investigation[]>([])
     const [selectedDoc, setSelectedDoc] = useState<number | "">("")
     const [selectedInv, setSelectedInv] = useState<number | "">("")
@@ -131,7 +135,7 @@ function AttachModal({
                 <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-4">
                     <div className="flex items-center gap-2">
                         <Paperclip size={14} className="text-neutral-500" />
-                        <h2 className="text-sm font-semibold text-neutral-900">Attach Document to Investigation</h2>
+                        <h2 className="text-sm font-semibold text-neutral-900">{t("investigations.details.uploadDocument", "Attach Document to Investigation")}</h2>
                     </div>
                     <button onClick={onClose} className="rounded p-1 text-neutral-400 hover:bg-neutral-100">
                         <X size={14} />
@@ -153,11 +157,11 @@ function AttachModal({
 
                     <div>
                         <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                            Document
+                            {t("investigations.columns.documents", "Document")}
                         </label>
                         {readyDocs.length === 0 ? (
                             <p className="text-xs text-neutral-400">
-                                No ready documents in your repository. Upload and process a document first.
+                                {t("investigations.details.noDocuments", "No ready documents in your repository. Upload and process a document first.")}
                             </p>
                         ) : (
                             <select
@@ -165,7 +169,7 @@ function AttachModal({
                                 onChange={(e) => setSelectedDoc(Number(e.target.value) || "")}
                                 className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-xs outline-none focus:border-neutral-400"
                             >
-                                <option value="">Select a document…</option>
+                                <option value="">{t("research.comparison.selectBase", "Select a document…")}</option>
                                 {readyDocs.map((d) => (
                                     <option key={d.id} value={d.id}>
                                         {d.title}
@@ -177,13 +181,13 @@ function AttachModal({
 
                     <div>
                         <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                            Investigation
+                            {t("nav.investigations", "Investigation")}
                         </label>
                         {loadingInvs ? (
-                            <p className="text-xs text-neutral-400">Loading investigations…</p>
+                            <p className="text-xs text-neutral-400">{t("common.loading", "Loading investigations…")}</p>
                         ) : activeInvs.length === 0 ? (
                             <p className="text-xs text-neutral-400">
-                                No active investigations. Create one in the Investigations workspace first.
+                                {t("investigations.empty.desc", "No active investigations. Create one in the Investigations workspace first.")}
                             </p>
                         ) : (
                             <select
@@ -191,7 +195,7 @@ function AttachModal({
                                 onChange={(e) => setSelectedInv(Number(e.target.value) || "")}
                                 className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-xs outline-none focus:border-neutral-400"
                             >
-                                <option value="">Select an investigation…</option>
+                                <option value="">{t("research.selectInvestigation", "Select an investigation…")}</option>
                                 {activeInvs.map((i) => (
                                     <option key={i.id} value={i.id}>
                                         {i.title}
@@ -207,14 +211,14 @@ function AttachModal({
                         onClick={onClose}
                         className="rounded-lg px-3 py-1.5 text-xs text-neutral-500 hover:bg-neutral-50"
                     >
-                        Close
+                        {t("common.close", "Close")}
                     </button>
                     <button
                         onClick={handleAttach}
                         disabled={!selectedDoc || !selectedInv || saving}
                         className="rounded-full bg-neutral-900 px-4 py-1.5 text-xs text-white disabled:opacity-40 hover:bg-neutral-700"
                     >
-                        {saving ? "Attaching…" : "Attach"}
+                        {saving ? t("common.saving", "Attaching…") : t("common.add", "Attach")}
                     </button>
                 </div>
             </div>
@@ -235,6 +239,7 @@ function ShareToInvestigationModal({
     answer: string
     onClose: () => void
 }) {
+    const { t } = useTranslation()
     const [investigations, setInvestigations] = useState<Investigation[]>([])
     const [selectedInv, setSelectedInv] = useState<number | "">("")
     const [saving, setSaving] = useState(false)
@@ -298,7 +303,7 @@ function ShareToInvestigationModal({
                 <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-4">
                     <div className="flex items-center gap-2">
                         <Share2 size={14} className="text-neutral-500" />
-                        <h2 className="text-sm font-semibold text-neutral-900">Share to Investigation</h2>
+                        <h2 className="text-sm font-semibold text-neutral-900">{t("nav.investigations", "Share to Investigation")}</h2>
                     </div>
                     <button onClick={onClose} className="rounded p-1 text-neutral-400 hover:bg-neutral-100">
                         <X size={14} />
@@ -319,19 +324,19 @@ function ShareToInvestigationModal({
                     )}
 
                     <div className="rounded-lg border border-neutral-100 bg-neutral-50 p-3">
-                        <p className="text-xs font-medium text-neutral-500 mb-1">Question being shared</p>
+                        <p className="text-xs font-medium text-neutral-500 mb-1">{t("research.tabs.general", "Question being shared")}</p>
                         <p className="text-xs text-neutral-700 line-clamp-3">{question}</p>
                     </div>
 
                     <div>
                         <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                            Destination Investigation
+                            {t("nav.investigations", "Destination Investigation")}
                         </label>
                         {loadingInvs ? (
-                            <p className="text-xs text-neutral-400">Loading investigations…</p>
+                            <p className="text-xs text-neutral-400">{t("common.loading", "Loading investigations…")}</p>
                         ) : activeInvs.length === 0 ? (
                             <p className="text-xs text-neutral-400">
-                                No active investigations. Create one in the Investigations workspace first.
+                                {t("investigations.empty.desc", "No active investigations. Create one in the Investigations workspace first.")}
                             </p>
                         ) : (
                             <select
@@ -339,7 +344,7 @@ function ShareToInvestigationModal({
                                 onChange={(e) => setSelectedInv(Number(e.target.value) || "")}
                                 className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-xs outline-none focus:border-neutral-400"
                             >
-                                <option value="">Select an investigation…</option>
+                                <option value="">{t("research.selectInvestigation", "Select an investigation…")}</option>
                                 {activeInvs.map((i) => (
                                     <option key={i.id} value={i.id}>
                                         {i.title}
@@ -360,14 +365,14 @@ function ShareToInvestigationModal({
                         onClick={onClose}
                         className="rounded-lg px-3 py-1.5 text-xs text-neutral-500 hover:bg-neutral-50"
                     >
-                        Close
+                        {t("common.close", "Close")}
                     </button>
                     <button
                         onClick={handleShare}
                         disabled={!selectedInv || saving || result?.ok === true}
                         className="rounded-full bg-neutral-900 px-4 py-1.5 text-xs text-white disabled:opacity-40 hover:bg-neutral-700"
                     >
-                        {saving ? "Sharing…" : "Share"}
+                        {saving ? t("common.saving", "Sharing…") : t("common.save", "Share")}
                     </button>
                 </div>
             </div>
@@ -380,6 +385,7 @@ function ShareToInvestigationModal({
 // ---------------------------------------------------------------------------
 
 function Research() {
+    const { t } = useTranslation()
     const [queries, setQueries] = useState<ResearchQuery[]>([])
     const [documents, setDocuments] = useState<Document[]>([])
     const [question, setQuestion] = useState("")
@@ -392,6 +398,7 @@ function Research() {
     const [showShare, setShowShare] = useState(false)
     const [showHeaderShare, setShowHeaderShare] = useState(false)
     const [deletingId, setDeletingId] = useState<number | null>(null)
+    const abortControllerRef = useRef<AbortController | null>(null)
 
     // Track the question that produced the current answer, for sharing
     const lastQuestion = useRef("")
@@ -431,7 +438,7 @@ function Research() {
 
                 if (researchResponse.ok) {
                     const researchData = await researchResponse.json()
-                    setQueries(researchData.items || [])
+                    setQueries(Array.isArray(researchData) ? researchData : (researchData.items || []))
                 }
 
                 if (documentsResponse.ok) {
@@ -448,9 +455,17 @@ function Research() {
         loadWorkspace()
     }, [])
 
-    // Submit RAG query
+    const handleStopGeneration = () => {
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort()
+            abortControllerRef.current = null
+        }
+        setRagLoading(false)
+    }
+
+    // Submit RAG query with streaming
     const askRag = async () => {
-        if (!question.trim()) return
+        if (!question.trim() || ragLoading) return
 
         const token = localStorage.getItem("access_token")
         if (!token) {
@@ -466,59 +481,165 @@ function Research() {
         const currentQuestion = question.trim()
         lastQuestion.current = currentQuestion
 
+        const abortController = new AbortController()
+        abortControllerRef.current = abortController
+
+        let streamSucceeded = false
+        let fullAnswer = ""
+        let finalSources: RagSource[] = []
+
         try {
-            // 1. Run global RAG query (no investigation_id → searches all user documents)
-            const response = await fetch(`${API}/api/v1/rag/ask`, {
+            // 1. Attempt streaming from /api/v1/rag/stream
+            const streamResponse = await fetch(`${API}/api/v1/rag/stream`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({ question: currentQuestion, limit: 5 }),
+                signal: abortController.signal,
             })
 
-            const data = await response.json()
+            if (streamResponse.ok && streamResponse.body) {
+                streamSucceeded = true
+                const reader = streamResponse.body.getReader()
+                const decoder = new TextDecoder("utf-8")
+                let buffer = ""
 
-            if (!response.ok) {
-                const normalizedErr = normalizeApiError(data.detail || data.error, "Unable to get an answer")
-                setAnswer(normalizedErr)
+                while (true) {
+                    const { done, value } = await reader.read()
+                    if (done) break
+
+                    buffer += decoder.decode(value, { stream: true })
+                    const lines = buffer.split("\n")
+                    buffer = lines.pop() || ""
+
+                    let currentEvent = "message"
+                    for (const line of lines) {
+                        const trimmed = line.trim()
+                        if (trimmed.startsWith("event:")) {
+                            currentEvent = trimmed.slice(6).trim()
+                        } else if (trimmed.startsWith("data:")) {
+                            const dataStr = trimmed.slice(5).trim()
+                            try {
+                                const parsed = JSON.parse(dataStr)
+                                if (currentEvent === "delta") {
+                                    const delta = parsed.delta || ""
+                                    if (delta) {
+                                        fullAnswer += delta
+                                        setAnswer(fullAnswer)
+                                    }
+                                } else if (currentEvent === "sources") {
+                                    finalSources = parsed.sources || []
+                                    setSources(finalSources)
+                                } else if (currentEvent === "done") {
+                                    if (parsed.answer) fullAnswer = parsed.answer
+                                    if (parsed.sources) finalSources = parsed.sources
+                                    setAnswer(fullAnswer)
+                                    setSources(finalSources)
+                                } else if (currentEvent === "error") {
+                                    const errMsg = parsed.error || "Streaming error occurred."
+                                    fullAnswer = `Error: ${errMsg}`
+                                    setAnswer(fullAnswer)
+                                }
+                            } catch {
+                                // Ignore parsing errors on keep-alives
+                            }
+                        }
+                    }
+                }
+
+                // Persist completed session to history
+                if (fullAnswer) {
+                    try {
+                        const saveResponse = await fetch(`${API}/api/v1/research/sessions`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${token}`,
+                            },
+                            body: JSON.stringify({
+                                question: currentQuestion,
+                                status: "Completed",
+                                answer: fullAnswer,
+                                sources: finalSources,
+                            }),
+                        })
+                        if (saveResponse.ok) {
+                            const savedQuery = await saveResponse.json()
+                            setQueries((current) => [savedQuery, ...current])
+                        }
+                    } catch {
+                        // Non-fatal
+                    }
+                }
+                setQuestion("")
+            }
+        } catch (streamErr: any) {
+            if (streamErr.name === "AbortError") {
+                setAnswer((prev) => prev ? `${prev}\n\n*(Research stopped by user)*` : "*(Research stopped by user)*")
                 setRagLoading(false)
                 return
             }
-
-            setAnswer(typeof data.answer === "string" ? data.answer : safeString(data.answer))
-            setSources(data.sources || [])
-
-            // 2. Persist the session with status "Completed"
-            const saveResponse = await fetch(`${API}/api/v1/research/sessions`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({ 
-                    question: currentQuestion, 
-                    status: "Completed",
-                    answer: data.answer || "",
-                    sources: data.sources || []
-                }),
-            })
-
-            if (saveResponse.ok) {
-                const savedQuery = await saveResponse.json()
-                setQueries((current) => [savedQuery, ...current])
-            } else {
-                // Session save failure is non-fatal
-                setMessage("Answer generated but could not be saved to history.")
-            }
-
-            setQuestion("")
-        } catch {
-            setAnswer("Unable to connect to the backend")
-        } finally {
-            setRagLoading(false)
         }
+
+        // 2. Fallback to /api/v1/rag/ask if streaming failed
+        if (!streamSucceeded) {
+            try {
+                const response = await fetch(`${API}/api/v1/rag/ask`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ question: currentQuestion, limit: 5 }),
+                    signal: abortController.signal,
+                })
+
+                const data = await response.json()
+
+                if (!response.ok) {
+                    const normalizedErr = normalizeApiError(data.detail || data.error, "Unable to get an answer")
+                    setAnswer(normalizedErr)
+                    setRagLoading(false)
+                    return
+                }
+
+                const ans = typeof data.answer === "string" ? data.answer : safeString(data.answer)
+                setAnswer(ans)
+                setSources(data.sources || [])
+
+                const saveResponse = await fetch(`${API}/api/v1/research/sessions`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        question: currentQuestion,
+                        status: "Completed",
+                        answer: data.answer || "",
+                        sources: data.sources || []
+                    }),
+                })
+
+                if (saveResponse.ok) {
+                    const savedQuery = await saveResponse.json()
+                    setQueries((current) => [savedQuery, ...current])
+                }
+
+                setQuestion("")
+            } catch (err: any) {
+                if (err.name !== "AbortError") {
+                    setAnswer("Unable to connect to the backend")
+                }
+            }
+        }
+
+        setRagLoading(false)
+        abortControllerRef.current = null
     }
+
 
     // Delete a history entry
     const deleteSession = async (id: number) => {
@@ -569,24 +690,23 @@ function Research() {
                         <div className="flex items-center gap-2">
                             <FolderLock size={15} className="text-neutral-500" />
                             <span className="text-xs font-medium uppercase tracking-[0.14em] text-neutral-400">
-                                Private Workspace
+                                {t("dashboard.activeWorkspace", "Private Workspace")}
                             </span>
                         </div>
-                        <h1 className="mt-2 text-xl font-semibold tracking-tight">Research Desk</h1>
+                        <h1 className="mt-2 text-xl font-semibold tracking-tight">{t("research.title", "Research Desk")}</h1>
                         <p className="mt-1 text-sm text-neutral-500">
-                            Explore regulations, documents and compliance questions privately
-                            before sharing your work.
+                            {t("research.subtitle", "Explore regulations, documents and compliance questions privately before sharing your work.")}
                         </p>
                     </div>
 
                     <button
                         onClick={() => setShowHeaderShare(true)}
                         disabled={!hasAnswer}
-                        title={hasAnswer ? "Share the current answer to an investigation" : "Ask a question first to share its answer"}
+                        title={hasAnswer ? t("research.tabs.investigation", "Share the current answer to an investigation") : t("research.empty.desc", "Ask a question first to share its answer")}
                         className="flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-xs text-neutral-600 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-40"
                     >
                         <Share2 size={13} />
-                        Share to Investigation
+                        {t("nav.investigations", "Share to Investigation")}
                     </button>
                 </div>
 
@@ -607,7 +727,7 @@ function Research() {
                                         askRag()
                                     }
                                 }}
-                                placeholder="Ask a legal or compliance question, analyze your documents, or explore a regulation…"
+                                placeholder={t("research.inputPlaceholder", "Ask a legal or compliance question, analyze your documents, or explore a regulation…")}
                                 rows={4}
                                 className="w-full resize-none bg-transparent text-sm leading-5 outline-none placeholder:text-neutral-400"
                                 disabled={ragLoading}
@@ -622,7 +742,7 @@ function Research() {
                                         className="flex items-center gap-1.5 rounded-md border border-neutral-200 px-2.5 py-1.5 text-xs text-neutral-500 hover:bg-neutral-50"
                                     >
                                         <Paperclip size={12} />
-                                        Attach
+                                        {t("investigations.details.uploadDocument", "Attach")}
                                     </button>
 
                                     {/* SEARCH — focuses and clears the textarea to start a new query */}
@@ -639,7 +759,7 @@ function Research() {
                                         className="flex items-center gap-1.5 rounded-md border border-neutral-200 px-2.5 py-1.5 text-xs text-neutral-500 hover:bg-neutral-50"
                                     >
                                         <Search size={12} />
-                                        New Search
+                                        {t("common.search", "New Search")}
                                     </button>
 
                                     {/* DEEP RESEARCH — requires an investigation, not available globally */}
@@ -648,21 +768,28 @@ function Research() {
                                         title="Deep Research runs a multi-step AI agent against a specific investigation. Open an investigation and use the Agent tab there."
                                         className="rounded-md border border-neutral-200 px-2.5 py-1.5 text-xs text-neutral-400 cursor-not-allowed opacity-50"
                                     >
-                                        Deep Research
+                                        {t("agents.title", "Deep Research")}
                                     </button>
                                 </div>
 
-                                <button
-                                    onClick={askRag}
-                                    disabled={ragLoading || !question.trim()}
-                                    className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FBC648] text-neutral-900 disabled:cursor-not-allowed disabled:opacity-30"
-                                >
-                                    {ragLoading ? (
-                                        <Sparkles size={13} className="animate-pulse" />
-                                    ) : (
+                                {ragLoading ? (
+                                    <button
+                                        onClick={handleStopGeneration}
+                                        title="Stop research"
+                                        className="flex h-8 items-center gap-1 px-3 rounded-full bg-red-500 text-white text-xs font-medium cursor-pointer shadow-sm hover:bg-red-600 transition-all"
+                                    >
+                                        <Square size={11} className="fill-current" />
+                                        <span>{t("research.stopButton", "Stop")}</span>
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={askRag}
+                                        disabled={!question.trim()}
+                                        className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FBC648] text-neutral-900 disabled:cursor-not-allowed disabled:opacity-30 hover:bg-[#F0BD44] transition-all cursor-pointer"
+                                    >
                                         <ArrowUp size={14} />
-                                    )}
-                                </button>
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -673,7 +800,7 @@ function Research() {
                     <div className="mt-3 flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 py-3">
                         <Sparkles size={13} className="animate-pulse text-neutral-500" />
                         <span className="text-sm text-neutral-400">
-                            Searching your document repository…
+                            {t("research.comparison.comparing", "Searching your document repository…")}
                         </span>
                     </div>
                 )}
@@ -686,32 +813,35 @@ function Research() {
                 )}
 
                 {/* AI ANSWER */}
-                {hasAnswer && !ragLoading && (
+                {(hasAnswer || (ragLoading && answer)) && (
                     <article className="mt-3 rounded-xl border border-neutral-200 bg-white p-4">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <Sparkles size={14} />
-                                <span className="text-sm font-semibold">Research Assistant</span>
+                                <Sparkles size={14} className={ragLoading ? "animate-pulse text-amber-500" : "text-neutral-700"} />
+                                <span className="text-sm font-semibold">{t("research.title", "Research Assistant")}</span>
                                 <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs text-neutral-500">
-                                    Private
+                                    {t("dashboard.activeWorkspace", "Private")}
                                 </span>
+                                {ragLoading && (
+                                    <span className="text-xs text-amber-600 animate-pulse font-medium">
+                                        {t("common.loading", "Generating...")}
+                                    </span>
+                                )}
                             </div>
                         </div>
 
-                        <div className="mt-4 space-y-2 text-sm leading-6 text-neutral-700">
-                            {safeString(answer).split("\n").map((line, index) => (
-                                <p key={index}>{line || "\u00A0"}</p>
-                            ))}
+                        <div className="mt-4 text-sm leading-6 text-neutral-700">
+                            <MarkdownRenderer content={safeString(answer)} />
                         </div>
 
                         {sources.length > 0 && (
                             <div className="mt-5 border-t border-neutral-100 pt-4">
                                 <div className="mb-3 flex items-center justify-between">
                                     <h2 className="text-xs font-semibold uppercase tracking-[0.12em] text-neutral-400">
-                                        Evidence
+                                        {t("investigations.details.evidence", "Evidence")}
                                     </h2>
                                     <span className="text-xs text-neutral-400">
-                                        {sources.length} sources
+                                        {sources.length} {t("research.sourcesTitle", "sources")}
                                     </span>
                                 </div>
 
@@ -745,7 +875,7 @@ function Research() {
                                 className="flex items-center gap-1.5 rounded-md border border-neutral-200 px-2.5 py-1.5 text-xs text-neutral-500 hover:bg-neutral-50"
                             >
                                 <Share2 size={12} />
-                                Share to Investigation
+                                {t("nav.investigations", "Share to Investigation")}
                             </button>
                         </div>
                     </article>
@@ -755,9 +885,9 @@ function Research() {
                 <div className="mt-5">
                     <div className="mb-3 flex items-center justify-between">
                         <div>
-                            <h2 className="text-sm font-semibold">Private Research</h2>
+                            <h2 className="text-sm font-semibold">{t("research.tabs.general", "Private Research")}</h2>
                             <p className="mt-1 text-xs text-neutral-400">
-                                Your previous research sessions
+                                {t("research.subtitle", "Your previous research sessions")}
                             </p>
                         </div>
                         <span className="text-xs text-neutral-400">
@@ -768,12 +898,12 @@ function Research() {
                     <div className="space-y-2">
                         {wsLoading ? (
                             <div className="rounded-xl border border-dashed border-neutral-200 bg-white p-6 text-center">
-                                <p className="text-sm text-neutral-400">Loading history…</p>
+                                <p className="text-sm text-neutral-400">{t("common.loading", "Loading history…")}</p>
                             </div>
                         ) : queries.length === 0 ? (
                             <div className="rounded-xl border border-dashed border-neutral-200 bg-white p-6 text-center">
                                 <p className="text-sm text-neutral-400">
-                                    No private research sessions yet. Ask a question above to get started.
+                                    {t("research.empty.desc", "No private research sessions yet. Ask a question above to get started.")}
                                 </p>
                             </div>
                         ) : (
@@ -835,15 +965,15 @@ function Research() {
             <aside className="min-w-0">
                 <div className="sticky top-4">
                     <div className="mb-3">
-                        <h2 className="text-sm font-semibold">Private Context</h2>
+                        <h2 className="text-sm font-semibold">{t("research.scope", "Private Context")}</h2>
                         <p className="mt-1 text-xs text-neutral-400">
-                            Documents available to your research
+                            {t("research.scopeAll", "Documents available to your research")}
                         </p>
                     </div>
 
                     <div className="rounded-xl border border-neutral-200 bg-white">
                         <div className="flex items-center justify-between border-b border-neutral-100 px-3 py-3">
-                            <span className="text-xs font-medium">Documents</span>
+                            <span className="text-xs font-medium">{t("investigations.columns.documents", "Documents")}</span>
                             <span className="text-xs text-neutral-400">
                                 {wsLoading ? "…" : documents.length}
                             </span>
@@ -852,12 +982,12 @@ function Research() {
                         <div className="divide-y divide-neutral-100 max-h-[60vh] overflow-y-auto">
                             {wsLoading ? (
                                 <div className="p-4 text-center">
-                                    <p className="text-xs text-neutral-400">Loading…</p>
+                                    <p className="text-xs text-neutral-400">{t("common.loading", "Loading…")}</p>
                                 </div>
                             ) : documents.length === 0 ? (
                                 <div className="p-5 text-center">
                                     <p className="text-xs text-neutral-400">
-                                        No documents available. Upload documents in the Investigations workspace.
+                                        {t("investigations.details.noDocuments", "No documents available. Upload documents in the Investigations workspace.")}
                                     </p>
                                 </div>
                             ) : (
@@ -901,20 +1031,17 @@ function Research() {
                     </div>
 
                     <div className="mt-3 rounded-xl border border-neutral-200 bg-white p-3">
-                        <p className="text-xs font-medium">Workspace visibility</p>
+                        <p className="text-xs font-medium">{t("settings.tabs.workspace", "Workspace visibility")}</p>
                         <p className="mt-1.5 text-xs leading-4 text-neutral-400">
-                            Your research remains private until you explicitly share it
-                            with an investigation.
+                            {t("research.empty.desc", "Your research remains private until you explicitly share it with an investigation.")}
                         </p>
                     </div>
 
                     {/* Deep research callout */}
                     <div className="mt-3 rounded-xl border border-neutral-200 bg-neutral-50 p-3">
-                        <p className="text-xs font-medium text-neutral-700">Deep Research</p>
+                        <p className="text-xs font-medium text-neutral-700">{t("agents.title", "Deep Research")}</p>
                         <p className="mt-1.5 text-xs leading-4 text-neutral-400">
-                            Multi-step AI agent analysis is available inside an Investigation.
-                            Open an investigation and use the Agent tab to run Deep Research against
-                            its attached documents.
+                            {t("agents.subtitle", "Multi-step AI agent analysis is available inside an Investigation.")}
                         </p>
                     </div>
                 </div>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { ShieldCheck, Search, Plus, X, ChevronDown, ChevronUp, AlertTriangle } from "lucide-react"
 
 const API = "http://127.0.0.1:8000"
@@ -62,35 +63,36 @@ function riskBadge(risk: string) {
 }
 
 function OverviewBar({ overview }: { overview: Overview }) {
+    const { t } = useTranslation()
     const score = overview.compliance_score
     const scoreColor =
-        score >= 80 ? "text-green-600" : score >= 50 ? "text-amber-600" : "text-red-600"
+        score >= 80 ? "text-green-600 dark:text-green-400" : score >= 50 ? "text-amber-600 dark:text-amber-400" : "text-red-600 dark:text-red-400"
 
     return (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 shrink-0 border-b border-neutral-100 bg-neutral-50/50 px-6 py-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 shrink-0 border-b border-neutral-100 dark:border-[#262626] bg-neutral-50/50 dark:bg-[#171717] px-6 py-4 transition-colors">
             <div className="text-center">
                 <p className={`text-2xl font-semibold ${scoreColor}`}>{score}%</p>
-                <p className="mt-0.5 text-xs text-neutral-400 uppercase tracking-wider">Score</p>
+                <p className="mt-0.5 text-xs text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">{t("compliance.score", "Score")}</p>
             </div>
             <div className="text-center">
-                <p className="text-2xl font-semibold text-neutral-900">{overview.total_obligations}</p>
-                <p className="mt-0.5 text-xs text-neutral-400 uppercase tracking-wider">Total</p>
+                <p className="text-2xl font-semibold text-neutral-900 dark:text-white">{overview.total_obligations}</p>
+                <p className="mt-0.5 text-xs text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">{t("compliance.total", "Total")}</p>
             </div>
             <div className="text-center">
-                <p className="text-2xl font-semibold text-green-600">{overview.compliant}</p>
-                <p className="mt-0.5 text-xs text-neutral-400 uppercase tracking-wider">Compliant</p>
+                <p className="text-2xl font-semibold text-green-600 dark:text-green-400">{overview.compliant}</p>
+                <p className="mt-0.5 text-xs text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">{t("common.compliant", "Compliant")}</p>
             </div>
             <div className="text-center">
-                <p className="text-2xl font-semibold text-blue-600">{overview.in_progress}</p>
-                <p className="mt-0.5 text-xs text-neutral-400 uppercase tracking-wider">In Progress</p>
+                <p className="text-2xl font-semibold text-blue-600 dark:text-blue-400">{overview.in_progress}</p>
+                <p className="mt-0.5 text-xs text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">{t("common.inProgress", "In Progress")}</p>
             </div>
             <div className="text-center">
-                <p className="text-2xl font-semibold text-red-600">{overview.non_compliant}</p>
-                <p className="mt-0.5 text-xs text-neutral-400 uppercase tracking-wider">Non-Compliant</p>
+                <p className="text-2xl font-semibold text-red-600 dark:text-red-400">{overview.non_compliant}</p>
+                <p className="mt-0.5 text-xs text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">{t("common.nonCompliant", "Non-Compliant")}</p>
             </div>
             <div className="text-center">
-                <p className="text-2xl font-semibold text-orange-600">{overview.high_risk_items}</p>
-                <p className="mt-0.5 text-xs text-neutral-400 uppercase tracking-wider">High Risk</p>
+                <p className="text-2xl font-semibold text-orange-600 dark:text-orange-400">{overview.high_risk_items}</p>
+                <p className="mt-0.5 text-xs text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">{t("compliance.highRisk", "High Risk")}</p>
             </div>
         </div>
     )
@@ -103,6 +105,7 @@ function CreateComplianceModal({
     onClose: () => void
     onCreated: () => void
 }) {
+    const { t } = useTranslation()
     const [form, setForm] = useState({
         title: "",
         regulation: "",
@@ -152,123 +155,123 @@ function CreateComplianceModal({
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20">
-            <div className="w-full max-w-lg rounded-xl border border-neutral-200 bg-white shadow-xl">
-                <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-4">
-                    <h2 className="text-sm font-semibold text-neutral-900">Add Compliance Obligation</h2>
-                    <button onClick={onClose} className="rounded p-1 text-neutral-400 hover:bg-neutral-100">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+            <div className="w-full max-w-lg rounded-xl border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#171717] shadow-xl overflow-hidden transition-colors">
+                <div className="flex items-center justify-between border-b border-neutral-100 dark:border-[#262626] px-5 py-4">
+                    <h2 className="text-sm font-semibold text-neutral-900 dark:text-white">{t("compliance.modalTitle", "Add Compliance Obligation")}</h2>
+                    <button onClick={onClose} className="rounded p-1 text-neutral-400 hover:bg-neutral-100 dark:hover:bg-[#262626] transition-colors">
                         <X size={14} />
                     </button>
                 </div>
                 <form onSubmit={handleSubmit} className="space-y-4 p-5">
                     {error && (
-                        <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-600">{error}</p>
+                        <p className="rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 px-3 py-2 text-xs text-red-600 dark:text-red-400">{error}</p>
                     )}
                     <div>
-                        <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                            Title *
+                        <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">
+                            {t("compliance.fieldTitle", "Title *")}
                         </label>
                         <input
                             required
                             value={form.title}
                             onChange={(e) => setForm({ ...form, title: e.target.value })}
-                            className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-xs outline-none focus:border-neutral-400"
+                            className="w-full rounded-full border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#212121] px-4 py-2 text-xs text-neutral-900 dark:text-white outline-none focus:border-neutral-400 dark:focus:border-neutral-500"
                             placeholder="e.g. Annual GDPR data audit"
                         />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                         <div>
-                            <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                                Regulation *
+                            <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">
+                                {t("compliance.fieldRegulation", "Regulation *")}
                             </label>
                             <input
                                 required
                                 value={form.regulation}
                                 onChange={(e) => setForm({ ...form, regulation: e.target.value })}
-                                className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-xs outline-none focus:border-neutral-400"
+                                className="w-full rounded-full border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#212121] px-4 py-2 text-xs text-neutral-900 dark:text-white outline-none focus:border-neutral-400 dark:focus:border-neutral-500"
                                 placeholder="e.g. GDPR"
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                                Department *
+                            <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">
+                                {t("compliance.fieldDepartment", "Department *")}
                             </label>
                             <input
                                 required
                                 value={form.department}
                                 onChange={(e) => setForm({ ...form, department: e.target.value })}
-                                className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-xs outline-none focus:border-neutral-400"
+                                className="w-full rounded-full border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#212121] px-4 py-2 text-xs text-neutral-900 dark:text-white outline-none focus:border-neutral-400 dark:focus:border-neutral-500"
                                 placeholder="e.g. Legal"
                             />
                         </div>
                     </div>
                     <div className="grid grid-cols-3 gap-3">
                         <div>
-                            <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                                Status
+                            <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">
+                                {t("compliance.fieldStatus", "Status")}
                             </label>
                             <select
                                 value={form.status}
                                 onChange={(e) => setForm({ ...form, status: e.target.value })}
-                                className="w-full rounded-lg border border-neutral-200 px-2 py-2 text-xs outline-none focus:border-neutral-400"
+                                className="w-full rounded-full border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#212121] px-3 py-2 text-xs text-neutral-900 dark:text-white outline-none focus:border-neutral-400 dark:focus:border-neutral-500"
                             >
                                 {STATUS_OPTIONS.map((s) => (
-                                    <option key={s}>{s}</option>
+                                    <option key={s} value={s}>{s}</option>
                                 ))}
                             </select>
                         </div>
                         <div>
-                            <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                                Risk
+                            <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">
+                                {t("compliance.fieldRisk", "Risk")}
                             </label>
                             <select
                                 value={form.risk_level}
                                 onChange={(e) => setForm({ ...form, risk_level: e.target.value })}
-                                className="w-full rounded-lg border border-neutral-200 px-2 py-2 text-xs outline-none focus:border-neutral-400"
+                                className="w-full rounded-full border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#212121] px-3 py-2 text-xs text-neutral-900 dark:text-white outline-none focus:border-neutral-400 dark:focus:border-neutral-500"
                             >
                                 {RISK_OPTIONS.map((r) => (
-                                    <option key={r}>{r}</option>
+                                    <option key={r} value={r}>{r}</option>
                                 ))}
                             </select>
                         </div>
                         <div>
-                            <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                                Due Date
+                            <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">
+                                {t("compliance.fieldDueDate", "Due Date")}
                             </label>
                             <input
                                 type="date"
                                 value={form.due_date}
                                 onChange={(e) => setForm({ ...form, due_date: e.target.value })}
-                                className="w-full rounded-lg border border-neutral-200 px-2 py-2 text-xs outline-none focus:border-neutral-400"
+                                className="w-full rounded-full border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#212121] px-3 py-2 text-xs text-neutral-900 dark:text-white outline-none focus:border-neutral-400 dark:focus:border-neutral-500"
                             />
                         </div>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                            Description
+                        <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">
+                            {t("compliance.fieldDescription", "Description")}
                         </label>
                         <textarea
                             rows={3}
                             value={form.description}
                             onChange={(e) => setForm({ ...form, description: e.target.value })}
-                            className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-xs outline-none focus:border-neutral-400 resize-none"
+                            className="w-full rounded-2xl border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#212121] px-4 py-2.5 text-xs text-neutral-900 dark:text-white outline-none focus:border-neutral-400 dark:focus:border-neutral-500 resize-none"
                             placeholder="Optional description of this obligation"
                         />
                     </div>
-                    <div className="flex items-center justify-end gap-2 border-t border-neutral-100 pt-4">
+                    <div className="flex items-center justify-end gap-2 border-t border-neutral-100 dark:border-[#262626] pt-4">
                         <button
                             type="button"
                             onClick={onClose}
-                            className="rounded-lg px-3 py-1.5 text-xs text-neutral-500 hover:bg-neutral-50"
+                            className="rounded-full border border-neutral-200 dark:border-[#333333] px-4 py-1.5 text-xs text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-[#212121] transition-colors"
                         >
-                            Cancel
+                            {t("common.cancel", "Cancel")}
                         </button>
                         <button
                             type="submit"
                             disabled={saving}
-                            className="rounded-lg bg-neutral-900 px-4 py-1.5 text-xs text-white disabled:opacity-50 hover:bg-neutral-700"
+                            className="rounded-full bg-neutral-900 dark:bg-white px-5 py-1.5 text-xs text-white dark:text-neutral-900 font-medium disabled:opacity-50 hover:bg-neutral-700 dark:hover:bg-neutral-100 transition-colors"
                         >
-                            {saving ? "Saving…" : "Add Obligation"}
+                            {saving ? t("common.saving", "Saving…") : t("compliance.addObligation", "Add Obligation")}
                         </button>
                     </div>
                 </form>
@@ -285,26 +288,26 @@ function ComplianceCard({ item }: { item: ComplianceItem }) {
         new Date(item.due_date) < new Date()
 
     return (
-        <div className="rounded-xl border border-neutral-200 bg-white overflow-hidden">
+        <div className="rounded-xl border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#171717] overflow-hidden transition-colors shadow-xs">
             <button
                 onClick={() => setExpanded(!expanded)}
-                className="group flex w-full items-start gap-3 px-5 py-4 text-left hover:bg-neutral-50"
+                className="group flex w-full items-start gap-3 px-5 py-4 text-left hover:bg-neutral-50 dark:hover:bg-[#212121] transition-colors"
             >
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-neutral-100">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-neutral-100 dark:bg-[#262626]">
                     {isOverdue ? (
-                        <AlertTriangle size={14} className="text-red-500" />
+                        <AlertTriangle size={14} className="text-red-500 dark:text-red-400" />
                     ) : (
-                        <ShieldCheck size={14} className="text-neutral-500" />
+                        <ShieldCheck size={14} className="text-neutral-500 dark:text-neutral-400" />
                     )}
                 </div>
                 <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-4">
                         <div className="min-w-0 flex-1">
-                            <p className="text-sm font-semibold text-neutral-900 truncate">{item.title}</p>
+                            <p className="text-sm font-semibold text-neutral-900 dark:text-white truncate">{item.title}</p>
                         </div>
                         <div className="flex items-start justify-end gap-1 shrink-0">
                             {isOverdue && (
-                                <span className="rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-[10px] font-medium text-red-600 mr-1 uppercase tracking-wider">
+                                <span className="rounded-full border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/40 px-2 py-0.5 text-[10px] font-medium text-red-600 dark:text-red-400 mr-1 uppercase tracking-wider">
                                     Overdue
                                 </span>
                             )}
@@ -312,14 +315,14 @@ function ComplianceCard({ item }: { item: ComplianceItem }) {
                             {riskBadge(item.risk_level)}
                         </div>
                     </div>
-                    <div className="mt-1 flex items-center gap-3 text-xs text-neutral-400 flex-wrap">
+                    <div className="mt-1 flex items-center gap-3 text-xs text-neutral-400 dark:text-neutral-500 flex-wrap">
                         <span>{item.regulation}</span>
                         <span>·</span>
                         <span>{item.department}</span>
                         {item.due_date && (
                             <>
                                 <span>·</span>
-                                <span className={isOverdue ? "text-red-500" : ""}>
+                                <span className={isOverdue ? "text-red-500 dark:text-red-400" : ""}>
                                     Due {new Date(item.due_date).toLocaleDateString()}
                                 </span>
                             </>
@@ -327,14 +330,14 @@ function ComplianceCard({ item }: { item: ComplianceItem }) {
                     </div>
                 </div>
                 {expanded ? (
-                    <ChevronUp size={14} className="shrink-0 text-neutral-300 mt-1" />
+                    <ChevronUp size={14} className="shrink-0 text-neutral-300 dark:text-neutral-600 mt-1" />
                 ) : (
-                    <ChevronDown size={14} className="shrink-0 text-neutral-300 mt-1" />
+                    <ChevronDown size={14} className="shrink-0 text-neutral-300 dark:text-neutral-600 mt-1" />
                 )}
             </button>
             {expanded && item.description && (
-                <div className="border-t border-neutral-100 bg-neutral-50/50 px-5 py-3">
-                    <p className="text-xs text-neutral-600 leading-relaxed">{item.description}</p>
+                <div className="border-t border-neutral-100 dark:border-[#262626] bg-neutral-50/50 dark:bg-[#121212] px-5 py-3">
+                    <p className="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">{item.description}</p>
                 </div>
             )}
         </div>
@@ -342,6 +345,7 @@ function ComplianceCard({ item }: { item: ComplianceItem }) {
 }
 
 function Compliance() {
+    const { t } = useTranslation()
     const [items, setItems] = useState<ComplianceItem[]>([])
     const [overview, setOverview] = useState<Overview | null>(null)
     const [total, setTotal] = useState(0)
@@ -395,7 +399,7 @@ function Compliance() {
     }, [search, statusFilter, riskFilter])
 
     return (
-        <div className="flex h-full w-full flex-col bg-white">
+        <div className="flex h-full w-full flex-col bg-white dark:bg-[#0d0d0d] transition-colors">
             {showCreate && (
                 <CreateComplianceModal
                     onClose={() => setShowCreate(false)}
@@ -403,22 +407,22 @@ function Compliance() {
                 />
             )}
 
-            <header className="flex shrink-0 items-center justify-between border-b border-neutral-200 px-6 py-4">
+            <header className="flex shrink-0 items-center justify-between border-b border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#171717] px-6 py-4 transition-colors">
                 <div>
-                    <h1 className="text-xl font-semibold text-neutral-900">Compliance Tracking</h1>
-                    <p className="mt-1 text-sm text-neutral-500">
-                        Obligations and their current compliance status.
+                    <h1 className="text-xl font-semibold text-neutral-900 dark:text-white">{t("compliance.title", "Compliance Tracking")}</h1>
+                    <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+                        {t("compliance.subtitle", "Obligations and their current compliance status.")}
                         {loadState === "ok" && (
-                            <span className="ml-1 text-neutral-400">({total} total)</span>
+                            <span className="ml-1 text-neutral-400 dark:text-neutral-500">({total} total)</span>
                         )}
                     </p>
                 </div>
                 <button
                     onClick={() => setShowCreate(true)}
-                    className="flex items-center gap-1.5 rounded-lg bg-neutral-900 px-3 py-2 text-xs font-medium text-white hover:bg-neutral-700"
+                    className="flex items-center gap-1.5 rounded-full bg-neutral-900 dark:bg-white px-4 py-2 text-xs font-semibold text-white dark:text-neutral-900 hover:bg-neutral-700 dark:hover:bg-neutral-100 transition-colors shadow-xs"
                 >
                     <Plus size={12} />
-                    Add Obligation
+                    {t("compliance.addObligation", "Add Obligation")}
                 </button>
             </header>
 
@@ -428,14 +432,14 @@ function Compliance() {
             )}
 
             {/* Filters */}
-            <div className="flex shrink-0 items-center gap-3 border-b border-neutral-100 px-6 py-3">
-                <div className="search-pill flex flex-1 items-center gap-2 px-3 py-2">
+            <div className="flex shrink-0 items-center gap-3 border-b border-neutral-100 dark:border-[#262626] bg-white dark:bg-[#171717] px-6 py-3 transition-colors">
+                <div className="search-pill flex flex-1 items-center gap-2 px-3 py-2 bg-neutral-50 dark:bg-[#212121] border border-neutral-200 dark:border-[#262626] rounded-full">
                     <Search size={12} className="text-neutral-400" />
                     <input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="flex-1 bg-transparent text-xs outline-none placeholder:text-neutral-400"
-                        placeholder="Search obligations…"
+                        className="flex-1 bg-transparent text-xs text-neutral-900 dark:text-white outline-none placeholder:text-neutral-400 dark:placeholder:text-neutral-500"
+                        placeholder={t("common.searchObligations", "Search obligations…")}
                     />
                     {search && (
                         <button onClick={() => setSearch("")}>
@@ -446,9 +450,9 @@ function Compliance() {
                 <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="rounded-lg border border-neutral-200 bg-white px-2 py-2 text-xs text-neutral-600 outline-none"
+                    className="rounded-full border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#212121] px-4 py-2 text-xs text-neutral-600 dark:text-neutral-300 outline-none"
                 >
-                    <option value="">All statuses</option>
+                    <option value="">{t("common.allStatuses", "All statuses")}</option>
                     {STATUS_OPTIONS.map((s) => (
                         <option key={s} value={s}>
                             {s}
@@ -458,9 +462,9 @@ function Compliance() {
                 <select
                     value={riskFilter}
                     onChange={(e) => setRiskFilter(e.target.value)}
-                    className="rounded-lg border border-neutral-200 bg-white px-2 py-2 text-xs text-neutral-600 outline-none"
+                    className="rounded-full border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#212121] px-4 py-2 text-xs text-neutral-600 dark:text-neutral-300 outline-none"
                 >
-                    <option value="">All risks</option>
+                    <option value="">{t("common.allRisks", "All risks")}</option>
                     {RISK_OPTIONS.map((r) => (
                         <option key={r} value={r}>
                             {r}
@@ -470,47 +474,47 @@ function Compliance() {
             </div>
 
             {/* Content */}
-            <div className="flex-1 overflow-y-auto p-6">
+            <div className="flex-1 overflow-y-auto p-6 bg-neutral-50/30 dark:bg-[#0d0d0d]">
                 {loadState === "loading" && (
                     <div className="flex h-full items-center justify-center text-sm text-neutral-400">
-                        Loading compliance data…
+                        {t("common.loading", "Loading compliance data…")}
                     </div>
                 )}
 
                 {loadState === "error" && (
                     <div className="flex h-full flex-col items-center justify-center text-center">
-                        <ShieldCheck size={36} className="mb-3 text-neutral-200" />
-                        <p className="text-sm font-medium text-neutral-700">Could not load compliance data</p>
+                        <ShieldCheck size={36} className="mb-3 text-neutral-200 dark:text-neutral-700" />
+                        <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{t("common.error", "Could not load compliance data")}</p>
                         <p className="mt-1 text-xs text-neutral-400">{error}</p>
                         <button
                             onClick={fetchAll}
-                            className="mt-4 rounded-lg border border-neutral-200 px-3 py-1.5 text-xs text-neutral-600 hover:bg-neutral-50"
+                            className="mt-4 rounded-full border border-neutral-200 dark:border-[#262626] px-4 py-1.5 text-xs text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-[#212121] transition-colors"
                         >
-                            Retry
+                            {t("common.retry", "Retry")}
                         </button>
                     </div>
                 )}
 
                 {loadState === "empty" && (
                     <div className="flex h-full flex-col items-center justify-center text-center">
-                        <ShieldCheck size={36} className="mb-3 text-neutral-200" />
-                        <h3 className="text-sm font-medium text-neutral-700">
+                        <ShieldCheck size={36} className="mb-3 text-neutral-200 dark:text-neutral-700" />
+                        <h3 className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
                             {search || statusFilter || riskFilter
-                                ? "No obligations match your filters"
-                                : "No compliance obligations yet"}
+                                ? t("compliance.emptyFilterTitle", "No obligations match your filters")
+                                : t("compliance.emptyTitle", "No compliance obligations yet")}
                         </h3>
                         <p className="mt-1 text-xs text-neutral-400">
                             {search || statusFilter || riskFilter
                                 ? "Try adjusting your search or filters."
-                                : "Add compliance obligations to track regulatory requirements and their status."}
+                                : t("compliance.emptyDesc", "Add compliance obligations to track regulatory requirements and their status.")}
                         </p>
                         {!search && !statusFilter && !riskFilter && (
                             <button
                                 onClick={() => setShowCreate(true)}
-                                className="mt-4 flex items-center gap-1.5 rounded-lg bg-neutral-900 px-3 py-1.5 text-xs text-white hover:bg-neutral-700"
+                                className="mt-4 flex items-center gap-1.5 rounded-full bg-neutral-900 dark:bg-white px-4 py-1.5 text-xs text-white dark:text-neutral-900 font-medium hover:bg-neutral-700 dark:hover:bg-neutral-100 transition-colors shadow-xs"
                             >
                                 <Plus size={12} />
-                                Add Obligation
+                                {t("compliance.addObligation", "Add Obligation")}
                             </button>
                         )}
                     </div>

@@ -12,6 +12,7 @@ The active provider is chosen by the LLM_PROVIDER env var:
 
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 import textwrap
@@ -120,7 +121,8 @@ class MockLLMProvider(LLMProvider):
         prompt_lower = prompt.lower()
         if "gdpr" in prompt_lower and "retention" in prompt_lower:
             return DEMO_RESPONSES["gdpr"]
-        return DEMO_RESPONSES["default"]
+        from app.services.copilot_service import _generate_general_mock_response
+        return _generate_general_mock_response(prompt)
 
     async def stream(self, prompt: str, system: str | None = None):
         response = await self.generate(prompt, system=system)
@@ -137,6 +139,64 @@ class MockLLMProvider(LLMProvider):
             "demo": True,
             "message": "MockLLMProvider — structured output not supported in demo mode.",
         }
+
+
+# ---------------------------------------------------------------------------
+# Copilot provider
+# ---------------------------------------------------------------------------
+
+
+class CopilotLLMProvider(LLMProvider):
+    """LLM provider backed by local GitHub Copilot CLI SDK."""
+
+    def __init__(self, model: str = "auto", timeout: float = 60.0):
+        self.model = model
+        self.timeout = timeout
+
+    async def generate(self, prompt: str, system: str | None = None) -> str:
+        from app.services.copilot_service import get_client
+        from copilot import SessionEventType
+        c = await get_client()
+        session = await c.create_session(model=self.model, streaming=True)
+        response_text = ""
+        done = asyncio.Event()
+
+        def handle_event(event):
+            nonlocal response_text
+            if event.type == SessionEventType.ASSISTANT_MESSAGE:
+                response_text = event.data.content
+            elif event.type == SessionEventType.SESSION_IDLE:
+                done.set()
+            elif event.type == SessionEventType.SESSION_ERROR:
+                err_data = event.data
+                msg = err_data.message if hasattr(err_data, "message") else str(err_data)
+                response_text = f"SESSION_ERROR: {msg}"
+                done.set()
+
+        session.on(handle_event)
+        full_prompt = f"{system}\n\n{prompt}" if system else prompt
+        await session.send(full_prompt)
+        try:
+            await asyncio.wait_for(done.wait(), timeout=self.timeout)
+        finally:
+            await session.disconnect()
+
+        if response_text.startswith("SESSION_ERROR:"):
+            raise RuntimeError(f"Copilot API error: {response_text[14:].strip()}")
+        return response_text
+
+    async def stream(self, prompt: str, system: str | None = None):
+        res = await self.generate(prompt, system=system)
+        for token in res.split(" "):
+            yield token + " "
+
+    async def is_available(self) -> bool:
+        try:
+            from app.services.copilot_service import get_client
+            await get_client()
+            return True
+        except Exception:
+            return False
 
 
 # ---------------------------------------------------------------------------
@@ -224,11 +284,14 @@ class OllamaLLMProvider(LLMProvider):
 def get_llm_provider() -> LLMProvider:
     """
     Return the appropriate LLM provider based on configuration.
-    Falls back to MockLLMProvider if Ollama is not configured or unavailable.
+    Supports 'copilot', 'ollama', and 'mock'.
     """
     from app.config import settings
 
-    if settings.llm_provider == "ollama":
+    if settings.llm_provider == "copilot":
+        logger.info("Using CopilotLLMProvider (model=auto)")
+        return CopilotLLMProvider()
+    elif settings.llm_provider == "ollama":
         logger.info(
             "Using OllamaLLMProvider (model=%s, base_url=%s)",
             settings.ollama_model,

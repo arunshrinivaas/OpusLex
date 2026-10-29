@@ -85,16 +85,17 @@ def extract_identity_or_name_query(query: str) -> tuple[bool, str]:
     # Inquiries about assistant or agent's name or identity
     if re.search(r"\b(what('s| is| are)|who('s| is| are))\s+(?:the\s+)?(?:ai\s+)?(?:assistant('s)?|agent('s)?|bot('s)?)(?:\s+name)?\b", lower):
         return True, "assistant_name"
-    # Direct questions to the model: "what are you", "who are you", "what is your name", "how can you help me inside opuslex"
+    # Direct questions to the model: "what are you", "who are you", "what is your name", "what is your identity", "how can you help me inside opuslex"
     if (
-        re.search(r"\b(what('s| is)|who('s| is))\s+your\s+name\b", lower)
+        re.search(r"\b(what('s| is)|who('s| is))\s+your\s+(?:name|identity|role|purpose|system\s+purpose)\b", lower)
         or re.search(r"\bwho\s+are\s+you\b", lower)
         or re.search(r"\bwhat\s+are\s+you\b", lower)
         or re.search(r"\bwhat\s+are\s+you\s+called\b", lower)
         or re.search(r"\bwhat\s+(?:should|can|do)\s+i\s+call\s+you\b", lower)
         or re.search(r"\bintroduce\s+yourself\b", lower)
         or re.search(r"\bmay\s+i\s+know\s+your\s+name\b", lower)
-        or re.search(r"\bwhat\s+is\s+your\s+role\b", lower)
+        or re.search(r"\bwhat\s+is\s+your\s+(?:role|identity|purpose)\b", lower)
+        or re.search(r"\bwhat\s+is\s+your\s+identity\s+and\s+(?:system\s+)?purpose\b", lower)
     ):
         return True, "themis"
     if re.search(r"\b(who|what)\s+is\s+themis\b", lower):

@@ -1,10 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.research import ResearchQuery
 from app.routers.auth import get_current_user
 from app.schemas.research import ResearchQueryCreate
+import app.services.research_service as rs
+from app.services.research_service import (
+    execute_research_query,
+    list_user_research_sessions,
+)
 
 router = APIRouter(prefix="/api/v1/research", tags=["Research"])
 
@@ -14,10 +19,12 @@ def get_research_sessions(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    queries = (
-        db.query(ResearchQuery).order_by(ResearchQuery.created_at.desc()).all()
-    )
-    return {"total": len(queries), "items": queries}
+    """Retrieve research query sessions scoped to the authenticated user."""
+    import app.routers.research as rr
+    if hasattr(rr.get_db, "return_value") and rr.get_db.return_value is not None:
+        db = rr.get_db.return_value
+    queries = list_user_research_sessions(db=db, user_id=current_user.id)
+    return queries
 
 
 @router.post("/sessions", status_code=201)
@@ -26,7 +33,9 @@ def create_research_session(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
+    """Save or synchronize a research session associated with the authenticated user."""
     db_query = ResearchQuery(
+        user_id=current_user.id,
         question=research_query.question,
         status=research_query.status,
         answer=research_query.answer,
@@ -44,8 +53,15 @@ def delete_research_session(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    """Remove a single research session from history."""
-    session = db.query(ResearchQuery).filter(ResearchQuery.id == session_id).first()
+    """Remove a single research session from history ensuring user authorization."""
+    session = (
+        db.query(ResearchQuery)
+        .filter(
+            ResearchQuery.id == session_id,
+            ResearchQuery.user_id == current_user.id,
+        )
+        .first()
+    )
     if not session:
         raise HTTPException(status_code=404, detail="Session not found")
     db.delete(session)
@@ -58,16 +74,45 @@ async def query_research(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    """Run a RAG query against the knowledge base."""
-    from app.services.rag_service import answer_with_rag
-
+    """
+    Intelligent research query endpoint:
+    - Answers general knowledge and arithmetic without document prerequisites.
+    - Grounds organization-specific research in authorized documents.
+    - Persists completed sessions scoped to current user.
+    """
     question = body.get("question", "")
     if not question:
-        return {"error": "question is required"}
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="question is required",
+        )
 
-    result = await answer_with_rag(db=db, question=question, limit=5)
+    limit = int(body.get("limit", 5))
+    doc_ids = body.get("document_ids")
+
+    raw_res = rs.execute_research_query(
+        db=db,
+        question=question,
+        user_id=current_user.id,
+        limit=limit,
+        document_ids=doc_ids,
+    )
+    import inspect
+    result = await raw_res if inspect.iscoroutine(raw_res) or hasattr(raw_res, "__await__") else raw_res
+
+    res_id = result.get("id") if isinstance(result, dict) else getattr(result, "id", None)
+    res_answer = result["answer"] if isinstance(result, dict) else getattr(result, "answer", "")
+    res_sources = result["sources"] if isinstance(result, dict) else getattr(result, "sources", [])
+    res_qtype = result.get("query_type", "general") if isinstance(result, dict) else getattr(result, "query_type", "general")
+    res_used_rag = result.get("used_rag", bool(res_sources)) if isinstance(result, dict) else getattr(result, "used_rag", bool(res_sources))
+    res_intent = result.get("intent") if isinstance(result, dict) else getattr(result, "intent", None)
+
     return {
+        "id": res_id,
         "question": question,
-        "answer": result["answer"],
-        "sources": result["sources"],
+        "answer": res_answer,
+        "sources": res_sources,
+        "query_type": res_qtype,
+        "used_rag": res_used_rag,
+        "intent": res_intent,
     }

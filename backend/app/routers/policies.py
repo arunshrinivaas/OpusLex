@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.policy import Policy
-from app.routers.auth import get_current_user
+from app.routers.auth import get_current_user, require_roles
 from app.schemas.policy import PolicyCreate, PolicyUpdate
 
 router = APIRouter(prefix="/api/v1/policies", tags=["Policies"])
@@ -45,7 +45,7 @@ def get_policy(policy_id: int, db: Session = Depends(get_db)):
 def create_policy(
     policy: PolicyCreate,
     db: Session = Depends(get_db),
-    current_user=Depends(get_current_user),
+    current_user=Depends(require_roles("admin", "compliance_officer", "legal_analyst")),
 ):
     db_policy = Policy(
         title=policy.title,
@@ -66,7 +66,7 @@ def update_policy(
     policy_id: int,
     policy: PolicyUpdate,
     db: Session = Depends(get_db),
-    current_user=Depends(get_current_user),
+    current_user=Depends(require_roles("admin", "compliance_officer", "legal_analyst")),
 ):
     db_policy = db.query(Policy).filter(Policy.id == policy_id).first()
     if not db_policy:
@@ -85,7 +85,7 @@ def update_policy(
 def delete_policy(
     policy_id: int,
     db: Session = Depends(get_db),
-    current_user=Depends(get_current_user),
+    current_user=Depends(require_roles("admin", "compliance_officer")),
 ):
     db_policy = db.query(Policy).filter(Policy.id == policy_id).first()
     if not db_policy:

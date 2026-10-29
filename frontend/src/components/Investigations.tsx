@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import {
     Activity,
     ArrowUp,
@@ -159,6 +160,7 @@ type AgentRunResponse = {
 
 
 function Investigations() {
+    const { t } = useTranslation()
     const [investigations, setInvestigations] = useState<Investigation[]>([])
     const [selectedInvestigation, setSelectedInvestigation] =
         useState<Investigation | null>(null)
@@ -1496,23 +1498,23 @@ function Investigations() {
                             <div className="min-w-0 flex-1">
                                 <div className="flex items-center gap-2">
                                     <span className="rounded-full bg-neutral-100 px-2 py-1 text-xs font-medium uppercase tracking-[0.08em] text-neutral-500">
-                                        Investigation
+                                        {t("nav.investigations", "Investigation")}
                                     </span>
 
                                     <span className="flex items-center gap-1 text-xs text-neutral-400">
                                         <span className="h-1.5 w-1.5 rounded-full bg-neutral-700" />
-                                        {investigation?.status || "No investigation"}
+                                        {investigation?.status || t("investigations.empty.title", "No investigation")}
                                     </span>
                                 </div>
 
                                 <h1 className="mt-3 text-lg font-semibold tracking-tight">
                                     {investigation?.title ||
-                                        "No investigation selected"}
+                                        t("investigations.details.noDocuments", "No investigation selected")}
                                 </h1>
 
                                 <p className="mt-1.5 max-w-2xl text-xs leading-5 text-neutral-500">
                                     {investigation?.description ||
-                                        "Create an investigation to begin a persistent research workspace."}
+                                        t("investigations.empty.desc", "Create an investigation to begin a persistent research workspace.")}
                                 </p>
                             </div>
 
@@ -1538,7 +1540,7 @@ function Investigations() {
                                             }}
                                             className="block w-full px-3 py-1.5 text-left text-xs text-neutral-700 hover:bg-neutral-50"
                                         >
-                                            Edit
+                                            {t("common.save", "Edit")}
                                         </button>
                                         <button
                                             onClick={(e) => {
@@ -1551,7 +1553,7 @@ function Investigations() {
                                             }}
                                             className="block w-full px-3 py-1.5 text-left text-xs text-neutral-700 hover:bg-neutral-50"
                                         >
-                                            {selectedInvestigation.status === "Archived" ? "Restore" : "Archive"}
+                                            {selectedInvestigation.status === "Archived" ? t("common.retry", "Restore") : t("investigations.statuses.archived", "Archive")}
                                         </button>
                                         <button
                                             onClick={(e) => {
@@ -1561,7 +1563,7 @@ function Investigations() {
                                             }}
                                             className="block w-full px-3 py-1.5 text-left text-xs text-red-600 hover:bg-red-50"
                                         >
-                                            Delete
+                                            {t("common.delete", "Delete")}
                                         </button>
                                     </div>
                                 )}
@@ -1628,19 +1630,19 @@ function Investigations() {
                 <section className="mt-4 rounded-xl border border-neutral-200 bg-white">
                     <SectionHeader
                         icon={<Search size={14} />}
-                        title="Investigations"
-                        detail="Persistent investigation workspaces"
+                        title={t("investigations.title", "Investigations")}
+                        detail={t("investigations.subtitle", "Persistent investigation workspaces")}
                     />
 
                     <div className="p-4">
                         {loadingInvestigations ? (
                             <p className="text-xs text-neutral-400">
-                                Loading investigations...
+                                {t("common.loading", "Loading investigations...")}
                             </p>
                         ) : activeInvestigations.length === 0 && archivedInvestigations.length === 0 ? (
                             <div className="space-y-3">
                                 <p className="text-xs text-neutral-400">
-                                    No investigations exist yet.
+                                    {t("investigations.empty.title", "No investigations exist yet.")}
                                 </p>
 
                                 <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-3">
@@ -1649,7 +1651,7 @@ function Investigations() {
                                         onChange={(event) =>
                                             setNewTitle(event.target.value)
                                         }
-                                        placeholder="Investigation title"
+                                        placeholder={t("investigations.modal.fieldTitle", "Investigation title")}
                                         className="w-full bg-transparent text-xs outline-none placeholder:text-neutral-400"
                                     />
 
@@ -1658,7 +1660,7 @@ function Investigations() {
                                         onChange={(event) =>
                                             setNewDescription(event.target.value)
                                         }
-                                        placeholder="Description (optional)"
+                                        placeholder={t("investigations.modal.fieldDesc", "Description (optional)")}
                                         rows={2}
                                         className="mt-2 w-full resize-none border-t border-neutral-200 bg-transparent pt-2 text-xs leading-4 outline-none placeholder:text-neutral-400"
                                     />
@@ -1677,7 +1679,7 @@ function Investigations() {
                                             disabled={creatingInvestigation || !newTitle.trim()}
                                             className="rounded-full bg-neutral-900 px-4 py-1.5 text-xs text-white disabled:cursor-not-allowed disabled:opacity-30"
                                         >
-                                            {creatingInvestigation ? "Creating..." : "Create investigation"}
+                                            {creatingInvestigation ? t("common.saving", "Creating...") : t("investigations.modal.submit", "Create investigation")}
                                         </button>
                                     </div>
                                 </div>
@@ -2138,8 +2140,8 @@ function Investigations() {
                 <section className="mt-4 rounded-xl border border-neutral-200 bg-white">
                     <SectionHeader
                         icon={<Sparkles size={14} />}
-                        title="Investigation Research"
-                        detail="Ask questions using the investigation knowledge base"
+                        title={t("research.tabs.investigation", "Investigation Research")}
+                        detail={t("research.subtitle", "Ask questions using the investigation knowledge base")}
                     />
 
                     <div className="p-4">
@@ -2375,15 +2377,15 @@ function Investigations() {
                 <section className="mt-4 rounded-xl border border-neutral-200 bg-white">
                     <SectionHeader
                         icon={<ShieldAlert size={14} />}
-                        title="Regulatory Comparison"
-                        detail="Compare all attached investigation documents using AI"
+                        title={t("research.comparison.title", "Regulatory Comparison")}
+                        detail={t("research.comparison.subtitle", "Compare all attached investigation documents using AI")}
                     />
 
                     <div className="p-4 space-y-3">
                         {/* Read-only document context — no dropdowns */}
                         {investigationDocuments.length === 0 ? (
                             <p className="rounded-lg border border-dashed border-neutral-200 px-4 py-5 text-center text-xs text-neutral-400">
-                                No documents are attached to this investigation.
+                                {t("investigations.details.noDocuments", "No documents are attached to this investigation.")}
                             </p>
                         ) : investigationDocuments.length === 1 ? (
                             <p className="rounded-lg border border-dashed border-neutral-200 px-4 py-5 text-center text-xs text-neutral-400">
@@ -2431,7 +2433,7 @@ function Investigations() {
                                                     }
                                                 }}
                                                 rows={2}
-                                                placeholder="e.g. Compare data breach notification requirements, or: Compare these documents."
+                                                placeholder={t("research.inputPlaceholder", "e.g. Compare data breach notification requirements, or: Compare these documents.")}
                                                 className="w-full resize-none bg-transparent text-sm leading-5 outline-none placeholder:text-neutral-400"
                                             />
 
@@ -2497,7 +2499,7 @@ function Investigations() {
                                         <div className="rounded-xl border border-neutral-200 bg-white p-4">
                                             <div className="flex items-center gap-2 mb-3">
                                                 <ShieldAlert size={13} />
-                                                <span className="text-xs font-semibold">Comparison Result</span>
+                                                <span className="text-xs font-semibold">{t("research.comparison.title", "Comparison Result")}</span>
                                                 <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs text-neutral-500">AI · grounded · {compareResult.documents.length} docs</span>
                                             </div>
 
@@ -2548,15 +2550,15 @@ function Investigations() {
                 <section className="mt-4 rounded-xl border border-neutral-200 bg-white">
                     <SectionHeader
                         icon={<MessageCircle size={14} />}
-                        title="Discussion"
-                        detail="Human and AI collaboration"
+                        title={t("investigations.details.notes", "Discussion")}
+                        detail={t("investigations.subtitle", "Human and AI collaboration")}
                     />
 
                     <div className="divide-y divide-neutral-100">
                         {loadingComments ? (
-                            <div className="p-4 text-center text-xs text-neutral-400">Loading comments...</div>
+                            <div className="p-4 text-center text-xs text-neutral-400">{t("common.loading", "Loading comments...")}</div>
                         ) : comments.length === 0 ? (
-                            <div className="p-4 text-center text-xs text-neutral-400">No comments yet.</div>
+                            <div className="p-4 text-center text-xs text-neutral-400">{t("investigations.empty.desc", "No comments yet.")}</div>
                         ) : (
                             comments.map((comment) => (
                                 <Comment
@@ -2575,7 +2577,7 @@ function Investigations() {
                         <div className="flex items-center gap-2 rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2.5">
                             <input
                                 className="min-w-0 flex-1 bg-transparent text-xs outline-none placeholder:text-neutral-400"
-                                placeholder="Add a comment to this investigation..."
+                                placeholder={t("investigations.modal.descPlaceholder", "Add a comment to this investigation...")}
                                 value={newCommentText}
                                 onChange={(e) => setNewCommentText(e.target.value)}
                                 onKeyDown={(e) => {
@@ -2600,15 +2602,15 @@ function Investigations() {
                 <section className="mt-4 rounded-xl border border-neutral-200 bg-white">
                     <SectionHeader
                         icon={<FileText size={14} />}
-                        title="Evidence"
-                        detail="Documents attached to this investigation"
+                        title={t("investigations.details.evidence", "Evidence")}
+                        detail={t("investigations.details.documents", "Documents attached to this investigation")}
                     />
 
                     <div className="divide-y divide-neutral-100">
                         {loadingInvestigationDocuments ? (
                             <div className="p-5 text-center">
                                 <p className="text-xs text-neutral-400">
-                                    Loading evidence...
+                                    {t("common.loading", "Loading evidence...")}
                                 </p>
                             </div>
                         ) : investigationDocuments.length === 0 ? (
@@ -2619,7 +2621,7 @@ function Investigations() {
                                 />
 
                                 <p className="mt-2 text-xs text-neutral-400">
-                                    No documents are currently available.
+                                    {t("investigations.details.noDocuments", "No documents are currently available.")}
                                 </p>
                             </div>
                         ) : (
@@ -2647,14 +2649,14 @@ function Investigations() {
                 <section className="mt-4 rounded-xl border border-neutral-200 bg-white">
                     <SectionHeader
                         icon={<Sparkles size={14} />}
-                        title="Compliance Investigation Agent"
-                        detail="Analyze the evidence attached to this investigation and produce a structured finding."
+                        title={t("agents.title", "Compliance Investigation Agent")}
+                        detail={t("agents.subtitle", "Analyze the evidence attached to this investigation and produce a structured finding.")}
                     />
 
                     <div className="p-4 space-y-3">
                         <div className="rounded-lg border border-neutral-100 bg-neutral-50 p-3">
                             <p className="text-xs font-medium uppercase tracking-wide text-neutral-400 mb-2">
-                                Investigation Scope
+                                {t("agents.scopeLabel", "Investigation Scope")}
                             </p>
                             <p className="text-xs text-neutral-600">
                                 The agent will analyze all {investigationDocuments.length} document{investigationDocuments.length !== 1 ? 's' : ''} currently attached to this investigation.
@@ -2672,7 +2674,7 @@ function Investigations() {
                                         value={agentQuestion}
                                         onChange={(e) => setAgentQuestion(e.target.value)}
                                         rows={3}
-                                        placeholder="e.g. Determine if our data retention policy complies with GDPR Article 5."
+                                        placeholder={t("agents.taskPlaceholder", "e.g. Determine if our data retention policy complies with GDPR Article 5.")}
                                         className="w-full resize-none bg-transparent text-sm leading-5 outline-none placeholder:text-neutral-400"
                                     />
                                     <div className="flex items-center justify-between border-t border-neutral-200 pt-2">
@@ -2685,7 +2687,7 @@ function Investigations() {
                                             disabled={agentLoading || !agentQuestion.trim()}
                                             className="rounded-full bg-[#FBC648] px-4 py-1.5 text-xs font-medium text-neutral-900 disabled:opacity-40 disabled:cursor-not-allowed"
                                         >
-                                            {agentLoading ? "Running..." : "Run Investigation"}
+                                            {agentLoading ? t("agents.statusRunning", "Running...") : t("agents.runAgent", "Run Investigation")}
                                         </button>
                                     </div>
                                 </div>
@@ -2718,7 +2720,7 @@ function Investigations() {
                         {agentRuns.length > 0 && (
                             <div className="mt-6">
                                 <div className="mb-3 flex items-center justify-between">
-                                    <h3 className="text-xs font-semibold">Agent Run History</h3>
+                                    <h3 className="text-xs font-semibold">{t("agents.executionTrace", "Agent Run History")}</h3>
                                     <span className="text-xs text-neutral-400">{agentRuns.length} run{agentRuns.length !== 1 ? 's' : ''}</span>
                                 </div>
 

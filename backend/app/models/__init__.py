@@ -11,3 +11,10 @@ from app.models.investigation_comment import InvestigationComment  # noqa: F401
 from app.models.integration import Integration  # noqa: F401
 from app.models.investigation_collaborator import InvestigationCollaborator
 from app.models.investigation_presence import InvestigationPresence
+from app.models.assistant import (  # noqa: F401
+    AssistantPreference,
+    AssistantAuditLog,
+    AssistantActionToken,
+    AssistantConversation,
+    AssistantMessage,
+)

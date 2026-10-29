@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { SegmentedControl } from "./SegmentedControl"
 import {
     AlertTriangle,
@@ -75,26 +76,29 @@ function fmtDate(ts: string | null) {
     return new Date(ts).toLocaleDateString(undefined, { dateStyle: "medium" })
 }
 
-function policyStatusBadge(status: string) {
+function policyStatusBadge(status: string, t?: any) {
+    const tr = t || ((_k: string, f?: string) => f || _k)
     const base = "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
-    if (status === "Active") return <span className={`${base} bg-green-50 text-green-700`}>{status}</span>
-    if (status === "Draft") return <span className={`${base} bg-amber-50 text-amber-700`}>{status}</span>
-    if (status === "Archived") return <span className={`${base} bg-neutral-100 text-neutral-500`}>{status}</span>
+    if (status === "Active") return <span className={`${base} bg-green-50 text-green-700`}>{tr("investigations.statuses.active", "Active")}</span>
+    if (status === "Draft") return <span className={`${base} bg-amber-50 text-amber-700`}>{tr("common.inProgress", "Draft")}</span>
+    if (status === "Archived") return <span className={`${base} bg-neutral-100 text-neutral-500`}>{tr("investigations.statuses.archived", "Archived")}</span>
     return <span className={`${base} bg-neutral-100 text-neutral-600`}>{status}</span>
 }
 
-function riskBadge(risk: string) {
+function riskBadge(risk: string, t?: any) {
+    const tr = t || ((_k: string, f?: string) => f || _k)
     const base = "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
-    if (risk === "High") return <span className={`${base} bg-red-50 text-red-700`}><AlertTriangle size={8} className="mr-1" />{risk}</span>
-    if (risk === "Medium") return <span className={`${base} bg-amber-50 text-amber-700`}>{risk}</span>
-    return <span className={`${base} bg-green-50 text-green-700`}>{risk}</span>
+    if (risk === "High") return <span className={`${base} bg-red-50 text-red-700`}><AlertTriangle size={8} className="mr-1" />{tr("common.high", "High")}</span>
+    if (risk === "Medium") return <span className={`${base} bg-amber-50 text-amber-700`}>{tr("common.medium", "Medium")}</span>
+    return <span className={`${base} bg-green-50 text-green-700`}>{tr("common.low", "Low")}</span>
 }
 
-function complianceStatusBadge(status: string) {
+function complianceStatusBadge(status: string, t?: any) {
+    const tr = t || ((_k: string, f?: string) => f || _k)
     const base = "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
-    if (status === "Compliant") return <span className={`${base} bg-green-50 text-green-700`}><CheckCircle size={8} className="mr-1" />{status}</span>
-    if (status === "Non-Compliant") return <span className={`${base} bg-red-50 text-red-700`}><XCircle size={8} className="mr-1" />{status}</span>
-    if (status === "In Progress") return <span className={`${base} bg-blue-50 text-blue-700`}>{status}</span>
+    if (status === "Compliant") return <span className={`${base} bg-green-50 text-green-700`}><CheckCircle size={8} className="mr-1" />{tr("common.compliant", "Compliant")}</span>
+    if (status === "Non-Compliant") return <span className={`${base} bg-red-50 text-red-700`}><XCircle size={8} className="mr-1" />{tr("common.nonCompliant", "Non-Compliant")}</span>
+    if (status === "In Progress") return <span className={`${base} bg-blue-50 text-blue-700`}>{tr("common.inProgress", "In Progress")}</span>
     return <span className={`${base} bg-neutral-100 text-neutral-600`}>{status}</span>
 }
 
@@ -103,6 +107,7 @@ function complianceStatusBadge(status: string) {
 // ---------------------------------------------------------------------------
 
 function OverviewTab({ summary }: { summary: GovSummary }) {
+    const { t } = useTranslation()
     const { policies, regulations, compliance, investigations, findings } = summary
 
     return (
@@ -111,9 +116,9 @@ function OverviewTab({ summary }: { summary: GovSummary }) {
             <div className="rounded-xl border border-neutral-200 bg-white p-5">
                 <div className="flex items-center justify-between mb-3">
                     <div>
-                        <h2 className="text-sm font-semibold text-neutral-800">Compliance Score</h2>
+                        <h2 className="text-sm font-semibold text-neutral-800">{t("dashboard.stats.complianceScore", "Compliance Score")}</h2>
                         <p className="mt-0.5 text-xs text-neutral-400">
-                            Based on {compliance.total_obligations} tracked obligation{compliance.total_obligations !== 1 ? "s" : ""}
+                            {compliance.total_obligations} {t("compliance.title", "Obligations")}
                         </p>
                     </div>
                     <span className="text-3xl font-bold text-neutral-900">
@@ -130,7 +135,7 @@ function OverviewTab({ summary }: { summary: GovSummary }) {
                 )}
                 {compliance.total_obligations === 0 && (
                     <p className="text-xs text-neutral-400 mt-2">
-                        No compliance obligations tracked yet. Add items in the Compliance workspace.
+                        {t("compliance.emptyDesc", "No compliance obligations tracked yet. Add items in the Compliance workspace.")}
                     </p>
                 )}
             </div>
@@ -139,34 +144,34 @@ function OverviewTab({ summary }: { summary: GovSummary }) {
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
                 {[
                     {
-                        label: "Policies",
+                        label: t("nav.policies", "Policies"),
                         value: policies.total,
-                        sub: `${policies.active} active`,
+                        sub: `${policies.active} ${t("investigations.statuses.active", "active")}`,
                         icon: <FileText size={13} className="text-neutral-500" />,
                     },
                     {
-                        label: "Regulations",
+                        label: t("nav.regulations", "Regulations"),
                         value: regulations.total,
-                        sub: `${regulations.active} active`,
+                        sub: `${regulations.active} ${t("investigations.statuses.active", "active")}`,
                         icon: <Gavel size={13} className="text-neutral-500" />,
                     },
                     {
-                        label: "Non-Compliant",
+                        label: t("common.nonCompliant", "Non-Compliant"),
                         value: compliance.non_compliant,
-                        sub: `${compliance.high_risk} high risk`,
+                        sub: `${compliance.high_risk} ${t("common.high", "high risk")}`,
                         icon: <ShieldAlert size={13} className="text-red-500" />,
                         warn: compliance.non_compliant > 0,
                     },
                     {
-                        label: "Investigations",
+                        label: t("nav.investigations", "Investigations"),
                         value: investigations.active,
-                        sub: `${investigations.total} total`,
+                        sub: `${investigations.total} ${t("compliance.total", "total")}`,
                         icon: <BookOpen size={13} className="text-neutral-500" />,
                     },
                     {
-                        label: "Agent Findings",
+                        label: t("dashboard.stats.recentFindings", "Findings"),
                         value: findings.total,
-                        sub: `${findings.completed} completed`,
+                        sub: `${findings.completed} ${t("agents.statusCompleted", "completed")}`,
                         icon: <ShieldCheck size={13} className="text-neutral-500" />,
                     },
                 ].map((kpi) => (
@@ -192,16 +197,16 @@ function OverviewTab({ summary }: { summary: GovSummary }) {
             <div className="grid gap-3 sm:grid-cols-2">
                 <div className="rounded-xl border border-neutral-200 bg-white p-4">
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-3">
-                        Policy Status
+                        {t("nav.policies", "Policy")} {t("policies.columns.status", "Status")}
                     </h3>
                     {policies.total === 0 ? (
-                        <p className="text-xs text-neutral-400">No policies registered. Add policies in the Policies workspace.</p>
+                        <p className="text-xs text-neutral-400">{t("policies.subtitle", "No policies registered. Add policies in the Policies workspace.")}</p>
                     ) : (
                         <div className="space-y-2">
                             {[
-                                { label: "Active", value: policies.active, color: "bg-green-500" },
-                                { label: "Draft", value: policies.draft, color: "bg-amber-400" },
-                                { label: "Other", value: policies.total - policies.active - policies.draft, color: "bg-neutral-300" },
+                                { label: t("investigations.statuses.active", "Active"), value: policies.active, color: "bg-green-500" },
+                                { label: t("common.inProgress", "Draft"), value: policies.draft, color: "bg-amber-400" },
+                                { label: t("dashboard.topNav.all", "Other"), value: policies.total - policies.active - policies.draft, color: "bg-neutral-300" },
                             ].filter((r) => r.value > 0).map((row) => (
                                 <div key={row.label} className="flex items-center gap-2">
                                     <div className={`h-2 w-2 rounded-full shrink-0 ${row.color}`} />
@@ -215,17 +220,17 @@ function OverviewTab({ summary }: { summary: GovSummary }) {
 
                 <div className="rounded-xl border border-neutral-200 bg-white p-4">
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-3">
-                        Compliance Obligations
+                        {t("compliance.title", "Compliance Obligations")}
                     </h3>
                     {compliance.total_obligations === 0 ? (
-                        <p className="text-xs text-neutral-400">No compliance obligations tracked.</p>
+                        <p className="text-xs text-neutral-400">{t("compliance.emptyTitle", "No compliance obligations tracked.")}</p>
                     ) : (
                         <div className="space-y-2">
                             {[
-                                { label: "Compliant", value: compliance.compliant, color: "bg-green-500" },
-                                { label: "Non-Compliant", value: compliance.non_compliant, color: "bg-red-500" },
+                                { label: t("common.compliant", "Compliant"), value: compliance.compliant, color: "bg-green-500" },
+                                { label: t("common.nonCompliant", "Non-Compliant"), value: compliance.non_compliant, color: "bg-red-500" },
                                 {
-                                    label: "Other",
+                                    label: t("dashboard.topNav.all", "Other"),
                                     value: compliance.total_obligations - compliance.compliant - compliance.non_compliant,
                                     color: "bg-neutral-300",
                                 },
@@ -244,13 +249,13 @@ function OverviewTab({ summary }: { summary: GovSummary }) {
             {/* Capabilities not available */}
             <div className="rounded-xl border border-dashed border-neutral-200 bg-neutral-50 p-4">
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">
-                    Governance capabilities not yet configured
+                    {t("governance.title", "Corporate Governance")} — {t("settings.appearance.theme.comingSoon", "Coming soon")}
                 </h3>
                 <ul className="space-y-1.5 text-xs text-neutral-400">
-                    <li>• <span className="font-medium text-neutral-500">Approval workflows</span> — no approvals model exists in the backend yet</li>
-                    <li>• <span className="font-medium text-neutral-500">Control framework</span> — no controls table exists in the backend yet</li>
-                    <li>• <span className="font-medium text-neutral-500">Exception management</span> — no exceptions model exists in the backend yet</li>
-                    <li>• <span className="font-medium text-neutral-500">Role-based review assignments</span> — users table has roles but no assignment workflow is implemented</li>
+                    <li>• <span className="font-medium text-neutral-500">Approval workflows</span> — {t("agents.approvalRequired", "Approval Required")}</li>
+                    <li>• <span className="font-medium text-neutral-500">Control framework</span> — {t("governance.subtitle", "Framework oversight")}</li>
+                    <li>• <span className="font-medium text-neutral-500">Exception management</span> — {t("audit.title", "Audit & Findings")}</li>
+                    <li>• <span className="font-medium text-neutral-500">Role-based review assignments</span> — {t("governance.reviews", "Pending Policy Reviews")}</li>
                 </ul>
             </div>
         </div>
@@ -262,6 +267,7 @@ function OverviewTab({ summary }: { summary: GovSummary }) {
 // ---------------------------------------------------------------------------
 
 function Governance() {
+    const { t } = useTranslation()
     const [activeTab, setActiveTab] = useState<Tab>("overview")
 
     const [summary, setSummary] = useState<GovSummary | null>(null)
@@ -387,10 +393,10 @@ function Governance() {
     }, [activeTab, riskLevelFilter, riskStatusFilter])
 
     const tabs: { id: Tab; label: string }[] = [
-        { id: "overview", label: "Overview" },
-        { id: "policies", label: "Policy Register" },
-        { id: "regulations", label: "Regulation Register" },
-        { id: "risk", label: "Risk Register" },
+        { id: "overview", label: t("investigations.details.overview", "Overview") },
+        { id: "policies", label: `${t("nav.policies", "Policy")} ${t("investigations.details.timeline", "Register")}` },
+        { id: "regulations", label: `${t("nav.regulations", "Regulation")} ${t("investigations.details.timeline", "Register")}` },
+        { id: "risk", label: `${t("investigations.columns.risk", "Risk")} ${t("investigations.details.timeline", "Register")}` },
     ]
 
     return (
@@ -400,12 +406,12 @@ function Governance() {
                 <div className="flex items-center gap-2 mb-1">
                     <ShieldCheck size={15} className="text-neutral-500" />
                     <span className="text-xs font-medium uppercase tracking-[0.14em] text-neutral-400">
-                        Governance Layer
+                        {t("governance.title", "Governance Layer")}
                     </span>
                 </div>
-                <h1 className="text-xl font-semibold tracking-tight">Governance</h1>
+                <h1 className="text-xl font-semibold tracking-tight">{t("nav.governance", "Governance")}</h1>
                 <p className="mt-1 text-sm text-neutral-500">
-                    Organizational compliance posture derived from policies, regulations, and compliance obligations.
+                    {t("governance.subtitle", "Organizational compliance posture derived from policies, regulations, and compliance obligations.")}
                 </p>
             </div>
 
@@ -423,7 +429,7 @@ function Governance() {
             {activeTab === "overview" && (
                 summaryLoading ? (
                     <div className="rounded-xl border border-neutral-200 bg-white p-8 text-center">
-                        <p className="text-sm text-neutral-400">Loading governance summary…</p>
+                        <p className="text-sm text-neutral-400">{t("common.loading", "Loading governance summary…")}</p>
                     </div>
                 ) : summaryError ? (
                     <div className="rounded-xl border border-neutral-200 bg-white p-8 text-center">
@@ -445,7 +451,7 @@ function Governance() {
                             <input
                                 value={policySearch}
                                 onChange={(e) => setPolicySearch(e.target.value)}
-                                placeholder="Search policies…"
+                                placeholder={t("policies.searchPlaceholder", "Search policies…")}
                                 className="w-44 bg-transparent text-sm outline-none placeholder:text-neutral-400"
                             />
                             {policySearch && (
@@ -459,26 +465,26 @@ function Governance() {
                             onChange={(e) => setPolicyStatusFilter(e.target.value)}
                             className="rounded-lg border border-neutral-200 bg-white px-2.5 py-1.5 text-sm text-neutral-700 outline-none"
                         >
-                            <option value="">All statuses</option>
-                            <option value="Active">Active</option>
-                            <option value="Draft">Draft</option>
-                            <option value="Archived">Archived</option>
+                            <option value="">{t("common.allStatuses", "All statuses")}</option>
+                            <option value="Active">{t("investigations.statuses.active", "Active")}</option>
+                            <option value="Draft">{t("common.inProgress", "Draft")}</option>
+                            <option value="Archived">{t("investigations.statuses.archived", "Archived")}</option>
                         </select>
                         <span className="ml-auto text-xs text-neutral-400">
-                            {policiesLoading ? "Loading…" : `${policiesTotal} policies`}
+                            {policiesLoading ? t("common.loading", "Loading…") : `${policiesTotal} ${t("nav.policies", "policies")}`}
                         </span>
                     </div>
 
                     {policiesLoading ? (
                         <div className="rounded-xl border border-neutral-200 bg-white p-8 text-center">
-                            <p className="text-sm text-neutral-400">Loading policies…</p>
+                            <p className="text-sm text-neutral-400">{t("common.loading", "Loading policies…")}</p>
                         </div>
                     ) : policies.length === 0 ? (
                         <div className="rounded-xl border border-dashed border-neutral-200 bg-white p-10 text-center">
                             <FileText size={20} className="mx-auto mb-3 text-neutral-300" />
-                            <p className="text-sm font-medium text-neutral-600">No policies found</p>
+                            <p className="text-sm font-medium text-neutral-600">{t("policies.subtitle", "No policies found")}</p>
                             <p className="mt-1 text-sm text-neutral-400">
-                                Add policies in the Policies workspace. They will appear here automatically.
+                                {t("policies.subtitle", "Add policies in the Policies workspace. They will appear here automatically.")}
                             </p>
                         </div>
                     ) : (
@@ -486,19 +492,19 @@ function Governance() {
                             <table className="w-full text-sm">
                                 <thead>
                                     <tr className="border-b border-neutral-100 bg-neutral-50">
-                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">Policy</th>
-                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">Department</th>
-                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">Status</th>
-                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">Version</th>
-                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">Effective Date</th>
+                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">{t("policies.columns.name", "Policy")}</th>
+                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">{t("compliance.fieldDepartment", "Department")}</th>
+                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">{t("policies.columns.status", "Status")}</th>
+                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">{t("policies.columns.version", "Version")}</th>
+                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">{t("regulations.columns.effectiveDate", "Effective Date")}</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-neutral-100">
                                     {policies.map((p) => (
-                                        <tr key={p.id} className="hover:bg-neutral-50">
+                                         <tr key={p.id} className="hover:bg-neutral-50">
                                             <td className="px-4 py-3 font-medium text-neutral-900">{p.title}</td>
                                             <td className="px-4 py-3 text-neutral-500">{p.department}</td>
-                                            <td className="px-4 py-3">{policyStatusBadge(p.status)}</td>
+                                            <td className="px-4 py-3">{policyStatusBadge(p.status, t)}</td>
                                             <td className="px-4 py-3 text-neutral-500">{p.version}</td>
                                             <td className="px-4 py-3 text-neutral-400">{fmtDate(p.effective_date)}</td>
                                         </tr>
@@ -521,17 +527,17 @@ function Governance() {
                             onChange={(e) => setRegStatusFilter(e.target.value)}
                             className="rounded-lg border border-neutral-200 bg-white px-2.5 py-1.5 text-sm text-neutral-700 outline-none"
                         >
-                            <option value="">All statuses</option>
-                            <option value="Active">Active</option>
-                            <option value="Draft">Draft</option>
-                            <option value="Archived">Archived</option>
+                            <option value="">{t("common.allStatuses", "All statuses")}</option>
+                            <option value="Active">{t("investigations.statuses.active", "Active")}</option>
+                            <option value="Draft">{t("common.inProgress", "Draft")}</option>
+                            <option value="Archived">{t("investigations.statuses.archived", "Archived")}</option>
                         </select>
                         <div className="search-pill flex items-center gap-1.5 px-2.5 py-1.5">
                             <Search size={12} className="text-neutral-400" />
                             <input
                                 value={regJurisdictionFilter}
                                 onChange={(e) => setRegJurisdictionFilter(e.target.value)}
-                                placeholder="Filter by jurisdiction…"
+                                placeholder={t("investigations.filterJurisdiction", "Filter by jurisdiction…")}
                                 className="w-44 bg-transparent text-sm outline-none placeholder:text-neutral-400"
                             />
                             {regJurisdictionFilter && (
@@ -541,20 +547,20 @@ function Governance() {
                             )}
                         </div>
                         <span className="ml-auto text-xs text-neutral-400">
-                            {regulationsLoading ? "Loading…" : `${regulationsTotal} regulations`}
+                            {regulationsLoading ? t("common.loading", "Loading…") : `${regulationsTotal} ${t("nav.regulations", "regulations")}`}
                         </span>
                     </div>
 
                     {regulationsLoading ? (
                         <div className="rounded-xl border border-neutral-200 bg-white p-8 text-center">
-                            <p className="text-sm text-neutral-400">Loading regulations…</p>
+                            <p className="text-sm text-neutral-400">{t("common.loading", "Loading regulations…")}</p>
                         </div>
                     ) : regulations.length === 0 ? (
                         <div className="rounded-xl border border-dashed border-neutral-200 bg-white p-10 text-center">
                             <Gavel size={20} className="mx-auto mb-3 text-neutral-300" />
-                            <p className="text-sm font-medium text-neutral-600">No regulations found</p>
+                            <p className="text-sm font-medium text-neutral-600">{t("regulations.subtitle", "No regulations found")}</p>
                             <p className="mt-1 text-sm text-neutral-400">
-                                Add regulations in the Regulations workspace. They will appear here automatically.
+                                {t("regulations.subtitle", "Add regulations in the Regulations workspace. They will appear here automatically.")}
                             </p>
                         </div>
                     ) : (
@@ -562,11 +568,11 @@ function Governance() {
                             <table className="w-full text-sm">
                                 <thead>
                                     <tr className="border-b border-neutral-100 bg-neutral-50">
-                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">Regulation</th>
-                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">Issuing Authority</th>
-                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">Jurisdiction</th>
-                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">Status</th>
-                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">Effective Date</th>
+                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">{t("regulations.columns.name", "Regulation")}</th>
+                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">{t("regulations.columns.authority", "Issuing Authority")}</th>
+                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">{t("regulations.columns.jurisdiction", "Jurisdiction")}</th>
+                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">{t("regulations.columns.status", "Status")}</th>
+                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">{t("regulations.columns.effectiveDate", "Effective Date")}</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-neutral-100">
@@ -575,7 +581,7 @@ function Governance() {
                                             <td className="px-4 py-3 font-medium text-neutral-900">{r.title}</td>
                                             <td className="px-4 py-3 text-neutral-500">{r.issuing_authority}</td>
                                             <td className="px-4 py-3 text-neutral-500">{r.jurisdiction}</td>
-                                            <td className="px-4 py-3">{policyStatusBadge(r.status)}</td>
+                                            <td className="px-4 py-3">{policyStatusBadge(r.status, t)}</td>
                                             <td className="px-4 py-3 text-neutral-400">{fmtDate(r.effective_date)}</td>
                                         </tr>
                                     ))}
@@ -597,37 +603,37 @@ function Governance() {
                             onChange={(e) => setRiskLevelFilter(e.target.value)}
                             className="rounded-lg border border-neutral-200 bg-white px-2.5 py-1.5 text-sm text-neutral-700 outline-none"
                         >
-                            <option value="">All risk levels</option>
-                            <option value="High">High</option>
-                            <option value="Medium">Medium</option>
-                            <option value="Low">Low</option>
+                            <option value="">{t("common.allRisks", "All risk levels")}</option>
+                            <option value="High">{t("common.high", "High")}</option>
+                            <option value="Medium">{t("common.medium", "Medium")}</option>
+                            <option value="Low">{t("common.low", "Low")}</option>
                         </select>
                         <select
                             value={riskStatusFilter}
                             onChange={(e) => setRiskStatusFilter(e.target.value)}
                             className="rounded-lg border border-neutral-200 bg-white px-2.5 py-1.5 text-sm text-neutral-700 outline-none"
                         >
-                            <option value="">All statuses</option>
-                            <option value="Compliant">Compliant</option>
-                            <option value="Non-Compliant">Non-Compliant</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Not Started">Not Started</option>
+                            <option value="">{t("common.allStatuses", "All statuses")}</option>
+                            <option value="Compliant">{t("common.compliant", "Compliant")}</option>
+                            <option value="Non-Compliant">{t("common.nonCompliant", "Non-Compliant")}</option>
+                            <option value="In Progress">{t("common.inProgress", "In Progress")}</option>
+                            <option value="Not Started">{t("common.notStarted", "Not Started")}</option>
                         </select>
                         <span className="ml-auto text-xs text-neutral-400">
-                            {riskLoading ? "Loading…" : `${riskTotal} obligations`}
+                            {riskLoading ? t("common.loading", "Loading…") : `${riskTotal} ${t("compliance.title", "obligations")}`}
                         </span>
                     </div>
 
                     {riskLoading ? (
                         <div className="rounded-xl border border-neutral-200 bg-white p-8 text-center">
-                            <p className="text-sm text-neutral-400">Loading risk register…</p>
+                            <p className="text-sm text-neutral-400">{t("common.loading", "Loading risk register…")}</p>
                         </div>
                     ) : riskItems.length === 0 ? (
                         <div className="rounded-xl border border-dashed border-neutral-200 bg-white p-10 text-center">
                             <ShieldAlert size={20} className="mx-auto mb-3 text-neutral-300" />
-                            <p className="text-sm font-medium text-neutral-600">No compliance obligations found</p>
+                            <p className="text-sm font-medium text-neutral-600">{t("compliance.emptyTitle", "No compliance obligations found")}</p>
                             <p className="mt-1 text-sm text-neutral-400">
-                                Add compliance obligations in the Compliance workspace. They will appear here automatically.
+                                {t("compliance.emptyDesc", "Add compliance obligations in the Compliance workspace. They will appear here automatically.")}
                             </p>
                         </div>
                     ) : (
@@ -635,12 +641,12 @@ function Governance() {
                             <table className="w-full text-sm">
                                 <thead>
                                     <tr className="border-b border-neutral-100 bg-neutral-50">
-                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">Obligation</th>
-                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">Regulation</th>
-                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">Department</th>
-                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">Risk</th>
-                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">Status</th>
-                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">Due Date</th>
+                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">{t("compliance.fieldTitle", "Obligation")}</th>
+                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">{t("regulations.columns.name", "Regulation")}</th>
+                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">{t("compliance.fieldDepartment", "Department")}</th>
+                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">{t("compliance.fieldRisk", "Risk")}</th>
+                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">{t("compliance.fieldStatus", "Status")}</th>
+                                        <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-neutral-400">{t("compliance.fieldDueDate", "Due Date")}</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-neutral-100">
@@ -652,8 +658,8 @@ function Governance() {
                                             <td className="px-4 py-3 font-medium text-neutral-900">{c.title}</td>
                                             <td className="px-4 py-3 text-neutral-500">{c.regulation}</td>
                                             <td className="px-4 py-3 text-neutral-500">{c.department}</td>
-                                            <td className="px-4 py-3">{riskBadge(c.risk_level)}</td>
-                                            <td className="px-4 py-3">{complianceStatusBadge(c.status)}</td>
+                                            <td className="px-4 py-3">{riskBadge(c.risk_level, t)}</td>
+                                            <td className="px-4 py-3">{complianceStatusBadge(c.status, t)}</td>
                                             <td className="px-4 py-3 text-neutral-400">{fmtDate(c.due_date)}</td>
                                         </tr>
                                     ))}

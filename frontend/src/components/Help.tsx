@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { Search, HelpCircle, MessageSquare } from "lucide-react"
 
@@ -14,25 +15,26 @@ type HelpTopicId =
     | "faq"
     | "shortcuts"
 
-const helpTopics: { id: HelpTopicId; label: string }[] = [
-    { id: "getting-started", label: "Getting Started" },
-    { id: "investigations", label: "Investigations" },
-    { id: "research", label: "Research" },
-    { id: "agents", label: "AI Agents" },
-    { id: "documents", label: "Documents & Knowledge" },
-    { id: "integrations", label: "Integrations" },
-    { id: "governance", label: "Governance & Compliance" },
-    { id: "audit", label: "Audit & Findings" },
-    { id: "faq", label: "FAQ" },
-    { id: "shortcuts", label: "Keyboard Shortcuts" },
-]
-
 export default function Help() {
+    const { t } = useTranslation()
     const [activeTopic, setActiveTopic] = useState<HelpTopicId>("getting-started")
     const [question, setQuestion] = useState("")
     const [answer, setAnswer] = useState<string | null>(null)
     const [loadingAsk, setLoadingAsk] = useState(false)
     const [errorAsk, setErrorAsk] = useState<string | null>(null)
+
+    const helpTopics: { id: HelpTopicId; label: string }[] = [
+        { id: "getting-started", label: t("help.categories.gettingStarted", "Getting Started") },
+        { id: "investigations", label: t("help.categories.investigations", "Investigations") },
+        { id: "research", label: t("help.categories.research", "Research") },
+        { id: "agents", label: t("nav.agents", "AI Agents") },
+        { id: "documents", label: t("investigations.details.documents", "Documents & Knowledge") },
+        { id: "integrations", label: t("nav.integrations", "Integrations") },
+        { id: "governance", label: t("nav.governance", "Governance & Compliance") },
+        { id: "audit", label: t("nav.audit", "Audit & Findings") },
+        { id: "faq", label: "FAQ" },
+        { id: "shortcuts", label: t("help.shortcutsTitle", "Keyboard Shortcuts") },
+    ]
 
     const handleAsk = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -44,7 +46,8 @@ export default function Help() {
 
         try {
             const token = localStorage.getItem("access_token")
-            const res = await fetch("http://127.0.0.1:8000/api/v1/help/ask", {
+            const apiBase = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "")
+            const res = await fetch(`${apiBase}/api/v1/help/ask`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -260,7 +263,7 @@ export default function Help() {
             <div className="w-64 pr-6 border-r border-neutral-200 overflow-y-auto shrink-0 flex flex-col">
                 <div className="flex items-center gap-2 mb-6 pl-2">
                     <HelpCircle size={20} className="text-neutral-900" />
-                    <h2 className="text-heading font-semibold text-neutral-900">Help Center</h2>
+                    <h2 className="text-heading font-semibold text-neutral-900">{t("help.title", "Help Center")}</h2>
                 </div>
                 
                 <nav className="flex flex-col gap-1 flex-1">
@@ -290,7 +293,7 @@ export default function Help() {
                 <div className="mt-12 max-w-2xl border-t border-neutral-200 pt-8">
                     <div className="flex items-center gap-2 mb-2">
                         <MessageSquare size={18} className="text-neutral-900" />
-                        <h3 className="text-lg font-semibold text-neutral-900">Still need help?</h3>
+                        <h3 className="text-lg font-semibold text-neutral-900">{t("help.subtitle", "Still need help?")}</h3>
                     </div>
                     <p className="text-body text-neutral-500 mb-4">
                         Ask OpusLex about using the platform.
@@ -301,7 +304,7 @@ export default function Help() {
                             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
                             <input
                                 type="text"
-                                placeholder="How do I create an investigation?"
+                                placeholder={t("help.searchPlaceholder", "How do I create an investigation?")}
                                 value={question}
                                 onChange={e => setQuestion(e.target.value)}
                                 className="w-full pl-9 pr-4 py-2 bg-white border border-neutral-300 rounded-lg focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 text-body transition-shadow"
@@ -312,7 +315,7 @@ export default function Help() {
                             disabled={!question.trim() || loadingAsk}
                             className="px-4 py-2 bg-[#FBC648] text-neutral-900 rounded-lg font-medium text-sm hover:bg-[#F0BD44] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
-                            {loadingAsk ? "Asking..." : "Ask"}
+                            {loadingAsk ? t("common.loading", "Asking...") : t("research.askButton", "Ask")}
                         </button>
                     </form>
 

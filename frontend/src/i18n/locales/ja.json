@@ -1,0 +1,568 @@
+{
+  "nav": {
+    "home": "ホーム",
+    "regulations": "規制",
+    "compliance": "コンプライアンス",
+    "policies": "ポリシー",
+    "research": "リサーチ",
+    "agents": "AIエージェント",
+    "investigations": "調査",
+    "integrations": "連携",
+    "audit": "監査および所見",
+    "reports": "レポート",
+    "governance": "ガバナンス",
+    "settings": "設定",
+    "help": "ヘルプ"
+  },
+  "settings": {
+    "title": "設定",
+    "categories": {
+      "app": "アプリ",
+      "account": "アカウント",
+      "data_privacy": "データとプライバシー",
+      "integrations": "外部連携",
+      "advanced": "詳細設定"
+    },
+    "tabs": {
+      "appearance": "外観",
+      "general": "一般",
+      "accessibility": "アクセシビリティ",
+      "notifications": "通知",
+      "profile": "プロフィール",
+      "security": "セキュリティとログイン",
+      "data": "データ管理",
+      "storage": "ストレージ",
+      "language": "言語",
+      "privacy": "プライバシー",
+      "integrations": "連携",
+      "advanced": "詳細設定",
+      "workspace": "ワークスペース",
+      "navigation": "ナビゲーション",
+      "assistant": "AIアシスタント"
+    },
+    "appearance": {
+      "headerTitle": "外観",
+      "headerSub": "デバイス上でのOpusLexの表示をカスタマイズします。",
+      "fontSize": {
+        "title": "フォントサイズ",
+        "description": "階層構造を維持しながら文字サイズを選択します。",
+        "current": "現在値:"
+      },
+      "density": {
+        "title": "表示密度",
+        "description": "インターフェース要素の間隔を調整します。"
+      },
+      "theme": {
+        "title": "テーマ",
+        "description": "お好みのカラーテーマを選択してください。",
+        "comingSoon": "近日公開",
+        "light": "ライト",
+        "dark": "ダーク",
+        "auto": "自動",
+        "lightDesc": "視認性の高いクリーンなライトインターフェース。",
+        "darkDesc": "目の疲れを軽減する落ち着いたダークパレット。",
+        "autoDesc": "システムのテーマ設定と自動的に同期します。",
+        "autoDescription": "システム設定に従う"
+      }
+    },
+    "general": {
+      "headerTitle": "一般",
+      "headerSub": "アプリケーションの基本動作を設定します。",
+      "landing": {
+        "title": "デフォルトの初期セクション",
+        "description": "ログイン直後に表示するセクションを選択します。",
+        "takesEffect": "次回ログイン時から有効になります。"
+      }
+    },
+    "accessibility": {
+      "headerTitle": "アクセシビリティ",
+      "headerSub": "操作環境に合わせてインターフェースを調整します。",
+      "reduceMotion": {
+        "label": "視覚効果を減らす",
+        "description": "アプリ全体のアニメーションや画面遷移を最小限に抑えます。"
+      },
+      "largerTargets": {
+        "label": "クリック領域を拡大",
+        "description": "操作を容易にするためボタンの余白を増やします。"
+      },
+      "highContrast": {
+        "label": "ハイコントラスト",
+        "description": "テキストと枠線のコントラストを高めて視認性を向上させます。"
+      },
+      "osPreference": "オペレーティングシステムの視覚効果設定も尊重されます。"
+    },
+    "language": {
+      "headerTitle": "言語",
+      "headerSub": "表示言語を管理します。100以上の言語に対応しています。",
+      "english": "英語",
+      "spanish": "スペイン語",
+      "active": "アクティブ",
+      "select": "言語を選択",
+      "searchPlaceholder": "110以上の言語を英語または母国語で検索...",
+      "coverageFull": "完全翻訳",
+      "coveragePriority": "優先言語バンドル",
+      "coverageFallback": "英語フォールバック（翻訳進行中）",
+      "catalogCount": "{{count}} 言語が利用可能",
+      "noResults": "一致する言語が見つかりません。"
+    },
+    "assistant": {
+      "headerTitle": "AIアシスタント",
+      "headerSub": "音声・テキストアシスタント、ショートカット、バックエンド権限を設定します。",
+      "enableTitle": "AIアシスタントを有効化",
+      "enableDesc": "フローティングオーブを表示し、音声・テキストコマンドを許可します。",
+      "permissionsTitle": "アシスタント権限レベル",
+      "permissionsDesc": "不正なデータ変更を防ぐためバックエンドで厳格に適用されます。",
+      "level1": "レベル1: 閲覧・回答（読み取り専用、変更不可）",
+      "level2": "レベル2: 提案（実行を伴わない下書き作成）",
+      "level3": "レベル3: 承認付き実行（明示的な事前確認が必要）",
+      "level4": "レベル4: 限定的自律実行（低リスク操作を直接実行）",
+      "voiceTitle": "音声・音声出力",
+      "voiceDesc": "読み上げ音声とブラウザ音声エンジンを設定します。",
+      "enableVoice": "音声読み上げを有効化",
+      "voiceSelect": "ブラウザ音声",
+      "shortcutTitle": "起動ショートカット",
+      "shortcutDesc": "アシスタントを呼び出すアプリ内ショートカットキー。",
+      "privacyTitle": "コンテキスト共有",
+      "privacyDesc": "調査メタデータをアシスタントが参照することを許可します。"
+    },
+    "workspace": {
+      "headerTitle": "ワークスペース",
+      "headerSub": "現在のOpusLex作業環境に関する情報。",
+      "activeEnv": {
+        "title": "アクティブな環境",
+        "description": "統合OpusLexワークスペースで作業しています。",
+        "defaultLanding": "初期セクションの設定先：",
+        "generalLink": "一般"
+      },
+      "identity": {
+        "title": "ワークスペースの識別情報",
+        "description": "ワークスペースの表示名を管理します。",
+        "nameLabel": "ワークスペース名",
+        "save": "保存",
+        "saving": "保存中...",
+        "saved": "保存完了",
+        "emptyError": "ワークスペース名は空にできません。"
+      },
+      "usage": {
+        "title": "使用状況の概要",
+        "description": "ワークスペースの現在のメトリクス。",
+        "documents": "総ドキュメント数",
+        "investigations": "アクティブな調査数",
+        "agentRuns": "エージェント実行数",
+        "loading": "メトリクスを読み込み中...",
+        "error": "メトリクスの読み込みに失敗しました。"
+      }
+    },
+    "storage": {
+      "headerTitle": "ストレージ",
+      "headerSub": "ワークスペースのストレージ情報。",
+      "summary": {
+        "title": "ストレージ概要",
+        "totalDocuments": "総ドキュメント数"
+      },
+      "documents": {
+        "title": "アップロードされた文書",
+        "empty": "まだ文書はありません。リサーチ文書がここに表示されます。",
+        "deleteAction": "削除",
+        "confirmDelete": "このドキュメントを削除してもよろしいですか？",
+        "deletedSuccess": "ドキュメントが正常に削除されました。"
+      }
+    },
+    "security": {
+      "status": {
+        "configured": "設定済み",
+        "notConfigured": "未設定",
+        "linked": "連携済み",
+        "notLinked": "未連携",
+        "verified": "確認済み",
+        "notVerified": "未確認"
+      },
+      "action": {
+        "changePassword": "パスワード変更",
+        "setPassword": "パスワード設定",
+        "link_phone": "電話番号連携",
+        "verify_email": "メールアドレス確認"
+      }
+    }
+  },
+  "assistantUI": {
+    "title": "OpusLex アシスタント",
+    "tooltip": "アシスタントを開く ({{shortcut}})",
+    "inputPlaceholder": "コンプライアンスに関する質問や指示を入力...",
+    "send": "送信",
+    "listening": "音声を聞き取り中...",
+    "stopListening": "聞き取りを終了",
+    "mute": "音声をミュート",
+    "unmute": "音声を有効化",
+    "clearHistory": "会話をクリア",
+    "close": "閉じる",
+    "taskWorkspace": "タスク画面",
+    "actionRequiresApproval": "承認が必要です",
+    "approveAction": "承認して実行",
+    "rejectAction": "アクションを中止",
+    "actionExecuted": "アクションが正常に実行されました",
+    "actionDenied": "権限レベルにより実行が拒否されました",
+    "voiceUnavailable": "このブラウザでは音声認識を利用できません。",
+    "voiceDenied": "マイクの許可が得られませんでした。テキストで入力してください。",
+    "contextBadge": "コンテキスト: {{section}}",
+    "switchToText": "テキストに切り替え",
+    "switchToVoice": "音声に切り替え",
+    "voiceHudHint": "話しかけるか「テキストに切り替え」と言ってください",
+    "spotlightPlaceholder": "コンプライアンスに関する質問や指示を入力...",
+    "returnToVoice": "音声モード",
+    "explainPage": "ページを説明"
+  },
+  "common": {
+    "search": "検索...",
+    "searchWorkspace": "ワークスペースを検索...",
+    "searchObligations": "コンプライアンス義務を検索...",
+    "add": "追加",
+    "create": "作成",
+    "save": "保存",
+    "saving": "保存中...",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "confirm": "確認",
+    "close": "閉じる",
+    "back": "戻る",
+    "retry": "再試行",
+    "loading": "読み込み中...",
+    "error": "問題が発生しました。",
+    "allStatuses": "すべてのステータス",
+    "allRisks": "すべてのリスク",
+    "compliant": "準拠",
+    "nonCompliant": "非準拠",
+    "inProgress": "進行中",
+    "notStarted": "未着手",
+    "waived": "免除",
+    "overdue": "期限超過",
+    "low": "低",
+    "medium": "中",
+    "high": "高",
+    "critical": "重大",
+    "saved": "保存しました"
+  },
+  "compliance": {
+    "title": "コンプライアンス追跡",
+    "subtitle": "法令上の義務と現在の準拠ステータス。",
+    "addObligation": "義務を追加",
+    "total": "総計",
+    "score": "適合スコア",
+    "highRisk": "高リスク",
+    "emptyTitle": "コンプライアンス義務がまだ登録されていません",
+    "emptyFilterTitle": "条件に一致する義務が見つかりません",
+    "emptyDesc": "規制要件と進捗を追跡するために義務を追加してください。",
+    "modalTitle": "コンプライアンス義務を追加",
+    "fieldTitle": "タイトル *",
+    "fieldRegulation": "関連規制 *",
+    "fieldDepartment": "担当部門 *",
+    "fieldStatus": "ステータス",
+    "fieldRisk": "リスク度",
+    "fieldDueDate": "期日",
+    "fieldDescription": "説明"
+  },
+  "auth": {
+    "welcome": "OpusLex へようこそ",
+    "signIn": "サインイン",
+    "signUp": "新規登録",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "fullName": "氏名",
+    "logIn": "ログイン",
+    "logOut": "ログアウト",
+    "createAccount": "アカウント作成",
+    "alreadyHaveAccount": "アカウントをお持ちですか？ サインイン",
+    "dontHaveAccount": "アカウントをお持ちでないですか？ 新規登録",
+    "verifyCode": "認証コード",
+    "verify": "認証する",
+    "rememberMe": "ログイン状態を保持する",
+    "forgotPassword": "パスワードをお忘れですか？",
+    "continueGoogle": "Googleで続行",
+    "continueApple": "Appleで続行",
+    "continueEmail": "メールで続行",
+    "invalidCredentials": "メールアドレスまたはパスワードが無効です",
+    "passwordMinLength": "パスワードは8文字以上である必要があります",
+    "passwordsDoNotMatch": "パスワードが一致しません",
+    "termsNotice": "続行することにより、OpusLexの利用規約およびプライバシーポリシーに同意したものとみなされます。"
+  },
+  "dashboard": {
+    "welcomeBack": "おかえりなさい",
+    "systemOperational": "すべてのシステムが正常稼働中",
+    "activeWorkspace": "アクティブなワークスペース",
+    "stats": {
+      "activeInvestigations": "進行中の調査",
+      "documentsIndexed": "インデックス済み文書",
+      "complianceScore": "コンプライアンススコア",
+      "recentFindings": "最近の検出事項",
+      "totalObligations": "遵守義務合計",
+      "auditsPassed": "監査合格数"
+    },
+    "quickLaunch": {
+      "title": "クイックアクション",
+      "newInvestigation": "新規調査",
+      "uploadDocument": "文書をアップロード",
+      "askResearch": "リサーチを開始",
+      "deployAgent": "エージェントを展開"
+    },
+    "recentInvestigations": {
+      "title": "最近の調査",
+      "viewAll": "すべて表示",
+      "empty": "進行中の調査はありません。新規調査を作成して開始してください。"
+    },
+    "activityFeed": {
+      "title": "最近のアクティビティ",
+      "empty": "最近のアクティビティはありません。"
+    },
+    "topNav": {
+      "all": "すべて",
+      "reports": "レポート",
+      "research": "リサーチ",
+      "agents": "エージェント",
+      "searchPlaceholder": "ワークスペース、文書、コマンドを検索 (⌘K)...",
+      "openAssistant": "Themisアシスタントを開く",
+      "selectLanguage": "言語の変更"
+    },
+    "notifications": {
+      "title": "通知",
+      "markAllRead": "すべて既読にする",
+      "empty": "新しい通知はありません",
+      "clear": "すべてクリア"
+    },
+    "searchModal": {
+      "title": "グローバル検索",
+      "placeholder": "調査、文書、エージェント、設定を検索...",
+      "noResults": "「{{query}}」に一致する結果は見つかりませんでした",
+      "escToClose": "ESCキーで閉じる"
+    },
+    "profileModal": {
+      "title": "アカウントプロファイル",
+      "displayName": "表示名",
+      "displayNamePlaceholder": "氏名を入力してください",
+      "email": "メールアドレス（恒久識別子）",
+      "role": "役割",
+      "save": "変更を保存",
+      "saving": "保存中...",
+      "saved": "変更を正常に保存しました",
+      "emptyNameError": "表示名を入力してください。"
+    }
+  },
+  "investigations": {
+    "title": "調査管理",
+    "subtitle": "進行中のコンプライアンス事案の管理、証拠の確認、規制上の調査結果の追跡を行います。",
+    "newInvestigation": "新規調査",
+    "searchPlaceholder": "タイトルまたは説明で調査を検索...",
+    "filterStatus": "ステータスで絞り込み",
+    "filterJurisdiction": "管轄区域",
+    "allJurisdictions": "すべての管轄区域",
+    "columns": {
+      "title": "タイトル",
+      "status": "ステータス",
+      "risk": "リスクレベル",
+      "jurisdiction": "管轄区域",
+      "documents": "文書数",
+      "updated": "最終更新",
+      "actions": "操作"
+    },
+    "statuses": {
+      "active": "対応中",
+      "review": "レビュー中",
+      "closed": "完了",
+      "archived": "アーカイブ済み"
+    },
+    "risks": {
+      "low": "低",
+      "medium": "中",
+      "high": "高",
+      "critical": "重大"
+    },
+    "modal": {
+      "createTitle": "新規調査の作成",
+      "titleLabel": "調査タイトル *",
+      "titlePlaceholder": "例: 年次データプライバシーコンプライアンスレビュー",
+      "descLabel": "説明",
+      "descPlaceholder": "調査の範囲および目的の概要を入力してください...",
+      "jurisdictionLabel": "管轄区域",
+      "leadLabel": "担当責任者",
+      "targetDateLabel": "目標完了日",
+      "cancel": "キャンセル",
+      "create": "調査を作成"
+    },
+    "details": {
+      "overview": "概要",
+      "documents": "添付文書",
+      "evidence": "証拠と調査結果",
+      "timeline": "タイムライン",
+      "notes": "メモ",
+      "uploadDocument": "文書をアップロード",
+      "generateReport": "レポート生成",
+      "noDocuments": "この調査にはまだ文書が添付されていません。",
+      "noEvidence": "証拠項目はまだ登録されていません。"
+    },
+    "empty": {
+      "title": "調査が見つかりません",
+      "desc": "最初の調査を作成して、コンプライアンス事案の追跡を開始してください。"
+    }
+  },
+  "research": {
+    "title": "リサーチアシスタント",
+    "subtitle": "コンプライアンス文書の照会、規制要件の分析、法的証拠の引用を行います。",
+    "tabs": {
+      "general": "一般リサーチ",
+      "investigation": "調査事案リサーチ",
+      "comparison": "規制比較分析"
+    },
+    "inputPlaceholder": "規制、ポリシー、または添付文書について質問を入力してください...",
+    "scope": "検索範囲",
+    "scopeAll": "全文書ライブラリ",
+    "scopeInvestigation": "選択した調査",
+    "selectInvestigation": "調査を選択...",
+    "attachedDocs": "添付文書 ({{count}})",
+    "autoDiscovered": "選択した調査から自動検出",
+    "strictGrounding": "厳格な根拠準拠",
+    "askButton": "リサーチに質問",
+    "stopButton": "生成を停止",
+    "clearButton": "クリア",
+    "copyButton": "回答をコピー",
+    "copied": "コピー完了！",
+    "sourcesTitle": "参照元と引用",
+    "noSources": "この一般的な質問には直接の文書引用は不要です。",
+    "comparison": {
+      "title": "複数文書間の規制比較",
+      "subtitle": "基本契約または社内運用ポリシーと規制基準を詳細に比較します。",
+      "baseDoc": "比較元文書",
+      "selectBase": "比較元の契約書またはポリシーを選択...",
+      "targetDocs": "対象文書 / 規制文書",
+      "runComparison": "規制比較を実行",
+      "execSummary": "エグゼクティブサマリー",
+      "materialConflicts": "重大な相違・抵触点",
+      "gaps": "不足事項および不備",
+      "actions": "優先対応アクション",
+      "comparing": "文書を分析および比較しています..."
+    },
+    "empty": {
+      "title": "リサーチワークスペース準備完了",
+      "desc": "質問を入力するか調査を選択して、法的およびコンプライアンス要件の分析を開始してください。"
+    }
+  },
+  "agents": {
+    "title": "AIコンプライアンスエージェント",
+    "subtitle": "調査、検証、報告を行う自律型マルチステップ推論エージェントを展開します。",
+    "runAgent": "エージェントを実行",
+    "stopAgent": "エージェントを停止",
+    "taskLabel": "タスクの説明",
+    "taskPlaceholder": "調査の目的、検証すべき証拠、または監査内容を記述してください...",
+    "scopeLabel": "調査コンテキスト",
+    "executionTrace": "エージェント実行トレース",
+    "logs": "エージェントログ",
+    "approvalRequired": "承認が必要です",
+    "approve": "承認して実行",
+    "reject": "操作を却下",
+    "statusIdle": "待機中",
+    "statusRunning": "実行中...",
+    "statusCompleted": "実行完了",
+    "roles": {
+      "lead": "リード調査エージェント",
+      "auditor": "規制監査エージェント",
+      "gapAnalyzer": "ポリシー差分分析エージェント",
+      "evidenceVerifier": "証拠検証エージェント"
+    }
+  },
+  "regulations": {
+    "title": "規制ライブラリ",
+    "subtitle": "世界の規制枠組みおよび法的義務を閲覧および管理します。",
+    "searchPlaceholder": "規制を検索...",
+    "filterJurisdiction": "すべての管轄区域",
+    "filterSector": "すべての分野",
+    "addRegulation": "規制を追加",
+    "columns": {
+      "name": "規制名",
+      "authority": "発行機関",
+      "jurisdiction": "管轄区域",
+      "effectiveDate": "施行日",
+      "status": "ステータス",
+      "obligations": "遵守項目"
+    }
+  },
+  "policies": {
+    "title": "社内規定",
+    "subtitle": "外部の法令要件に対応付けられた企業ガバナンスポリシーです。",
+    "createPolicy": "規定を作成",
+    "searchPlaceholder": "社内規定を検索...",
+    "uploadPolicy": "規定をアップロード",
+    "columns": {
+      "name": "規定名",
+      "category": "カテゴリ",
+      "version": "版数",
+      "status": "ステータス",
+      "lastReviewed": "最終確認日"
+    }
+  },
+  "audit": {
+    "title": "監査と調査結果",
+    "subtitle": "ユーザー操作、エージェント実行、およびコンプライアンス発見事項の包括的な監査ログです。",
+    "searchPlaceholder": "監査証跡を検索...",
+    "export": "監査ログを出力",
+    "columns": {
+      "timestamp": "タイムスタンプ",
+      "user": "ユーザー / エージェント",
+      "action": "実行された操作",
+      "target": "対象リソース",
+      "severity": "重大度",
+      "details": "イベント詳細"
+    }
+  },
+  "reports": {
+    "title": "コンプライアンスレポート",
+    "subtitle": "正式なコンプライアンスおよび監査レポートを作成、確認、出力します。",
+    "generate": "レポートを作成",
+    "exportPdf": "PDF出力",
+    "exportCsv": "CSV出力",
+    "templates": "レポートテンプレート"
+  },
+  "governance": {
+    "title": "コーポレートガバナンス",
+    "subtitle": "フレームワーク監督、リスク委員会、および規定承認ワークフローを管理します。",
+    "committees": "ガバナンス委員会",
+    "reviews": "保留中の規定レビュー"
+  },
+  "integrations": {
+    "title": "データ・ストレージ連携",
+    "subtitle": "外部文書リポジトリ、クラウドストレージ、企業IDプロバイダーを接続します。",
+    "googleDrive": "Google Drive",
+    "oneDrive": "Microsoft OneDrive / SharePoint",
+    "box": "Box Enterprise",
+    "slack": "Slack Enterprise Grid",
+    "connect": "連携する",
+    "disconnect": "連携解除",
+    "connected": "連携済み",
+    "notConnected": "未連携"
+  },
+  "help": {
+    "title": "ヘルプとドキュメント",
+    "subtitle": "ドキュメント、ユーザーガイド、ショートカット、FAQを確認できます。",
+    "searchPlaceholder": "記事、FAQ、ショートカットを検索...",
+    "categories": {
+      "gettingStarted": "はじめに",
+      "investigations": "調査と証拠",
+      "research": "リサーチアシスタント",
+      "themis": "Themis AIアシスタント",
+      "security": "アカウントとセキュリティ"
+    },
+    "shortcutsTitle": "キーボードショートカット",
+    "passwordChangeStep": "パスワードを変更するには、設定 > セキュリティとログイン に移動するか、右上のアカウントメニューをご利用ください。"
+  },
+  "cookies": {
+    "bannerTitle": "プライバシーと環境設定",
+    "bannerDesc": "OpusLexは、基本的なアプリケーション機能と設定を維持するために必要なブラウザストレージを使用します。現在、オプションのアナリティクストラッキングは構成されていません。",
+    "customize": "カスタマイズ",
+    "rejectOptional": "任意項目を拒否",
+    "acceptAll": "すべて同意",
+    "modalTitle": "Cookieの設定",
+    "necessaryTitle": "必須 / 機能用",
+    "alwaysActive": "常に有効",
+    "necessaryDesc": "アプリケーションの基本機能に必須です。セッションおよびUI設定の保持に使用されます。",
+    "analyticsTitle": "アナリティクス",
+    "notConfigured": "未構成",
+    "analyticsDesc": "現在、任意のトラッキング技術は構成されていません。"
+  }
+}

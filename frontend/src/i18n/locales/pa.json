@@ -1,0 +1,568 @@
+{
+  "nav": {
+    "home": "ਮੁੱਖ ਪੰਨਾ",
+    "regulations": "ਨਿਯਮ",
+    "compliance": "ਪਾਲਣਾ",
+    "policies": "ਨੀਤੀਆਂ",
+    "research": "ਖੋਜ",
+    "agents": "AI ਏਜੰਟ",
+    "investigations": "ਜਾਂਚ",
+    "integrations": "ਏਕੀਕਰਣ",
+    "audit": "ਆਡਿਟ ਅਤੇ ਨਤੀਜੇ",
+    "reports": "ਰਿਪੋਰਟਾਂ",
+    "governance": "ਸ਼ਾਸਨ",
+    "settings": "ਸੈਟਿੰਗਾਂ",
+    "help": "ਮਦਦ"
+  },
+  "settings": {
+    "title": "ਸੈਟਿੰਗਾਂ",
+    "categories": {
+      "app": "ਐਪ",
+      "account": "ਖਾਤਾ",
+      "data_privacy": "ਡੇਟਾ ਅਤੇ ਗੋਪਨੀਯਤਾ",
+      "integrations": "ਏਕੀਕਰਣ",
+      "advanced": "ਉੱਨਤ"
+    },
+    "tabs": {
+      "appearance": "ਦਿੱਖ",
+      "general": "ਆਮ",
+      "accessibility": "ਪਹੁੰਚਯੋਗਤਾ",
+      "notifications": "ਸੂਚਨਾਵਾਂ",
+      "profile": "ਪ੍ਰੋਫਾਈਲ",
+      "security": "ਸੁਰੱਖਿਆ ਅਤੇ ਲਾਗਇਨ",
+      "data": "ਡੇਟਾ ਨਿਯੰਤਰਣ",
+      "storage": "ਸਟੋਰੇਜ",
+      "language": "ਭਾਸ਼ਾ",
+      "privacy": "ਗੋਪਨੀਯਤਾ",
+      "integrations": "ਏਕੀਕਰਣ",
+      "advanced": "ਉੱਨਤ",
+      "workspace": "ਵਰਕਸਪੇਸ",
+      "navigation": "ਨੇਵੀਗੇਸ਼ਨ",
+      "assistant": "AI ਸਹਾਇਕ"
+    },
+    "appearance": {
+      "headerTitle": "ਦਿੱਖ",
+      "headerSub": "ਆਪਣੀ ਡਿਵਾਈਸ 'ਤੇ OpusLex ਦੀ ਦਿੱਖ ਨੂੰ ਅਨੁਕੂਲਿਤ ਕਰੋ।",
+      "fontSize": {
+        "title": "ਫੌਂਟ ਦਾ ਆਕਾਰ",
+        "description": "ਪੜ੍ਹਨਯੋਗਤਾ ਲਈ ਫੌਂਟ ਸਕੇਲ ਚੁਣੋ।",
+        "current": "ਮੌਜੂਦਾ:"
+      },
+      "density": {
+        "title": "ਜਗ੍ਹਾ ਦੀ ਘਣਤਾ",
+        "description": "UI ਤੱਤਾਂ ਵਿਚਕਾਰ ਦੂਰੀ ਨੂੰ ਕੰਟਰੋਲ ਕਰੋ।"
+      },
+      "theme": {
+        "title": "ਰੰਗ ਥੀਮ",
+        "description": "ਆਪਣੀ ਪਸੰਦੀਦਾ ਰੰਗ ਸਕੀਮ ਚੁਣੋ।",
+        "comingSoon": "ਜਲਦੀ ਆ ਰਿਹਾ ਹੈ",
+        "light": "ਹਲਕਾ",
+        "dark": "ਗੂੜ੍ਹਾ",
+        "auto": "ਆਟੋਮੈਟਿਕ",
+        "lightDesc": "ਚਮਕਦਾਰ ਅਤੇ ਸਪੱਸ਼ਟ ਇੰਟਰਫੇਸ।",
+        "darkDesc": "ਅੱਖਾਂ ਦੇ ਦਬਾਅ ਨੂੰ ਘਟਾਉਣ ਲਈ ਗੂੜ੍ਹੀ ਸਕੀਮ।",
+        "autoDesc": "ਤੁਹਾਡੇ ਓਪਰੇਟਿੰਗ ਸਿਸਟਮ ਦੀਆਂ ਤਰਜੀਹਾਂ ਨਾਲ ਸਿੰਕ ਹੁੰਦਾ ਹੈ।",
+        "autoDescription": "ਸਿਸਟਮ ਤਰਜੀਹ ਅਨੁਸਾਰ"
+      }
+    },
+    "general": {
+      "headerTitle": "ਆਮ",
+      "headerSub": "ਮੁੱਢਲੇ ਐਪਲੀਕੇਸ਼ਨ ਵਿਵਹਾਰ ਨੂੰ ਕੌਂਫਿਗਰ ਕਰੋ।",
+      "landing": {
+        "title": "ਡਿਫੌਲਟ ਲੈਂਡਿੰਗ ਭਾਗ",
+        "description": "ਲਾਗਇਨ ਤੋਂ ਬਾਅਦ ਤੁਰੰਤ ਖੁੱਲ੍ਹਣ ਵਾਲਾ ਭਾਗ ਚੁਣੋ।",
+        "takesEffect": "ਅਗਲੇ ਲਾਗਇਨ 'ਤੇ ਲਾਗੂ ਹੋਵੇਗਾ।"
+      }
+    },
+    "accessibility": {
+      "headerTitle": "ਪਹੁੰਚਯੋਗਤਾ",
+      "headerSub": "ਆਪਣੀਆਂ ਲੋੜਾਂ ਅਨੁਸਾਰ ਇੰਟਰਫੇਸ ਨੂੰ ਵਿਵਸਥਿਤ ਕਰੋ।",
+      "reduceMotion": {
+        "label": "ਮੋਸ਼ਨ ਘਟਾਓ",
+        "description": "ਐਨੀਮੇਸ਼ਨ ਅਤੇ ਪਰਿਵਰਤਨ ਨੂੰ ਘਟਾਉਂਦਾ ਹੈ।"
+      },
+      "largerTargets": {
+        "label": "ਵੱਡੇ ਟੀਚੇ",
+        "description": "ਆਸਾਨੀ ਨਾਲ ਕਲਿੱਕ ਕਰਨ ਲਈ ਨਿਯੰਤਰਣਾਂ ਨੂੰ ਵੱਡਾ ਕਰਦਾ ਹੈ।"
+      },
+      "highContrast": {
+        "label": "ਉੱਚ ਕੰਟਰਾਸਟ",
+        "description": "ਟੈਕਸਟ ਅਤੇ ਬਾਰਡਰਾਂ ਦਾ ਕੰਟਰਾਸਟ ਵਧਾਉਂਦਾ ਹੈ।"
+      },
+      "osPreference": "ਤੁਹਾਡੇ ਸਿਸਟਮ ਦੀ ਮੋਸ਼ਨ ਤਰਜੀਹ ਦਾ ਵੀ ਸਨਮਾਨ ਕਰਦਾ ਹੈ।"
+    },
+    "language": {
+      "headerTitle": "ਭਾਸ਼ਾ",
+      "headerSub": "ਡਿਸਪਲੇ ਭਾਸ਼ਾ ਦਾ ਪ੍ਰਬੰਧਨ ਕਰੋ। ੧੦੦+ ਭਾਸ਼ਾਵਾਂ ਸਮਰਥਿਤ ਹਨ।",
+      "english": "ਅੰਗਰੇਜ਼ੀ",
+      "spanish": "ਸਪੈਨਿਸ਼",
+      "active": "ਸਰਗਰਮ",
+      "select": "ਭਾਸ਼ਾ ਚੁਣੋ",
+      "searchPlaceholder": "ਅੰਗਰੇਜ਼ੀ ਜਾਂ ਮੂਲ ਨਾਮ ਵਿੱਚ ੧੧੦+ ਭਾਸ਼ਾਵਾਂ ਖੋਜੋ...",
+      "coverageFull": "ਪੂਰਾ ਅਨੁਵਾਦ",
+      "coveragePriority": "ਤਰਜੀਹੀ ਬੰਡਲ",
+      "coverageFallback": "ਅੰਗਰੇਜ਼ੀ ਫਾਲਬੈਕ (ਸਰਗਰਮ)",
+      "catalogCount": "{{count}} ਭਾਸ਼ਾਵਾਂ ਉਪਲਬਧ ਹਨ",
+      "noResults": "ਕੋਈ ਨਤੀਜੇ ਨਹੀਂ ਮਿਲੇ।"
+    },
+    "assistant": {
+      "headerTitle": "AI ਸਹਾਇਕ",
+      "headerSub": "ਵੌਇਸ ਅਤੇ ਟੈਕਸਟ ਸਹਾਇਕ, ਸ਼ਾਰਟਕੱਟ ਅਤੇ ਇਜਾਜ਼ਤ ਪੱਧਰ ਕੌਂਫਿਗਰ ਕਰੋ।",
+      "enableTitle": "AI ਸਹਾਇਕ ਚਾਲੂ ਕਰੋ",
+      "enableDesc": "ਫਲੋਟਿੰਗ ਓਰਬ ਦਿਖਾਓ ਅਤੇ ਵੌਇਸ/ਟੈਕਸਟ ਕਮਾਂਡਾਂ ਚਾਲੂ ਕਰੋ।",
+      "permissionsTitle": "ਸਹਾਇਕ ਇਜਾਜ਼ਤ ਪੱਧਰ",
+      "permissionsDesc": "ਅਣਅਧਿਕਾਰਤ ਤਬਦੀਲੀਆਂ ਨੂੰ ਰੋਕਣ ਲਈ ਬੈਕਐਂਡ ਦੁਆਰਾ ਲਾਗੂ ਕੀਤਾ ਜਾਂਦਾ ਹੈ।",
+      "level1": "ਪੱਧਰ ੧: ਪੜ੍ਹੋ ਅਤੇ ਜਵਾਬ ਦਿਓ (ਸਿਰਫ਼ ਪੜ੍ਹਨਯੋਗ, ਕੋਈ ਬਦਲਾਅ ਨਹੀਂ)",
+      "level2": "ਪੱਧਰ ੨: ਡਰਾਫਟ ਅਤੇ ਸਿਫ਼ਾਰਸ਼ (ਬਿਨਾਂ ਲਾਗੂ ਕੀਤੇ ਡਰਾਫਟ ਤਿਆਰ ਕਰਨਾ)",
+      "level3": "ਪੱਧਰ ੩: ਪ੍ਰਵਾਨਗੀ ਨਾਲ ਲਾਗੂ ਕਰੋ (ਸਪੱਸ਼ਟ ਪੁਸ਼ਟੀ ਦੀ ਲੋੜ ਹੈ)",
+      "level4": "ਪੱਧਰ ੪: ਸੀਮਤ ਖੁਦਮੁਖਤਿਆਰੀ (ਘੱਟ ਜੋਖਮ ਵਾਲੇ ਕੰਮ ਸਿੱਧੇ ਕਰਨਾ)",
+      "voiceTitle": "ਵੌਇਸ ਅਤੇ ਆਡੀਓ ਆਉਟਪੁੱਟ",
+      "voiceDesc": "ਬੋਲਣ ਵਾਲੇ ਜਵਾਬ ਅਤੇ ਬ੍ਰਾਊਜ਼ਰ ਵੌਇਸ ਕੌਂਫਿਗਰ ਕਰੋ।",
+      "enableVoice": "ਬੋਲਣ ਵਾਲੇ ਜਵਾਬ ਚਾਲੂ ਕਰੋ",
+      "voiceSelect": "ਬ੍ਰਾਊਜ਼ਰ ਵੌਇਸ",
+      "shortcutTitle": "ਸਰਗਰਮੀ ਸ਼ਾਰਟਕੱਟ",
+      "shortcutDesc": "ਸਹਾਇਕ ਨੂੰ ਟੌਗਲ ਕਰਨ ਲਈ ਗਲੋਬਲ ਕੀਬੋਰਡ ਸ਼ਾਰਟਕੱਟ।",
+      "privacyTitle": "ਐਪਲੀਕੇਸ਼ਨ ਸੰਦਰਭ ਸਾਂਝਾਕਰਨ",
+      "privacyDesc": "ਜਾਂਚ ਜਾਣਕਾਰੀ ਦੇਖਣ ਲਈ ਸਹਾਇਕ ਨੂੰ ਆਗਿਆ ਦਿਓ।"
+    },
+    "workspace": {
+      "headerTitle": "ਵਰਕਸਪੇਸ",
+      "headerSub": "ਤੁਹਾਡੇ ਮੌਜੂਦਾ OpusLex ਵਾਤਾਵਰਣ ਬਾਰੇ ਜਾਣਕਾਰੀ।",
+      "activeEnv": {
+        "title": "ਸਰਗਰਮ ਵਾਤਾਵਰਣ",
+        "description": "ਕਨੈਕਟ ਕੀਤੇ OpusLex ਵਰਕਸਪੇਸ ਵਿੱਚ ਕੰਮ ਕਰ ਰਿਹਾ ਹੈ।",
+        "defaultLanding": "ਡਿਫੌਲਟ ਲੈਂਡਿੰਗ ਭਾਗ ਸੈੱਟ ਕਰ ਸਕਦੇ ਹੋ:",
+        "generalLink": "ਆਮ"
+      },
+      "identity": {
+        "title": "ਵਰਕਸਪੇਸ ਪਛਾਣ",
+        "description": "ਵਰਕਸਪੇਸ ਦਾ ਨਾਮ ਪ੍ਰਬੰਧਿਤ ਕਰੋ।",
+        "nameLabel": "ਵਰਕਸਪੇਸ ਨਾਮ",
+        "save": "ਸੁਰੱਖਿਅਤ ਕਰੋ",
+        "saving": "ਸੁਰੱਖਿਅਤ ਹੋ ਰਿਹਾ ਹੈ...",
+        "saved": "ਸੁਰੱਖਿਅਤ ਹੋ ਗਿਆ",
+        "emptyError": "ਵਰਕਸਪੇਸ ਦਾ ਨਾਮ ਖਾਲੀ ਨਹੀਂ ਹੋ ਸਕਦਾ।"
+      },
+      "usage": {
+        "title": "ਵਰਤੋਂ ਬਾਰੇ ਸੰਖੇਪ ਜਾਣਕਾਰੀ",
+        "description": "ਵਰਕਸਪੇਸ ਦੇ ਮੌਜੂਦਾ ਮੈਟ੍ਰਿਕਸ।",
+        "documents": "ਕੁੱਲ ਦਸਤਾਵੇਜ਼",
+        "investigations": "ਸਰਗਰਮ ਜਾਂਚਾਂ",
+        "agentRuns": "ਏਜੰਟ ਰਨ",
+        "loading": "ਮੈਟ੍ਰਿਕਸ ਲੋਡ ਹੋ ਰਹੇ ਹਨ...",
+        "error": "ਮੈਟ੍ਰਿਕਸ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ।"
+      }
+    },
+    "storage": {
+      "headerTitle": "ਸਟੋਰੇਜ",
+      "headerSub": "ਵਰਕਸਪੇਸ ਸਟੋਰੇਜ ਜਾਣਕਾਰੀ।",
+      "summary": {
+        "title": "ਸਟੋਰੇਜ ਸੰਖੇਪ",
+        "totalDocuments": "ਕੁੱਲ ਦਸਤਾਵੇਜ਼"
+      },
+      "documents": {
+        "title": "ਅੱਪਲੋਡ ਕੀਤੇ ਦਸਤਾਵੇਜ਼",
+        "empty": "ਅਜੇ ਤੱਕ ਕੋਈ ਦਸਤਾਵੇਜ਼ ਅੱਪਲੋਡ ਨਹੀਂ ਕੀਤੇ ਗਏ। ਖੋਜ ਦਸਤਾਵੇਜ਼ ਇੱਥੇ ਦਿਖਾਈ ਦੇਣਗੇ।",
+        "deleteAction": "ਮਿਟਾਓ",
+        "confirmDelete": "ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ ਇਹ ਦਸਤਾਵੇਜ਼ ਮਿਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?",
+        "deletedSuccess": "ਦਸਤਾਵੇਜ਼ ਸਫਲਤਾਪੂਰਵਕ ਮਿਟਾ ਦਿੱਤਾ ਗਿਆ।"
+      }
+    },
+    "security": {
+      "status": {
+        "configured": "ਕੌਂਫਿਗਰ ਕੀਤਾ ਗਿਆ",
+        "notConfigured": "ਕੌਂਫਿਗਰ ਨਹੀਂ ਕੀਤਾ ਗਿਆ",
+        "linked": "ਲਿੰਕ ਕੀਤਾ ਗਿਆ",
+        "notLinked": "ਲਿੰਕ ਨਹੀਂ ਕੀਤਾ ਗਿਆ",
+        "verified": "ਤਸਦੀਕ ਕੀਤਾ ਗਿਆ",
+        "notVerified": "ਤਸਦੀਕ ਨਹੀਂ ਕੀਤਾ ਗਿਆ"
+      },
+      "action": {
+        "changePassword": "ਪਾਸਵਰਡ ਬਦਲੋ",
+        "setPassword": "ਪਾਸਵਰਡ ਸੈੱਟ ਕਰੋ",
+        "link_phone": "ਫੋਨ ਲਿੰਕ ਕਰੋ",
+        "verify_email": "ਈਮੇਲ ਤਸਦੀਕ ਕਰੋ"
+      }
+    }
+  },
+  "assistantUI": {
+    "title": "OpusLex ਸਹਾਇਕ",
+    "tooltip": "ਸਹਾਇਕ ਖੋਲ੍ਹੋ ({{shortcut}})",
+    "inputPlaceholder": "ਪਾਲਣਾ ਸੰਬੰਧੀ ਸਵਾਲ ਪੁੱਛੋ ਜਾਂ ਕਮਾਂਡ ਦਿਓ...",
+    "send": "ਭੇਜੋ",
+    "listening": "ਆਵਾਜ਼ ਸੁਣ ਰਿਹਾ ਹੈ...",
+    "stopListening": "ਸੁਣਨਾ ਬੰਦ ਕਰੋ",
+    "mute": "ਮਿਊਟ",
+    "unmute": "ਅਨਮਿਊਟ",
+    "clearHistory": "ਗੱਲਬਾਤ ਸਾਫ਼ ਕਰੋ",
+    "close": "ਬੰਦ ਕਰੋ",
+    "taskWorkspace": "ਟਾਸਕ ਵਰਕਸਪੇਸ",
+    "actionRequiresApproval": "ਪ੍ਰਵਾਨਗੀ ਦੀ ਲੋੜ ਹੈ",
+    "approveAction": "ਪ੍ਰਵਾਨ ਕਰੋ ਅਤੇ ਚਲਾਓ",
+    "rejectAction": "ਰੱਦ ਕਰੋ",
+    "actionExecuted": "ਕੰਮ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰਾ ਹੋਇਆ",
+    "actionDenied": "ਇਜਾਜ਼ਤ ਦੇ ਪੱਧਰ ਕਾਰਨ ਬੇਨਤੀ ਰੱਦ ਕੀਤੀ ਗਈ",
+    "voiceUnavailable": "ਇਸ ਬ੍ਰਾਊਜ਼ਰ ਵਿੱਚ ਵੌਇਸ ਪਛਾਣ ਉਪਲਬਧ ਨਹੀਂ ਹੈ।",
+    "voiceDenied": "ਮਾਈਕ੍ਰੋਫੋਨ ਇਜਾਜ਼ਤ ਰੱਦ ਕੀਤੀ ਗਈ। ਟੈਕਸਟ ਮੋਡ ਵਰਤੋ।",
+    "contextBadge": "ਸੰਦਰਭ: {{section}}",
+    "switchToText": "ਟੈਕਸਟ 'ਤੇ ਜਾਓ",
+    "switchToVoice": "ਵੌਇਸ 'ਤੇ ਜਾਓ",
+    "voiceHudHint": "ਕੁਦਰਤੀ ਤੌਰ 'ਤੇ ਬੋਲੋ ਜਾਂ 'ਟੈਕਸਟ 'ਤੇ ਜਾਓ' ਕਹੋ",
+    "spotlightPlaceholder": "ਪਾਲਣਾ ਸੰਬੰਧੀ ਸਵਾਲ ਪੁੱਛੋ ਜਾਂ ਕਮਾਂਡ ਦਿਓ...",
+    "returnToVoice": "ਵੌਇਸ ਮੋਡ",
+    "explainPage": "ਪੰਨਾ ਸਮਝਾਓ"
+  },
+  "common": {
+    "search": "ਖੋਜੋ...",
+    "searchWorkspace": "ਵਰਕਸਪੇਸ ਖੋਜੋ...",
+    "searchObligations": "ਜ਼ਿੰਮੇਵਾਰੀਆਂ ਖੋਜੋ...",
+    "add": "ਸ਼ਾਮਲ ਕਰੋ",
+    "create": "ਬਣਾਓ",
+    "save": "ਸੁਰੱਖਿਅਤ ਕਰੋ",
+    "saving": "ਸੁਰੱਖਿਅਤ ਹੋ ਰਿਹਾ ਹੈ...",
+    "cancel": "ਰੱਦ ਕਰੋ",
+    "delete": "ਮਿਟਾਓ",
+    "confirm": "ਪੁਸ਼ਟੀ ਕਰੋ",
+    "close": "ਬੰਦ ਕਰੋ",
+    "back": "ਪਿੱਛੇ",
+    "retry": "ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ",
+    "loading": "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ...",
+    "error": "ਕੁਝ ਗਲਤ ਹੋ ਗਿਆ।",
+    "allStatuses": "ਸਾਰੀਆਂ ਸਥਿਤੀਆਂ",
+    "allRisks": "ਸਾਰੇ ਜੋਖਮ",
+    "compliant": "ਪਾਲਣਾ ਕੀਤੀ",
+    "nonCompliant": "ਗੈਰ-ਪਾਲਣਾ",
+    "inProgress": "ਪ੍ਰਗਤੀ ਅਧੀਨ",
+    "notStarted": "ਸ਼ੁਰੂ ਨਹੀਂ ਹੋਇਆ",
+    "waived": "ਮਾਫ਼ ਕੀਤਾ",
+    "overdue": "ਮਿਆਦ ਪੁੱਗੀ",
+    "low": "ਘੱਟ",
+    "medium": "ਦਰਮਿਆਨਾ",
+    "high": "ਉੱਚ",
+    "critical": "ਨਾਜ਼ੁਕ",
+    "saved": "ਸੰਭਾਲਿਆ ਗਿਆ"
+  },
+  "compliance": {
+    "title": "ਪਾਲਣਾ ਟਰੈਕਿੰਗ",
+    "subtitle": "ਕਾਨੂੰਨੀ ਜ਼ਿੰਮੇਵਾਰੀਆਂ ਅਤੇ ਮੌਜੂਦਾ ਸਥਿਤੀ।",
+    "addObligation": "ਜ਼ਿੰਮੇਵਾਰੀ ਸ਼ਾਮਲ ਕਰੋ",
+    "total": "ਕੁੱਲ",
+    "score": "ਸਕੋਰ",
+    "highRisk": "ਉੱਚ ਜੋਖਮ",
+    "emptyTitle": "ਅਜੇ ਤੱਕ ਕੋਈ ਜ਼ਿੰਮੇਵਾਰੀਆਂ ਨਹੀਂ ਹਨ",
+    "emptyFilterTitle": "ਫਿਲਟਰ ਨਾਲ ਮੇਲ ਖਾਂਦੀ ਕੋਈ ਜ਼ਿੰਮੇਵਾਰੀ ਨਹੀਂ ਮਿਲੀ",
+    "emptyDesc": "ਨਿਯਮਿਤ ਲੋੜਾਂ ਨੂੰ ਟਰੈਕ ਕਰਨ ਲਈ ਜ਼ਿੰਮੇਵਾਰੀ ਸ਼ਾਮਲ ਕਰੋ।",
+    "modalTitle": "ਪਾਲਣਾ ਜ਼ਿੰਮੇਵਾਰੀ ਸ਼ਾਮਲ ਕਰੋ",
+    "fieldTitle": "ਸਿਰਲੇਖ *",
+    "fieldRegulation": "ਨਿਯਮ *",
+    "fieldDepartment": "ਵਿਭਾਗ *",
+    "fieldStatus": "ਸਥਿਤੀ",
+    "fieldRisk": "ਜੋਖਮ",
+    "fieldDueDate": "ਆਖਰੀ ਮਿਤੀ",
+    "fieldDescription": "ਵੇਰਵਾ"
+  },
+  "auth": {
+    "welcome": "OpusLex ਵਿੱਚ ਤੁਹਾਡਾ ਸੁਆਗਤ ਹੈ",
+    "signIn": "ਸਾਈਨ ਇਨ ਕਰੋ",
+    "signUp": "ਸਾਈਨ ਅੱਪ ਕਰੋ",
+    "email": "ਈਮੇਲ ਪਤਾ",
+    "password": "ਪਾਸਵਰਡ",
+    "fullName": "ਪੂਰਾ ਨਾਮ",
+    "logIn": "ਲਾਗ ਇਨ",
+    "logOut": "ਲਾਗ ਆਉਟ",
+    "createAccount": "ਖਾਤਾ ਬਣਾਓ",
+    "alreadyHaveAccount": "ਪਹਿਲਾਂ ਹੀ ਖਾਤਾ ਹੈ? ਸਾਈਨ ਇਨ ਕਰੋ",
+    "dontHaveAccount": "ਕੋਈ ਖਾਤਾ ਨਹੀਂ ਹੈ? ਸਾਈਨ ਅੱਪ ਕਰੋ",
+    "verifyCode": "ਤਸਦੀਕ ਕੋਡ",
+    "verify": "ਤਸਦੀਕ ਕਰੋ",
+    "rememberMe": "ਮੈਨੂੰ ਯਾਦ ਰੱਖੋ",
+    "forgotPassword": "ਪਾਸਵਰਡ ਭੁੱਲ ਗਏ?",
+    "continueGoogle": "Google ਨਾਲ ਜਾਰੀ ਰੱਖੋ",
+    "continueApple": "Apple ਨਾਲ ਜਾਰੀ ਰੱਖੋ",
+    "continueEmail": "ਈਮੇਲ ਨਾਲ ਜਾਰੀ ਰੱਖੋ",
+    "invalidCredentials": "ਅਵੈਧ ਈਮੇਲ ਜਾਂ ਪਾਸਵਰਡ",
+    "passwordMinLength": "ਪਾਸਵਰਡ ਘੱਟੋ-ਘੱਟ 8 ਅੱਖਰਾਂ ਦਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ",
+    "passwordsDoNotMatch": "ਪਾਸਵਰਡ ਮੇਲ ਨਹੀਂ ਖਾਂਦੇ",
+    "termsNotice": "ਜਾਰੀ ਰੱਖ ਕੇ, ਤੁਸੀਂ OpusLex ਦੀਆਂ ਸੇਵਾ ਦੀਆਂ ਸ਼ਰਤਾਂ ਅਤੇ ਗੋਪਨੀਯਤਾ ਨੀਤੀ ਨਾਲ ਸਹਿਮਤ ਹੁੰਦੇ ਹੋ।"
+  },
+  "dashboard": {
+    "welcomeBack": "ਜੀ ਆਇਆਂ ਨੂੰ",
+    "systemOperational": "ਸਾਰੇ ਸਿਸਟਮ ਕਾਰਜਸ਼ੀਲ ਹਨ",
+    "activeWorkspace": "ਸਰਗਰਮ ਵਰਕਸਪੇਸ",
+    "stats": {
+      "activeInvestigations": "ਸਰਗਰਮ ਜਾਂਚਾਂ",
+      "documentsIndexed": "ਸੂਚੀਬੱਧ ਦਸਤਾਵੇਜ਼",
+      "complianceScore": "ਪਾਲਣਾ ਸਕੋਰ",
+      "recentFindings": "ਤਾਜ਼ਾ ਖੋਜਾਂ",
+      "totalObligations": "ਕੁੱਲ ਜ਼ਿੰਮੇਵਾਰੀਆਂ",
+      "auditsPassed": "ਸਫਲ ਆਡਿਟ"
+    },
+    "quickLaunch": {
+      "title": "ਤੇਜ਼ ਕਾਰਵਾਈਆਂ",
+      "newInvestigation": "ਨਵੀਂ ਜਾਂਚ",
+      "uploadDocument": "ਦਸਤਾਵੇਜ਼ ਅੱਪਲੋਡ ਕਰੋ",
+      "askResearch": "ਖੋਜ ਪੁੱਛੋ",
+      "deployAgent": "ਏਜੰਟ ਤਾਇਨਾਤ ਕਰੋ"
+    },
+    "recentInvestigations": {
+      "title": "ਤਾਜ਼ਾ ਜਾਂਚਾਂ",
+      "viewAll": "ਸਾਰੇ ਵੇਖੋ",
+      "empty": "ਕੋਈ ਸਰਗਰਮ ਜਾਂਚ ਨਹੀਂ ਹੈ। ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਨਵੀਂ ਜਾਂਚ ਬਣਾਓ।"
+    },
+    "activityFeed": {
+      "title": "ਤਾਜ਼ਾ ਗਤੀਵਿਧੀ",
+      "empty": "ਕੋਈ ਤਾਜ਼ਾ ਗਤੀਵਿਧੀ ਦਰਜ ਨਹੀਂ ਕੀਤੀ ਗਈ।"
+    },
+    "topNav": {
+      "all": "ਸਾਰੇ",
+      "reports": "ਰਿਪੋਰਟਾਂ",
+      "research": "ਖੋਜ",
+      "agents": "ਏਜੰਟ",
+      "searchPlaceholder": "ਵਰਕਸਪੇਸ, ਦਸਤਾਵੇਜ਼ ਜਾਂ ਕਮਾਂਡਾਂ ਖੋਜੋ (⌘K)...",
+      "openAssistant": "Themis ਸਹਾਇਕ ਖੋਲ੍ਹੋ",
+      "selectLanguage": "ਭਾਸ਼ਾ ਬਦਲੋ"
+    },
+    "notifications": {
+      "title": "ਸੂਚਨਾਵਾਂ",
+      "markAllRead": "ਸਾਰੇ ਪੜ੍ਹੇ ਵਜੋਂ ਚਿੰਨ੍ਹਿਤ ਕਰੋ",
+      "empty": "ਕੋਈ ਨਵੀਂ ਸੂਚਨਾ ਨਹੀਂ",
+      "clear": "ਸਭ ਸਾਫ਼ ਕਰੋ"
+    },
+    "searchModal": {
+      "title": "ਗਲੋਬਲ ਖੋਜ",
+      "placeholder": "ਜਾਂਚਾਂ, ਦਸਤਾਵੇਜ਼, ਏਜੰਟ ਜਾਂ ਸੈਟਿੰਗਾਂ ਖੋਜੋ...",
+      "noResults": "\"{{query}}\" ਲਈ ਕੋਈ ਨਤੀਜੇ ਨਹੀਂ ਮਿਲੇ",
+      "escToClose": "ਬੰਦ ਕਰਨ ਲਈ ESC ਦਬਾਓ"
+    },
+    "profileModal": {
+      "title": "ਖਾਤਾ ਪ੍ਰੋਫਾਈਲ",
+      "displayName": "ਪ੍ਰਦਰਸ਼ਿਤ ਨਾਮ",
+      "displayNamePlaceholder": "ਆਪਣਾ ਪੂਰਾ ਨਾਮ ਦਰਜ ਕਰੋ",
+      "email": "ਈਮੇਲ (ਪੱਕਾ ਪਛਾਣਕਰਤਾ)",
+      "role": "ਭੂਮਿਕਾ",
+      "save": "ਤਬਦੀਲੀਆਂ ਸੰਭਾਲੋ",
+      "saving": "ਸੰਭਾਲਿਆ ਜਾ ਰਿਹਾ ਹੈ...",
+      "saved": "ਤਬਦੀਲੀਆਂ ਸਫਲਤਾਪੂਰਵਕ ਸੰਭਾਲੀਆਂ ਗਈਆਂ",
+      "emptyNameError": "ਪੂਰਾ ਨਾਮ ਖਾਲੀ ਨਹੀਂ ਹੋ ਸਕਦਾ।"
+    }
+  },
+  "investigations": {
+    "title": "ਜਾਂਚ",
+    "subtitle": "ਸਰਗਰਮ ਪਾਲਣਾ ਮਾਮਲਿਆਂ ਦਾ ਪ੍ਰਬੰਧਨ ਕਰੋ, ਸਬੂਤਾਂ ਦੀ ਸਮੀਖਿਆ ਕਰੋ ਅਤੇ ਰੈਗੂਲੇਟਰੀ ਖੋਜਾਂ ਨੂੰ ਟਰੈਕ ਕਰੋ।",
+    "newInvestigation": "ਨਵੀਂ ਜਾਂਚ",
+    "searchPlaceholder": "ਸਿਰਲੇਖ ਜਾਂ ਵੇਰਵੇ ਦੁਆਰਾ ਜਾਂਚ ਖੋਜੋ...",
+    "filterStatus": "ਸਥਿਤੀ ਦੁਆਰਾ ਫਿਲਟਰ ਕਰੋ",
+    "filterJurisdiction": "ਅਧਿਕਾਰ ਖੇਤਰ",
+    "allJurisdictions": "ਸਾਰੇ ਅਧਿਕਾਰ ਖੇਤਰ",
+    "columns": {
+      "title": "ਸਿਰਲੇਖ",
+      "status": "ਸਥਿਤੀ",
+      "risk": "ਜੋਖਮ ਪੱਧਰ",
+      "jurisdiction": "ਅਧਿਕਾਰ ਖੇਤਰ",
+      "documents": "ਦਸਤਾਵੇਜ਼",
+      "updated": "ਆਖਰੀ ਅੱਪਡੇਟ",
+      "actions": "ਕਾਰਵਾਈਆਂ"
+    },
+    "statuses": {
+      "active": "ਸਰਗਰਮ",
+      "review": "ਸਮੀਖਿਆ ਅਧੀਨ",
+      "closed": "ਬੰਦ",
+      "archived": "ਆਰਕਾਈਵ ਕੀਤਾ ਗਿਆ"
+    },
+    "risks": {
+      "low": "ਘੱਟ",
+      "medium": "ਦਰਮਿਆਨਾ",
+      "high": "ਉੱਚ",
+      "critical": "ਨਾਜ਼ੁਕ"
+    },
+    "modal": {
+      "createTitle": "ਨਵੀਂ ਜਾਂਚ ਬਣਾਓ",
+      "titleLabel": "ਜਾਂਚ ਸਿਰਲੇਖ *",
+      "titlePlaceholder": "ਜਿਵੇਂ ਕਿ, ਸਾਲਾਨਾ ਡਾਟਾ ਗੋਪਨੀਯਤਾ ਸਮੀਖਿਆ",
+      "descLabel": "ਵੇਰਵਾ",
+      "descPlaceholder": "ਉਦੇਸ਼ਾਂ ਅਤੇ ਦਾਇਰੇ ਦਾ ਸੰਖੇਪ ਦਿਓ...",
+      "jurisdictionLabel": "ਅਧਿਕਾਰ ਖੇਤਰ",
+      "leadLabel": "ਸੌਂਪਿਆ ਗਿਆ ਆਗੂ",
+      "targetDateLabel": "ਟੀਚਾ ਪੂਰਾ ਹੋਣ ਦੀ ਮਿਤੀ",
+      "cancel": "ਰੱਦ ਕਰੋ",
+      "create": "ਜਾਂਚ ਬਣਾਓ"
+    },
+    "details": {
+      "overview": "ਸੰਖੇਪ ਜਾਣਕਾਰੀ",
+      "documents": "ਨੱਥੀ ਦਸਤਾਵੇਜ਼",
+      "evidence": "ਸਬੂਤ ਅਤੇ ਖੋਜਾਂ",
+      "timeline": "ਸਮਾਂਰੇਖਾ",
+      "notes": "ਨੋਟਸ",
+      "uploadDocument": "ਦਸਤਾਵੇਜ਼ ਅੱਪਲੋਡ ਕਰੋ",
+      "generateReport": "ਰਿਪੋਰਟ ਤਿਆਰ ਕਰੋ",
+      "noDocuments": "ਇਸ ਜਾਂਚ ਨਾਲ ਅਜੇ ਕੋਈ ਦਸਤਾਵੇਜ਼ ਨੱਥੀ ਨਹੀਂ ਹਨ।",
+      "noEvidence": "ਅਜੇ ਕੋਈ ਸਬੂਤ ਦਰਜ ਨਹੀਂ ਕੀਤੇ ਗਏ।"
+    },
+    "empty": {
+      "title": "ਕੋਈ ਜਾਂਚ ਨਹੀਂ ਮਿਲੀ",
+      "desc": "ਪਾਲਣਾ ਮਾਮਲਿਆਂ ਨੂੰ ਟਰੈਕ ਕਰਨ ਲਈ ਆਪਣੀ ਪਹਿਲੀ ਜਾਂਚ ਬਣਾਓ।"
+    }
+  },
+  "research": {
+    "title": "ਖੋਜ ਸਹਾਇਕ",
+    "subtitle": "ਪਾਲਣਾ ਦਸਤਾਵੇਜ਼ਾਂ ਬਾਰੇ ਪੁੱਛੋ, ਨਿਯਮਾਂ ਦਾ ਵਿਸ਼ਲੇਸ਼ਣ ਕਰੋ ਅਤੇ ਸਬੂਤਾਂ ਦਾ ਹਵਾਲਾ ਦਿਓ।",
+    "tabs": {
+      "general": "ਆਮ ਖੋਜ",
+      "investigation": "ਕੇਸ ਖੋਜ",
+      "comparison": "ਰੈਗੂਲੇਟਰੀ ਤੁਲਨਾ"
+    },
+    "inputPlaceholder": "ਨਿਯਮਾਂ ਜਾਂ ਨੀਤੀਆਂ ਬਾਰੇ ਸਵਾਲ ਪੁੱਛੋ...",
+    "scope": "ਖੋਜ ਦਾ ਦਾਇਰਾ",
+    "scopeAll": "ਪੂਰੀ ਦਸਤਾਵੇਜ਼ ਲਾਇਬ੍ਰੇਰੀ",
+    "scopeInvestigation": "ਚੁਣੀ ਗਈ ਜਾਂਚ",
+    "selectInvestigation": "ਇੱਕ ਜਾਂਚ ਚੁਣੋ...",
+    "attachedDocs": "ਨੱਥੀ ਦਸਤਾਵੇਜ਼ ({{count}})",
+    "autoDiscovered": "ਚੁਣੀ ਗਈ ਜਾਂਚ ਤੋਂ ਲੱਭਿਆ ਗਿਆ",
+    "strictGrounding": "ਸਖ਼ਤ ਸਬੂਤ ਆਧਾਰ",
+    "askButton": "ਸਹਾਇਕ ਨੂੰ ਪੁੱਛੋ",
+    "stopButton": "ਰੋਕੋ",
+    "clearButton": "ਸਾਫ਼ ਕਰੋ",
+    "copyButton": "ਜਵਾਬ ਕਾਪੀ ਕਰੋ",
+    "copied": "ਕਾਪੀ ਹੋ ਗਿਆ!",
+    "sourcesTitle": "ਸਰੋਤ ਅਤੇ ਹਵਾਲੇ",
+    "noSources": "ਇਸ ਆਮ ਸਵਾਲ ਲਈ ਸਿੱਧੇ ਦਸਤਾਵੇਜ਼ ਹਵਾਲਿਆਂ ਦੀ ਲੋੜ ਨਹੀਂ ਹੈ।",
+    "comparison": {
+      "title": "ਦਸਤਾਵੇਜ਼ ਰੈਗੂਲੇਟਰੀ ਤੁਲਨਾ",
+      "subtitle": "ਰੈਗੂਲੇਟਰੀ ਮਾਪਦੰਡਾਂ ਨਾਲ ਸਮਝੌਤਿਆਂ ਜਾਂ ਨੀਤੀਆਂ ਦੀ ਤੁਲਨਾ ਕਰੋ।",
+      "baseDoc": "ਮੂਲ ਦਸਤਾਵੇਜ਼",
+      "selectBase": "ਮੂਲ ਸਮਝੌਤਾ ਜਾਂ ਨੀਤੀ ਚੁਣੋ...",
+      "targetDocs": "ਟਾਰਗੇਟ ਦਸਤਾਵੇਜ਼ / ਨਿਯਮ",
+      "runComparison": "ਤੁਲਨਾ ਚਲਾਓ",
+      "execSummary": "ਕਾਰਜਕਾਰੀ ਸੰਖੇਪ",
+      "materialConflicts": "ਮਹੱਤਵਪੂਰਨ ਟਕਰਾਅ",
+      "gaps": "ਕਮੀਆਂ ਅਤੇ ਅੰਤਰ",
+      "actions": "ਤਰਜੀਹੀ ਕਾਰਵਾਈਆਂ",
+      "comparing": "ਦਸਤਾਵੇਜ਼ਾਂ ਦਾ ਵਿਸ਼ਲੇਸ਼ਣ ਅਤੇ ਤੁਲਨਾ ਕੀਤੀ ਜਾ ਰਹੀ ਹੈ..."
+    },
+    "empty": {
+      "title": "ਖੋਜ ਵਰਕਸਪੇਸ ਤਿਆਰ ਹੈ",
+      "desc": "ਕਾਨੂੰਨੀ ਲੋੜਾਂ ਦਾ ਵਿਸ਼ਲੇਸ਼ਣ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਕੋਈ ਸਵਾਲ ਪੁੱਛੋ।"
+    }
+  },
+  "agents": {
+    "title": "AI ਪਾਲਣਾ ਏਜੰਟ",
+    "subtitle": "ਜਾਂਚ, ਤਸਦੀਕ ਅਤੇ ਰਿਪੋਰਟਿੰਗ ਲਈ ਖੁਦਮੁਖਤਿਆਰ ਏਜੰਟ ਤਾਇਨਾਤ ਕਰੋ।",
+    "runAgent": "ਏਜੰਟ ਸ਼ੁਰੂ ਕਰੋ",
+    "stopAgent": "ਏਜੰਟ ਰੋਕੋ",
+    "taskLabel": "ਕੰਮ ਦਾ ਵੇਰਵਾ",
+    "taskPlaceholder": "ਜਾਂਚ ਦਾ ਟੀਚਾ ਜਾਂ ਤਸਦੀਕ ਕੀਤੇ ਜਾਣ ਵਾਲੇ ਸਬੂਤਾਂ ਦਾ ਵਰਣਨ ਕਰੋ...",
+    "scopeLabel": "ਜਾਂਚ ਪ੍ਰਸੰਗ",
+    "executionTrace": "ਏਜੰਟ ਐਗਜ਼ੀਕਿਊਸ਼ਨ ਟਰੇਸ",
+    "logs": "ਏਜੰਟ ਲੌਗਸ",
+    "approvalRequired": "ਪ੍ਰਵਾਨਗੀ ਦੀ ਲੋੜ ਹੈ",
+    "approve": "ਪ੍ਰਵਾਨ ਕਰੋ ਅਤੇ ਚਲਾਓ",
+    "reject": "ਕਾਰਵਾਈ ਰੱਦ ਕਰੋ",
+    "statusIdle": "ਵਿਹਲਾ",
+    "statusRunning": "ਚੱਲ ਰਿਹਾ ਹੈ...",
+    "statusCompleted": "ਸੰਪੰਨ ਹੋਇਆ",
+    "roles": {
+      "lead": "ਮੁੱਖ ਜਾਂਚ ਏਜੰਟ",
+      "auditor": "ਰੈਗੂਲੇਟਰੀ ਆਡੀਟਰ",
+      "gapAnalyzer": "ਨੀਤੀ ਅੰਤਰ ਵਿਸ਼ਲੇਸ਼ਕ",
+      "evidenceVerifier": "ਸਬੂਤ ਤਸਦੀਕ ਏਜੰਟ"
+    }
+  },
+  "regulations": {
+    "title": "ਨਿਯਮ ਲਾਇਬ੍ਰੇਰੀ",
+    "subtitle": "ਗਲੋਬਲ ਰੈਗੂਲੇਟਰੀ ਫਰੇਮਵਰਕ ਅਤੇ ਕਾਨੂੰਨੀ ਆਦੇਸ਼ਾਂ ਦਾ ਪ੍ਰਬੰਧਨ ਕਰੋ।",
+    "searchPlaceholder": "ਨਿਯਮ ਖੋਜੋ...",
+    "filterJurisdiction": "ਸਾਰੇ ਅਧਿਕਾਰ ਖੇਤਰ",
+    "filterSector": "ਸਾਰੇ ਖੇਤਰ",
+    "addRegulation": "ਨਿਯਮ ਜੋੜੋ",
+    "columns": {
+      "name": "ਨਿਯਮ ਦਾ ਨਾਮ",
+      "authority": "ਜਾਰੀ ਕਰਨ ਵਾਲੀ ਅਥਾਰਟੀ",
+      "jurisdiction": "ਅਧਿਕਾਰ ਖੇਤਰ",
+      "effectiveDate": "ਲਾਗੂ ਹੋਣ ਦੀ ਮਿਤੀ",
+      "status": "ਸਥਿਤੀ",
+      "obligations": "ਜ਼ਿੰਮੇਵਾਰੀਆਂ"
+    }
+  },
+  "policies": {
+    "title": "ਅੰਦਰੂਨੀ ਨੀਤੀਆਂ",
+    "subtitle": "ਕਾਨੂੰਨੀ ਲੋੜਾਂ ਨਾਲ ਮੇਲ ਖਾਂਦੀਆਂ ਕਾਰਪੋਰੇਟ ਸ਼ਾਸਨ ਨੀਤੀਆਂ।",
+    "createPolicy": "ਨੀਤੀ ਬਣਾਓ",
+    "searchPlaceholder": "ਨੀਤੀਆਂ ਖੋਜੋ...",
+    "uploadPolicy": "ਨੀਤੀ ਅੱਪਲੋਡ ਕਰੋ",
+    "columns": {
+      "name": "ਨੀਤੀ ਸਿਰਲੇਖ",
+      "category": "ਸ਼੍ਰੇਣੀ",
+      "version": "ਸੰਸਕਰਣ",
+      "status": "ਸਥਿਤੀ",
+      "lastReviewed": "ਆਖਰੀ ਸਮੀਖਿਆ"
+    }
+  },
+  "audit": {
+    "title": "ਆਡਿਟ ਅਤੇ ਖੋਜਾਂ",
+    "subtitle": "ਉਪਭੋਗਤਾ ਕਾਰਵਾਈਆਂ ਅਤੇ ਖੋਜਾਂ ਦਾ ਵਿਆਪਕ ਆਡਿਟ ਲੌਗ।",
+    "searchPlaceholder": "ਆਡਿਟ ਲੌਗ ਖੋਜੋ...",
+    "export": "ਆਡਿਟ ਲੌਗ ਨਿਰਯਾਤ ਕਰੋ",
+    "columns": {
+      "timestamp": "ਸਮਾਂ ਮੋਹਰ",
+      "user": "ਉਪਭੋਗਤਾ / ਏਜੰਟ",
+      "action": "ਕੀਤੀ ਗਈ ਕਾਰਵਾਈ",
+      "target": "ਨਿਸ਼ਾਨਾ ਸਰੋਤ",
+      "severity": "ਗੰਭੀਰਤਾ",
+      "details": "ਵੇਰਵੇ"
+    }
+  },
+  "reports": {
+    "title": "ਪਾਲਣਾ ਰਿਪੋਰਟਾਂ",
+    "subtitle": "ਰਸਮੀ ਪਾਲਣਾ ਅਤੇ ਆਡਿਟ ਰਿਪੋਰਟਾਂ ਤਿਆਰ ਕਰੋ ਅਤੇ ਨਿਰਯਾਤ ਕਰੋ।",
+    "generate": "ਰਿਪੋਰਟ ਤਿਆਰ ਕਰੋ",
+    "exportPdf": "PDF ਨਿਰਯਾਤ",
+    "exportCsv": "CSV ਨਿਰਯਾਤ",
+    "templates": "ਟੈਮਪਲੇਟ"
+  },
+  "governance": {
+    "title": "ਕਾਰਪੋਰੇਟ ਪ੍ਰਸ਼ਾਸਨ",
+    "subtitle": "ਜੋਖਮ ਕਮੇਟੀਆਂ ਅਤੇ ਨੀਤੀ ਪ੍ਰਵਾਨਗੀ ਵਰਕਫਲੋ।",
+    "committees": "ਗਵਰਨੈਂਸ ਕਮੇਟੀਆਂ",
+    "reviews": "ਬਕਾਇਆ ਸਮੀਖਿਆਵਾਂ"
+  },
+  "integrations": {
+    "title": "ਡੇਟਾ ਅਤੇ ਸਟੋਰੇਜ ਏਕੀਕਰਣ",
+    "subtitle": "ਬਾਹਰੀ ਦਸਤਾਵੇਜ਼ ਭੰਡਾਰ ਅਤੇ ਕਲਾਉਡ ਸਟੋਰੇਜ ਕਨੈਕਟ ਕਰੋ।",
+    "googleDrive": "Google Drive",
+    "oneDrive": "Microsoft OneDrive / SharePoint",
+    "box": "Box Enterprise",
+    "slack": "Slack Enterprise Grid",
+    "connect": "ਕਨੈਕਟ ਕਰੋ",
+    "disconnect": "ਡਿਸਕਨੈਕਟ ਕਰੋ",
+    "connected": "ਕਨੈਕਟ ਹੈ",
+    "notConnected": "ਕਨੈਕਟ ਨਹੀਂ ਹੈ"
+  },
+  "help": {
+    "title": "ਮਦਦ ਅਤੇ ਦਸਤਾਵੇਜ਼",
+    "subtitle": "ਉਪਭੋਗਤਾ ਗਾਈਡਾਂ, ਸ਼ਾਰਟਕੱਟ ਅਤੇ ਅਕਸਰ ਪੁੱਛੇ ਜਾਂਦੇ ਸਵਾਲ।",
+    "searchPlaceholder": "ਲੇਖ ਅਤੇ ਸ਼ਾਰਟਕੱਟ ਖੋਜੋ...",
+    "categories": {
+      "gettingStarted": "ਸ਼ੁਰੂ ਕਰੋ",
+      "investigations": "ਜਾਂਚ ਅਤੇ ਸਬੂਤ",
+      "research": "ਖੋਜ ਸਹਾਇਕ",
+      "themis": "Themis AI ਸਹਾਇਕ",
+      "security": "ਖਾਤਾ ਅਤੇ ਸੁਰੱਖਿਆ"
+    },
+    "shortcutsTitle": "ਕੀਬੋਰਡ ਸ਼ਾਰਟਕੱਟ",
+    "passwordChangeStep": "ਪਾਸਵਰਡ ਬਦਲਣ ਲਈ, ਸੈਟਿੰਗਾਂ > ਸੁਰੱਖਿਆ ਅਤੇ ਲੌਗਇਨ 'ਤੇ ਜਾਓ ਜਾਂ ਉੱਪਰ ਸੱਜੇ ਮੀਨੂ ਦੀ ਵਰਤੋਂ ਕਰੋ।"
+  },
+  "cookies": {
+    "bannerTitle": "ਗੋਪਨੀਯਤਾ ਅਤੇ ਤਰਜੀਹਾਂ",
+    "bannerDesc": "OpusLex ਐਪ ਦੀ ਕਾਰਜਸ਼ੀਲਤਾ ਲਈ ਜ਼ਰੂਰੀ ਸਟੋਰੇਜ ਦੀ ਵਰਤੋਂ ਕਰਦਾ ਹੈ। ਕੋਈ ਵਾਧੂ ਟਰੈਕਿੰਗ ਕਿਰਿਆਸ਼ੀਲ ਨਹੀਂ ਹੈ।",
+    "customize": "ਅਨੁਕੂਲਿਤ ਕਰੋ",
+    "rejectOptional": "ਵਿਕਲਪਿਕ ਰੱਦ ਕਰੋ",
+    "acceptAll": "ਸਾਰੇ ਸਵੀਕਾਰ ਕਰੋ",
+    "modalTitle": "ਕੂਕੀ ਤਰਜੀਹਾਂ",
+    "necessaryTitle": "ਜ਼ਰੂਰੀ / ਕਾਰਜਸ਼ੀਲ",
+    "alwaysActive": "ਹਮੇਸ਼ਾ ਸਰਗਰਮ",
+    "necessaryDesc": "ਮੁੱਖ ਐਪ ਕਾਰਜਸ਼ੀਲਤਾ ਲਈ ਲੋੜੀਂਦਾ ਹੈ।",
+    "analyticsTitle": "ਵਿਸ਼ਲੇਸ਼ਣ",
+    "notConfigured": "ਸੰਰਚਿਤ ਨਹੀਂ ਹੈ",
+    "analyticsDesc": "ਕੋਈ ਵਿਕਲਪਿਕ ਟਰੈਕਿੰਗ ਸੰਰਚਿਤ ਨਹੀਂ ਹੈ।"
+  }
+}

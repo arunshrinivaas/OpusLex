@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useTranslation } from "react-i18next"
 import { Search, Printer, ShieldAlert, CheckCircle2, AlertTriangle, AlertCircle, BarChart2 } from "lucide-react"
 
 export interface FindingResponse {
@@ -26,6 +27,7 @@ export interface GovernanceSummary {
 }
 
 export default function Reports() {
+    const { t } = useTranslation()
     const [findings, setFindings] = useState<FindingResponse[]>([])
     const [summary, setSummary] = useState<GovernanceSummary | null>(null)
     const [loading, setLoading] = useState(true)
@@ -83,7 +85,7 @@ export default function Reports() {
     if (loading) {
         return (
             <div className="flex h-full items-center justify-center">
-                <p className="text-sm text-neutral-500">Loading reports...</p>
+                <p className="text-sm text-neutral-500">{t("common.loading", "Loading reports...")}</p>
             </div>
         )
     }
@@ -101,9 +103,9 @@ export default function Reports() {
             {/* Header */}
             <header className="print-hide flex shrink-0 items-center justify-between border-b border-neutral-200 px-8 py-5">
                 <div>
-                    <h1 className="text-xl font-semibold tracking-tight text-neutral-900">Reports</h1>
+                    <h1 className="text-xl font-semibold tracking-tight text-neutral-900">{t("reports.title", "Compliance Reports")}</h1>
                     <p className="mt-1 text-sm text-neutral-500">
-                        Executive synthesis of completed compliance agent findings and governance metrics.
+                        {t("reports.subtitle", "Generate, review, and export formal compliance and audit reports.")}
                     </p>
                 </div>
                 <button
@@ -111,13 +113,13 @@ export default function Reports() {
                     className="flex items-center gap-2 rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 transition-colors"
                 >
                     <Printer size={16} />
-                    <span>Print / Save as PDF</span>
+                    <span>{t("reports.exportPdf", "Print / Save as PDF")}</span>
                 </button>
             </header>
 
             {/* Print Header (Only visible when printing) */}
             <div className="hidden print-block px-8 py-6 border-b border-neutral-200">
-                <h1 className="text-2xl font-bold text-neutral-900">Compliance & Governance Report</h1>
+                <h1 className="text-2xl font-bold text-neutral-900">{t("reports.title", "Compliance & Governance Report")}</h1>
                 <p className="text-sm text-neutral-500 mt-1">Generated on {new Date().toLocaleDateString()}</p>
             </div>
 
@@ -129,23 +131,23 @@ export default function Reports() {
                         <section className="space-y-4">
                             <h2 className="text-lg font-semibold text-neutral-900 flex items-center gap-2">
                                 <BarChart2 size={18} />
-                                Governance & Compliance Metrics
+                                {t("governance.title", "Governance & Compliance Metrics")}
                             </h2>
                             <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
                                 <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
-                                    <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider">Compliance Score</p>
+                                    <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider">{t("compliance.score", "Compliance Score")}</p>
                                     <p className="mt-2 text-3xl font-semibold text-neutral-900">{summary.compliance.score}%</p>
                                 </div>
                                 <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
-                                    <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider">High Risk Obligations</p>
+                                    <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider">{t("compliance.highRisk", "High Risk Obligations")}</p>
                                     <p className="mt-2 text-3xl font-semibold text-neutral-900">{summary.compliance.high_risk}</p>
                                 </div>
                                 <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
-                                    <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider">Active Policies</p>
+                                    <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider">{t("investigations.statuses.active", "Active")} {t("nav.policies", "Policies")}</p>
                                     <p className="mt-2 text-3xl font-semibold text-neutral-900">{summary.policies.active}</p>
                                 </div>
                                 <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
-                                    <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider">Completed Findings</p>
+                                    <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider">{t("agents.statusCompleted", "Completed")} {t("dashboard.stats.recentFindings", "Findings")}</p>
                                     <p className="mt-2 text-3xl font-semibold text-neutral-900">{summary.findings.completed}</p>
                                 </div>
                             </div>
@@ -157,13 +159,13 @@ export default function Reports() {
                         <div className="flex items-center justify-between print-hide">
                             <h2 className="text-lg font-semibold text-neutral-900 flex items-center gap-2">
                                 <ShieldAlert size={18} />
-                                Completed Agent Findings
+                                {t("agents.statusCompleted", "Completed")} {t("dashboard.topNav.agents", "Agent")} {t("dashboard.stats.recentFindings", "Findings")}
                             </h2>
                             <div className="relative w-64">
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" size={16} />
                                 <input
                                     type="text"
-                                    placeholder="Search reports..."
+                                    placeholder={t("audit.searchPlaceholder", "Search reports...")}
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     className="w-full rounded-md border border-neutral-300 py-1.5 pl-9 pr-3 text-sm focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
@@ -173,13 +175,13 @@ export default function Reports() {
 
                         {/* Print Only Findings Header */}
                         <h2 className="hidden print-block text-lg font-semibold text-neutral-900 mt-8 mb-4 border-b pb-2">
-                            Detailed Findings
+                            {t("audit.columns.details", "Detailed Findings")}
                         </h2>
 
                         <div className="space-y-4">
                             {filteredFindings.length === 0 ? (
                                 <div className="rounded-xl border border-neutral-200 bg-white p-8 text-center">
-                                    <p className="text-sm text-neutral-500">No reports match your search.</p>
+                                    <p className="text-sm text-neutral-500">{t("compliance.emptyFilterTitle", "No reports match your search.")}</p>
                                 </div>
                             ) : (
                                 filteredFindings.map((finding) => (
@@ -192,7 +194,7 @@ export default function Reports() {
                                                 {finding.question}
                                             </h3>
                                             <p className="mt-1 text-xs text-neutral-400">
-                                                Completed on {new Date(finding.created_at).toLocaleString()}
+                                                {t("agents.statusCompleted", "Completed on")} {new Date(finding.created_at).toLocaleString()}
                                             </p>
                                         </div>
 
@@ -211,7 +213,7 @@ export default function Reports() {
                                                     <div>
                                                         <p className="text-xs font-semibold text-neutral-900 flex items-center gap-1 mb-1.5">
                                                             <AlertCircle size={14} className="text-amber-500" />
-                                                            Evidence Gaps
+                                                            {t("research.comparison.gaps", "Evidence Gaps")}
                                                         </p>
                                                         <ul className="list-disc pl-4 space-y-1">
                                                             {finding.evidence_gaps.map((gap: any, i: number) => (
@@ -224,7 +226,7 @@ export default function Reports() {
                                                     <div>
                                                         <p className="text-xs font-semibold text-neutral-900 flex items-center gap-1 mb-1.5">
                                                             <AlertTriangle size={14} className="text-red-500" />
-                                                            Policy Conflicts
+                                                            {t("research.comparison.materialConflicts", "Policy Conflicts")}
                                                         </p>
                                                         <ul className="list-disc pl-4 space-y-1">
                                                             {finding.conflicts.map((conflict: any, i: number) => (
@@ -242,7 +244,7 @@ export default function Reports() {
                                             <div>
                                                 <p className="text-xs font-semibold text-neutral-900 flex items-center gap-1 mb-1.5">
                                                     <CheckCircle2 size={14} className="text-emerald-500" />
-                                                    Governance Recommendations
+                                                    {t("research.comparison.actions", "Governance Recommendations")}
                                                 </p>
                                                 {finding.suggested_actions && finding.suggested_actions.length > 0 ? (
                                                     <ul className="space-y-2">

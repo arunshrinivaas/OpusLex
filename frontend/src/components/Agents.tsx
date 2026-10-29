@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Sparkles, FileText, CheckCircle, AlertTriangle, AlertCircle, Play, FileQuestion, BookOpen } from "lucide-react";
+
+const API = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
 
 type AgentEvidence = {
     claim: string;
@@ -59,6 +62,7 @@ type Investigation = {
 };
 
 export default function Agents() {
+    const { t } = useTranslation();
     const [investigations, setInvestigations] = useState<Investigation[]>([]);
     const [selectedInvestigation, setSelectedInvestigation] = useState<Investigation | null>(null);
     const [documentsCount, setDocumentsCount] = useState<number | null>(null);
@@ -76,7 +80,7 @@ export default function Agents() {
             try {
                 const token = localStorage.getItem("access_token");
                 if (!token) return;
-                const res = await fetch("http://127.0.0.1:8000/api/v1/investigations/", {
+                const res = await fetch(`${API}/api/v1/investigations/`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 if (!res.ok) throw new Error("Failed to load investigations");
@@ -102,7 +106,7 @@ export default function Agents() {
             if (!token) return;
             
             try {
-                const docsRes = await fetch(`http://127.0.0.1:8000/api/v1/investigations/${selectedInvestigation.id}/documents`, {
+                const docsRes = await fetch(`${API}/api/v1/investigations/${selectedInvestigation.id}/documents`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 if (docsRes.ok) {
@@ -110,7 +114,7 @@ export default function Agents() {
                     setDocumentsCount(docs.length);
                 }
                 
-                const runsRes = await fetch(`http://127.0.0.1:8000/api/v1/agents/runs?investigation_id=${selectedInvestigation.id}`, {
+                const runsRes = await fetch(`${API}/api/v1/agents/runs?investigation_id=${selectedInvestigation.id}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 if (runsRes.ok) {
@@ -132,7 +136,7 @@ export default function Agents() {
         setError("");
         const token = localStorage.getItem("access_token");
         try {
-            const res = await fetch(`http://127.0.0.1:8000/api/v1/agents/investigations/${selectedInvestigation.id}/run`, {
+            const res = await fetch(`${API}/api/v1/agents/investigations/${selectedInvestigation.id}/run`, {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",
@@ -170,7 +174,7 @@ export default function Agents() {
         <div className="flex h-[calc(100vh-4rem)]">
             <div className="w-1/3 flex flex-col border-r border-neutral-200 bg-neutral-50 overflow-y-auto">
                 <div className="p-4 border-b border-neutral-200 bg-white">
-                    <h2 className="text-sm font-semibold mb-2">Investigation Context</h2>
+                    <h2 className="text-sm font-semibold mb-2">{t("agents.scopeLabel", "Investigation Context")}</h2>
                     <select
                         className="w-full text-sm border border-neutral-300 rounded-md p-2 outline-none"
                         value={selectedInvestigation?.id || ""}
@@ -180,7 +184,7 @@ export default function Agents() {
                             setSelectedRun(null);
                         }}
                     >
-                        <option value="" disabled>Select an investigation</option>
+                        <option value="" disabled>{t("research.selectInvestigation", "Select an investigation")}</option>
                         {investigations.map(inv => (
                             <option key={inv.id} value={inv.id}>{inv.title}</option>
                         ))}
@@ -201,9 +205,9 @@ export default function Agents() {
                 </div>
                 
                 <div className="flex-1 overflow-y-auto p-4">
-                    <h2 className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">Agent Runs History</h2>
+                    <h2 className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">{t("agents.executionTrace", "Agent Runs History")}</h2>
                     {runs.length === 0 ? (
-                        <p className="text-xs text-neutral-400">No agent runs in this investigation.</p>
+                        <p className="text-xs text-neutral-400">{t("investigations.details.noEvidence", "No agent runs in this investigation.")}</p>
                     ) : (
                         <div className="space-y-2">
                             {runs.map(run => (
@@ -233,10 +237,10 @@ export default function Agents() {
                 <div className="border-b border-neutral-100 p-6 bg-neutral-50/50">
                     <div className="mb-4">
                         <h2 className="text-lg font-semibold tracking-tight flex items-center gap-2">
-                            <Sparkles size={18} className="text-neutral-700" /> AI Agent Execution
+                            <Sparkles size={18} className="text-neutral-700" /> {t("agents.title", "AI Agent Execution")}
                         </h2>
                         <p className="text-xs text-neutral-500 mt-1">
-                            Run a targeted compliance analysis scoped exclusively to the documents in your selected investigation.
+                            {t("agents.subtitle", "Run a targeted compliance analysis scoped exclusively to the documents in your selected investigation.")}
                         </p>
                     </div>
                     
@@ -244,7 +248,7 @@ export default function Agents() {
                         <textarea
                             className="w-full text-sm border border-neutral-300 rounded-xl p-4 pb-12 outline-none focus:border-neutral-900 transition-colors resize-none shadow-sm"
                             rows={3}
-                            placeholder="Ask a compliance question, e.g., 'What are the breach notification requirements under GDPR?'"
+                            placeholder={t("agents.taskPlaceholder", "Ask a compliance question, e.g., 'What are the breach notification requirements under GDPR?'")}
                             value={question}
                             onChange={(e) => setQuestion(e.target.value)}
                             disabled={isRunning || !selectedInvestigation || documentsCount === 0}
@@ -261,12 +265,12 @@ export default function Agents() {
                             {isRunning ? (
                                 <>
                                     <div className="h-3 w-3 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                                    Analyzing...
+                                    {t("agents.statusRunning", "Analyzing...")}
                                 </>
                             ) : (
                                 <>
                                     <Play size={12} />
-                                    Run Agent
+                                    {t("agents.runAgent", "Run Agent")}
                                 </>
                             )}
                         </button>
@@ -299,7 +303,7 @@ export default function Agents() {
                             ) : selectedRun.status === "pending" ? (
                                 <div className="flex flex-col items-center justify-center p-12 text-neutral-400 gap-4">
                                     <div className="h-8 w-8 rounded-full border-4 border-neutral-200 border-t-neutral-400 animate-spin" />
-                                    <p className="text-sm">Agent is analyzing documents...</p>
+                                    <p className="text-sm">{t("research.comparison.comparing", "Agent is analyzing documents...")}</p>
                                 </div>
                             ) : (
                                 <>
@@ -325,7 +329,7 @@ export default function Agents() {
                                     {selectedRun.applicable_requirements && selectedRun.applicable_requirements.length > 0 && (
                                         <div>
                                             <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-widest mb-3 flex items-center gap-2">
-                                                <CheckCircle size={14} /> Applicable Requirements
+                                                <CheckCircle size={14} /> {t("compliance.title", "Applicable Requirements")}
                                             </h3>
                                             <div className="space-y-3">
                                                 {selectedRun.applicable_requirements.map((req, i) => (
@@ -345,7 +349,7 @@ export default function Agents() {
                                     {selectedRun.evidence && selectedRun.evidence.length > 0 && (
                                         <div>
                                             <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-widest mb-3 flex items-center gap-2">
-                                                <FileText size={14} /> Supporting Evidence
+                                                <FileText size={14} /> {t("investigations.details.evidence", "Supporting Evidence")}
                                             </h3>
                                             <div className="space-y-3">
                                                 {selectedRun.evidence.map((ev, i) => (
@@ -370,7 +374,7 @@ export default function Agents() {
                                     {selectedRun.conflicts && selectedRun.conflicts.length > 0 && (
                                         <div>
                                             <h3 className="text-sm font-medium text-amber-600 uppercase tracking-widest mb-3 flex items-center gap-2">
-                                                <AlertTriangle size={14} /> Identified Conflicts
+                                                <AlertTriangle size={14} /> {t("research.comparison.materialConflicts", "Identified Conflicts")}
                                             </h3>
                                             <div className="space-y-3">
                                                 {selectedRun.conflicts.map((conflict, i) => (
@@ -391,7 +395,7 @@ export default function Agents() {
                                     {selectedRun.evidence_gaps && selectedRun.evidence_gaps.length > 0 && (
                                         <div>
                                             <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-widest mb-3 flex items-center gap-2">
-                                                <FileQuestion size={14} /> Evidence Gaps
+                                                <FileQuestion size={14} /> {t("research.comparison.gaps", "Evidence Gaps")}
                                             </h3>
                                             <div className="space-y-3">
                                                 {selectedRun.evidence_gaps.map((gap, i) => (
@@ -407,7 +411,7 @@ export default function Agents() {
                                     {selectedRun.suggested_actions && selectedRun.suggested_actions.length > 0 && (
                                         <div>
                                             <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-widest mb-3 flex items-center gap-2">
-                                                <Play size={14} /> Suggested Actions
+                                                <Play size={14} /> {t("research.comparison.actions", "Suggested Actions")}
                                             </h3>
                                             <div className="space-y-3">
                                                 {selectedRun.suggested_actions.map((action, i) => (
@@ -428,7 +432,7 @@ export default function Agents() {
                                     {selectedRun.citations && selectedRun.citations.length > 0 && (
                                         <div>
                                             <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-widest mb-3 flex items-center gap-2">
-                                                <BookOpen size={14} /> Citations
+                                                <BookOpen size={14} /> {t("research.sourcesTitle", "Citations")}
                                             </h3>
                                             <div className="space-y-2">
                                                 {selectedRun.citations.map((cit, i) => (
@@ -455,7 +459,7 @@ export default function Agents() {
                     ) : (
                         <div className="h-full flex flex-col items-center justify-center text-neutral-400">
                             <Sparkles size={32} className="opacity-20 mb-4" />
-                            <p className="text-sm">Select a past run from history or enter a new query above to begin.</p>
+                            <p className="text-sm">{t("research.empty.desc", "Select a past run from history or enter a new query above to begin.")}</p>
                         </div>
                     )}
                 </div>

@@ -60,13 +60,19 @@ async def synthesis_node(
     no_exec_summary = state.get("no_exec_summary", False)
 
     # Apply strict exclusion constraints
-    if no_exec_summary or is_conflict_only:
-        finding = None
-
     if is_conflict_only:
+        if conflicts:
+            finding = None
+        else:
+            doc_metadata = state.get("document_metadata", [])
+            doc_names = ", ".join(d.get("filename") for d in doc_metadata if d.get("filename")) if doc_metadata else ""
+            doc_info = f" in the attached documents ({doc_names})" if doc_names else " between the attached documents"
+            finding = f"No relevant evidence was found{doc_info} to substantiate any conflicts (Evidence Limitation: retrieved passages do not demonstrate conflicting provisions)."
         applicable_requirements = []
         evidence_gaps = []
         suggested_actions = []
+    elif no_exec_summary:
+        finding = None
 
     if is_gaps_only:
         conflicts = []
@@ -103,7 +109,13 @@ async def synthesis_node(
     calculated_score = 100 - (20 * num_conflicts) - (10 * num_gaps) - (5 * num_actions)
     risk_score = max(0, calculated_score)
 
-    if risk_score >= 80:
+    if (
+        (finding and ("no relevant evidence in the attached investigation documents" in finding.lower() or "cannot answer this question because there is no relevant evidence" in finding.lower()))
+        or (document_ids is not None and len(document_ids) == 0 and not evidence and not conflicts)
+    ):
+        risk_score = 0
+        risk_level = "Low"
+    elif risk_score >= 80:
         risk_level = "Low"
     elif risk_score >= 50:
         risk_level = "Medium"

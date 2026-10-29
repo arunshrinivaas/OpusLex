@@ -1,0 +1,568 @@
+{
+  "nav": {
+    "home": "होम",
+    "regulations": "विनियम",
+    "compliance": "अनुपालन",
+    "policies": "नीतियां",
+    "research": "शोध",
+    "agents": "AI एजेंट्स",
+    "investigations": "जांच",
+    "integrations": "एकीकरण",
+    "audit": "ऑडिट और निष्कर्ष",
+    "reports": "रिपोर्ट्स",
+    "governance": "शासन",
+    "settings": "सेटिंग्स",
+    "help": "सहायता"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "categories": {
+      "app": "ऐप",
+      "account": "खाता",
+      "data_privacy": "डेटा और गोपनीयता",
+      "integrations": "एकीकरण",
+      "advanced": "उन्नत"
+    },
+    "tabs": {
+      "appearance": "दिखावट",
+      "general": "सामान्य",
+      "accessibility": "पहुंच",
+      "notifications": "सूचनाएं",
+      "profile": "प्रोफ़ाइल",
+      "security": "सुरक्षा और लॉगिन",
+      "data": "डेटा नियंत्रण",
+      "storage": "संग्रहण",
+      "language": "भाषा",
+      "privacy": "गोपनीयता",
+      "integrations": "एकीकरण",
+      "advanced": "उन्नत",
+      "workspace": "कार्यक्षेत्र",
+      "navigation": "नेविगेशन",
+      "assistant": "AI सहायक"
+    },
+    "appearance": {
+      "headerTitle": "दिखावट",
+      "headerSub": "OpusLex का स्वरूप अपनी पसंद के अनुसार बदलें।",
+      "fontSize": {
+        "title": "फ़ॉन्ट आकार",
+        "description": "टाइपोग्राफ़िक पदानुक्रम बनाए रखते हुए टेक्स्ट का आकार चुनें।",
+        "current": "वर्तमान:"
+      },
+      "density": {
+        "title": "घनत्व",
+        "description": "इंटरफ़ेस तत्वों के बीच की दूरी नियंत्रित करें।"
+      },
+      "theme": {
+        "title": "थीम",
+        "description": "अपनी पसंदीदा रंग थीम चुनें।",
+        "comingSoon": "जल्द आ रहा है",
+        "light": "लाइट",
+        "dark": "डार्क",
+        "auto": "स्वचालित",
+        "lightDesc": "उच्च स्पष्टता वाला साफ़ लाइट इंटरफ़ेस।",
+        "darkDesc": "आंखों का तनाव कम करने वाला डार्क पैलेट।",
+        "autoDesc": "सिस्टम दिखावट के साथ स्वचालित रूप से सिंक होता है।",
+        "autoDescription": "सिस्टम के अनुसार"
+      }
+    },
+    "general": {
+      "headerTitle": "सामान्य",
+      "headerSub": "एप्लिकेशन के सामान्य व्यवहार को कॉन्फ़िगर करें।",
+      "landing": {
+        "title": "डिफ़ॉल्ट लैंडिंग अनुभाग",
+        "description": "लॉगिन के तुरंत बाद खुलने वाला अनुभाग चुनें।",
+        "takesEffect": "अगले लॉगिन से प्रभावी होगा।"
+      }
+    },
+    "accessibility": {
+      "headerTitle": "पहुंच",
+      "headerSub": "अपनी आवश्यकताओं के अनुसार इंटरफ़ेस समायोजित करें।",
+      "reduceMotion": {
+        "label": "गति कम करें",
+        "description": "एनिमेशन और बदलाव को कम करता है।"
+      },
+      "largerTargets": {
+        "label": "बड़े क्लिक लक्ष्य",
+        "description": "आसानी से क्लिक करने के लिए नियंत्रणों का आकार बढ़ाता है।"
+      },
+      "highContrast": {
+        "label": "उच्च कंट्रास्ट",
+        "description": "टेक्स्ट और सीमाओं का कंट्रास्ट बढ़ाता है।"
+      },
+      "osPreference": "ऑपरेटिंग सिस्टम की गति प्राथमिकता का भी सम्मान करता है।"
+    },
+    "language": {
+      "headerTitle": "भाषा",
+      "headerSub": "प्रदर्शन भाषा प्रबंधित करें। 100 से अधिक भाषाएं मूल लिपि में उपलब्ध हैं।",
+      "english": "अंग्रेज़ी",
+      "spanish": "स्पैनिश",
+      "active": "सक्रिय",
+      "select": "भाषा चुनें",
+      "searchPlaceholder": "110+ भाषाओं में खोजें...",
+      "coverageFull": "पूर्ण अनुवाद",
+      "coveragePriority": "प्राथमिकता पैकेज",
+      "coverageFallback": "अंग्रेज़ी फ़ॉलबैक (प्रगति पर है)",
+      "catalogCount": "{{count}} भाषाएं उपलब्ध हैं",
+      "noResults": "कोई मिलती-जुलती भाषा नहीं मिली।"
+    },
+    "assistant": {
+      "headerTitle": "AI सहायक",
+      "headerSub": "आवाज और टेक्स्ट सहायक, शॉर्टकट और अनुमतियां सेट करें।",
+      "enableTitle": "AI सहायक सक्षम करें",
+      "enableDesc": "फ्लोटिंग ऑर्ब प्रदर्शित करें और कमांड की अनुमति दें।",
+      "permissionsTitle": "सहायक अनुमति स्तर",
+      "permissionsDesc": "अनधिकृत परिवर्तनों को रोकने के लिए बैकएंड पर लागू किया गया।",
+      "level1": "स्तर 1: पढ़ें और उत्तर दें (केवल पढ़ने के लिए)",
+      "level2": "स्तर 2: सुझाव दें (बिना निष्पादन के ड्राफ्ट तैयार करता है)",
+      "level3": "स्तर 3: अनुमोदन के साथ निष्पादित करें (पुष्टि आवश्यक)",
+      "level4": "स्तर 4: सीमित स्वायत्तता (कम जोखिम वाली क्रियाएं सीधे करता है)",
+      "voiceTitle": "ध्वनि और ऑडियो आउटपुट",
+      "voiceDesc": "बोले गए उत्तर और ब्राउज़र आवाजें सेट करें।",
+      "enableVoice": "बोले गए उत्तर सक्षम हैं",
+      "voiceSelect": "ब्राउज़र आवाज",
+      "shortcutTitle": "सक्रियण शॉर्टकट",
+      "shortcutDesc": "सहायक को टॉगल करने के लिए कीबोर्ड शॉर्टकट।",
+      "privacyTitle": "सदर्भ साझाकरण",
+      "privacyDesc": "जांच संदर्भ तक पहुंचने के लिए सहायक को अनुमति दें।"
+    },
+    "workspace": {
+      "headerTitle": "कार्यक्षेत्र",
+      "headerSub": "आपके सक्रिय OpusLex वातावरण के बारे में जानकारी।",
+      "activeEnv": {
+        "title": "सक्रिय वातावरण",
+        "description": "एकीकृत OpusLex कार्यक्षेत्र में काम कर रहे हैं।",
+        "defaultLanding": "डिफ़ॉल्ट लैंडिंग अनुभाग यहाँ सेट करें:",
+        "generalLink": "सामान्य"
+      },
+      "identity": {
+        "title": "कार्यक्षेत्र पहचान",
+        "description": "कार्यक्षेत्र का नाम प्रबंधित करें।",
+        "nameLabel": "कार्यक्षेत्र का नाम",
+        "save": "सहेजें",
+        "saving": "सहेजा जा रहा है...",
+        "saved": "सहेजा गया",
+        "emptyError": "नाम खाली नहीं हो सकता।"
+      },
+      "usage": {
+        "title": "उपयोग अवलोकन",
+        "description": "कार्यक्षेत्र के वर्तमान मेट्रिक्स।",
+        "documents": "कुल दस्तावेज़",
+        "investigations": "सक्रिय जांच",
+        "agentRuns": "एजेंट रन",
+        "loading": "मेट्रिक्स लोड हो रहे हैं...",
+        "error": "मेट्रिक्स लोड करने में विफल।"
+      }
+    },
+    "storage": {
+      "headerTitle": "संग्रहण",
+      "headerSub": "कार्यक्षेत्र भंडारण जानकारी।",
+      "summary": {
+        "title": "संग्रहण सारांश",
+        "totalDocuments": "कुल दस्तावेज़"
+      },
+      "documents": {
+        "title": "अपलोड किए गए दस्तावेज़",
+        "empty": "अभी तक कोई दस्तावेज़ अपलोड नहीं किया गया।",
+        "deleteAction": "हटाएं",
+        "confirmDelete": "क्या आप वाकई इस दस्तावेज़ को हटाना चाहते हैं?",
+        "deletedSuccess": "दस्तावेज़ सफलतापूर्वक हटाया गया।"
+      }
+    },
+    "security": {
+      "status": {
+        "configured": "कॉन्फ़िगर किया गया",
+        "notConfigured": "कॉन्फ़िगर नहीं किया गया",
+        "linked": "लिंक किया गया",
+        "notLinked": "लिंक नहीं किया गया",
+        "verified": "सत्यापित",
+        "notVerified": "सत्यापित नहीं"
+      },
+      "action": {
+        "changePassword": "पासवर्ड बदलें",
+        "setPassword": "पासवर्ड सेट करें",
+        "link_phone": "फ़ोन लिंक करें",
+        "verify_email": "ईमेल सत्यापित करें"
+      }
+    }
+  },
+  "assistantUI": {
+    "title": "OpusLex सहायक",
+    "tooltip": "सहायक खोलें ({{shortcut}})",
+    "inputPlaceholder": "अनुपालन प्रश्न पूछें या कोई आदेश दें...",
+    "send": "भेजें",
+    "listening": "आवाज सुनी जा रही है...",
+    "stopListening": "सुनना बंद करें",
+    "mute": "म्यूट करें",
+    "unmute": "आवाज चालू करें",
+    "clearHistory": "चैट साफ़ करें",
+    "close": "बंद करें",
+    "taskWorkspace": "कार्यक्षेत्र",
+    "actionRequiresApproval": "अनुमोदन आवश्यक है",
+    "approveAction": "स्वीकृत करें और निष्पादित करें",
+    "rejectAction": "रद्द करें",
+    "actionExecuted": "कार्रवाई सफलतापूर्वक निष्पादित हुई",
+    "actionDenied": "अनुमति स्तर के कारण कार्रवाई अस्वीकृत",
+    "voiceUnavailable": "इस ब्राउज़र में वाक् पहचान उपलब्ध नहीं है।",
+    "voiceDenied": "माइक्रोफ़ोन अनुमति अस्वीकृत। टेक्स्ट का उपयोग करें।",
+    "contextBadge": "संदर्भ: {{section}}",
+    "switchToText": "टेक्स्ट पर जाएं",
+    "switchToVoice": "आवाज पर जाएं",
+    "voiceHudHint": "स्वाभाविक रूप से बोलें या 'टेक्स्ट पर जाएं' कहें",
+    "spotlightPlaceholder": "अनुपालन प्रश्न पूछें या कोई आदेश दें...",
+    "returnToVoice": "वॉयस मोड",
+    "explainPage": "पृष्ठ समझाएं"
+  },
+  "common": {
+    "search": "खोजें...",
+    "searchWorkspace": "कार्यक्षेत्र में खोजें...",
+    "searchObligations": "अनुपालन दायित्व खोजें...",
+    "add": "जोड़ें",
+    "create": "बनाएं",
+    "save": "सहेजें",
+    "saving": "सहेजा जा रहा है...",
+    "cancel": "रद्द करें",
+    "delete": "हटाएं",
+    "confirm": "पुष्टि करें",
+    "close": "बंद करें",
+    "back": "पीछे जाएं",
+    "retry": "पुनः प्रयास करें",
+    "loading": "लोड हो रहा है...",
+    "error": "कुछ गलत हो गया।",
+    "allStatuses": "सभी स्थितियां",
+    "allRisks": "सभी जोखिम स्तर",
+    "compliant": "अनुपालित",
+    "nonCompliant": "गैर-अनुपालित",
+    "inProgress": "प्रगति में",
+    "notStarted": "शुरू नहीं हुआ",
+    "waived": "माफ़ किया गया",
+    "overdue": "अतिदेय",
+    "low": "निम्न",
+    "medium": "मध्यम",
+    "high": "उच्च",
+    "critical": "गंभीर",
+    "saved": "सहेजा गया"
+  },
+  "compliance": {
+    "title": "अनुपालन ट्रैकिंग",
+    "subtitle": "कानूनी दायित्व और उनकी वर्तमान अनुपालन स्थिति।",
+    "addObligation": "दायित्व जोड़ें",
+    "total": "कुल",
+    "score": "स्कोर",
+    "highRisk": "उच्च जोखिम",
+    "emptyTitle": "अभी तक कोई अनुपालन दायित्व नहीं है",
+    "emptyFilterTitle": "फ़िल्टर से मेल खाने वाला कोई दायित्व नहीं मिला",
+    "emptyDesc": "नियामक आवश्यकताओं की निगरानी के लिए दायित्व जोड़ें।",
+    "modalTitle": "अनुपालन दायित्व जोड़ें",
+    "fieldTitle": "शीर्षक *",
+    "fieldRegulation": "विनियम *",
+    "fieldDepartment": "विभाग *",
+    "fieldStatus": "स्थिति",
+    "fieldRisk": "जोखिम",
+    "fieldDueDate": "नियत तारीख",
+    "fieldDescription": "विवरण"
+  },
+  "auth": {
+    "welcome": "OpusLex में आपका स्वागत है",
+    "signIn": "साइन इन करें",
+    "signUp": "साइन अप करें",
+    "email": "ईमेल पता",
+    "password": "पासवर्ड",
+    "fullName": "पूरा नाम",
+    "logIn": "लॉग इन",
+    "logOut": "लॉग आउट",
+    "createAccount": "खाता बनाएं",
+    "alreadyHaveAccount": "पहले से खाता है? साइन इन करें",
+    "dontHaveAccount": "खाता नहीं है? साइन अप करें",
+    "verifyCode": "सत्यापन कोड",
+    "verify": "सत्यापित करें",
+    "rememberMe": "मुझे याद रखें",
+    "forgotPassword": "पासवर्ड भूल गए?",
+    "continueGoogle": "Google के साथ जारी रखें",
+    "continueApple": "Apple के साथ जारी रखें",
+    "continueEmail": "ईमेल के साथ जारी रखें",
+    "invalidCredentials": "अमान्य ईमेल या पासवर्ड",
+    "passwordMinLength": "पासवर्ड कम से कम 8 वर्णों का होना चाहिए",
+    "passwordsDoNotMatch": "पासवर्ड मेल नहीं खाते",
+    "termsNotice": "जारी रखकर, आप OpusLex की सेवा की शर्तों और गोपनीयता नीति से सहमत होते हैं।"
+  },
+  "dashboard": {
+    "welcomeBack": "वापसी पर स्वागत है",
+    "systemOperational": "सभी प्रणालियाँ चालू हैं",
+    "activeWorkspace": "सक्रिय कार्यक्षेत्र",
+    "stats": {
+      "activeInvestigations": "सक्रिय जांच",
+      "documentsIndexed": "अनुक्रमित दस्तावेज़",
+      "complianceScore": "अनुपालन स्कोर",
+      "recentFindings": "हालिया निष्कर्ष",
+      "totalObligations": "कुल दायित्व",
+      "auditsPassed": "सफल ऑडिट"
+    },
+    "quickLaunch": {
+      "title": "त्वरित क्रियाएं",
+      "newInvestigation": "नई जांच",
+      "uploadDocument": "दस्तावेज़ अपलोड करें",
+      "askResearch": "शोध शुरू करें",
+      "deployAgent": "एजेंट तैनात करें"
+    },
+    "recentInvestigations": {
+      "title": "हालिया जांच",
+      "viewAll": "सभी देखें",
+      "empty": "कोई सक्रिय जांच नहीं है। शुरू करने के लिए एक नई जांच बनाएं।"
+    },
+    "activityFeed": {
+      "title": "हालिया गतिविधि",
+      "empty": "कोई हालिया गतिविधि दर्ज नहीं की गई।"
+    },
+    "topNav": {
+      "all": "सभी",
+      "reports": "रिपोर्ट",
+      "research": "अनुसंधान",
+      "agents": "एजेंट",
+      "searchPlaceholder": "कार्यक्षेत्र, दस्तावेज़ या कमांड खोजें (⌘K)...",
+      "openAssistant": "Themis सहायक खोलें",
+      "selectLanguage": "भाषा बदलें"
+    },
+    "notifications": {
+      "title": "सूचनाएं",
+      "markAllRead": "सभी को पढ़ा हुआ चिह्नित करें",
+      "empty": "कोई नई सूचना नहीं",
+      "clear": "सभी साफ़ करें"
+    },
+    "searchModal": {
+      "title": "वैश्विक खोज",
+      "placeholder": "जांच, दस्तावेज़, एजेंट या सेटिंग्स खोजें...",
+      "noResults": "\"{{query}}\" के लिए कोई परिणाम नहीं मिला",
+      "escToClose": "बंद करने के लिए ESC दबाएं"
+    },
+    "profileModal": {
+      "title": "खाता प्रोफ़ाइल",
+      "displayName": "प्रदर्शित नाम",
+      "displayNamePlaceholder": "अपना पूरा नाम दर्ज करें",
+      "email": "ईमेल (स्थायी पहचानकर्ता)",
+      "role": "भूमिका",
+      "save": "परिवर्तन सहेजें",
+      "saving": "सहेजा जा रहा है...",
+      "saved": "परिवर्तन सफलतापूर्वक सहेजे गए",
+      "emptyNameError": "पूरा नाम रिक्त नहीं हो सकता।"
+    }
+  },
+  "investigations": {
+    "title": "जांच एवं मामले",
+    "subtitle": "सक्रिय अनुपालन मामलों का प्रबंधन करें, साक्ष्यों की समीक्षा करें और विनियामक निष्कर्षों को ट्रैक करें।",
+    "newInvestigation": "नई जांच",
+    "searchPlaceholder": "शीर्षक या विवरण द्वारा जांच खोजें...",
+    "filterStatus": "स्थिति द्वारा फ़िल्टर करें",
+    "filterJurisdiction": "अधिकार क्षेत्र",
+    "allJurisdictions": "सभी अधिकार क्षेत्र",
+    "columns": {
+      "title": "शीर्षक",
+      "status": "स्थिति",
+      "risk": "जोखिम स्तर",
+      "jurisdiction": "अधिकार क्षेत्र",
+      "documents": "दस्तावेज़",
+      "updated": "अंतिम अद्यतन",
+      "actions": "क्रियाएँ"
+    },
+    "statuses": {
+      "active": "सक्रिय",
+      "review": "समीक्षाधीन",
+      "closed": "बंद",
+      "archived": "अभिलेखागार में"
+    },
+    "risks": {
+      "low": "निम्न",
+      "medium": "मध्यम",
+      "high": "उच्च",
+      "critical": "गंभीर"
+    },
+    "modal": {
+      "createTitle": "नई जांच बनाएं",
+      "titleLabel": "जांच शीर्षक *",
+      "titlePlaceholder": "उदा. वार्षिक डेटा गोपनीयता अनुपालन समीक्षा",
+      "descLabel": "विवरण",
+      "descPlaceholder": "दायरे और उद्देश्यों का विवरण दें...",
+      "jurisdictionLabel": "अधिकार क्षेत्र",
+      "leadLabel": "सौंपा गया नेतृत्व",
+      "targetDateLabel": "लक्ष्य पूर्णता तिथि",
+      "cancel": "रद्द करें",
+      "create": "जांच बनाएं"
+    },
+    "details": {
+      "overview": "अवलोकन",
+      "documents": "संलग्न दस्तावेज़",
+      "evidence": "साक्ष्य और निष्कर्ष",
+      "timeline": "समयरेखा",
+      "notes": "टिप्पणियाँ",
+      "uploadDocument": "दस्तावेज़ अपलोड करें",
+      "generateReport": "रिपोर्ट तैयार करें",
+      "noDocuments": "इस जांच में अभी तक कोई दस्तावेज़ संलग्न नहीं है।",
+      "noEvidence": "अभी तक कोई साक्ष्य दर्ज नहीं किया गया है।"
+    },
+    "empty": {
+      "title": "कोई जांच नहीं मिली",
+      "desc": "अनुपालन मामलों को ट्रैक करने के लिए अपनी पहली जांच बनाएं।"
+    }
+  },
+  "research": {
+    "title": "अनुसंधान सहायक",
+    "subtitle": "अनुपालन दस्तावेज़ों से पूछताछ करें, विनियामक आवश्यकताओं का विश्लेषण करें और साक्ष्य उद्धृत करें।",
+    "tabs": {
+      "general": "सामान्य अनुसंधान",
+      "investigation": "मामला अनुसंधान",
+      "comparison": "विनियामक तुलना"
+    },
+    "inputPlaceholder": "विनियमों, नीतियों या संलग्न दस्तावेज़ों के बारे में प्रश्न पूछें...",
+    "scope": "खोज का दायरा",
+    "scopeAll": "संपूर्ण दस्तावेज़ लाइब्रेरी",
+    "scopeInvestigation": "चयनित जांच",
+    "selectInvestigation": "जांच का चयन करें...",
+    "attachedDocs": "संलग्न दस्तावेज़ ({{count}})",
+    "autoDiscovered": "चयनित जांच से खोजा गया",
+    "strictGrounding": "सख्त साक्ष्य आधार",
+    "askButton": "अनुसंधान से पूछें",
+    "stopButton": "निर्माण रोकें",
+    "clearButton": "साफ़ करें",
+    "copyButton": "उत्तर कॉपी करें",
+    "copied": "कॉपी हो गया!",
+    "sourcesTitle": "स्रोत एवं उद्धरण",
+    "noSources": "इस सामान्य प्रश्न के लिए किसी दस्तावेज़ उद्धरण की आवश्यकता नहीं है।",
+    "comparison": {
+      "title": "दस्तावेज़ विनियामक तुलना",
+      "subtitle": "आधार अनुबंधों या आंतरिक नीतियों की विनियामक मानकों से तुलना करें।",
+      "baseDoc": "आधार दस्तावेज़",
+      "selectBase": "आधार अनुबंध या नीति का चयन करें...",
+      "targetDocs": "लक्षित दस्तावेज़ / विनियम",
+      "runComparison": "तुलना निष्पादित करें",
+      "execSummary": "कार्यकारी सारांश",
+      "materialConflicts": "महत्वपूर्ण विसंगतियां",
+      "gaps": "कमियां और विसंगतियां",
+      "actions": "प्राथमिकता वाले कार्य",
+      "comparing": "दस्तावेज़ों का विश्लेषण और तुलना की जा रही है..."
+    },
+    "empty": {
+      "title": "अनुसंधान कार्यक्षेत्र तैयार है",
+      "desc": "कानूनी और अनुपालन आवश्यकताओं का विश्लेषण करने के लिए प्रश्न पूछें।"
+    }
+  },
+  "agents": {
+    "title": "एआई अनुपालन एजेंट",
+    "subtitle": "जांच, सत्यापन और रिपोर्टिंग के लिए स्वायत्त एजेंट तैनात करें।",
+    "runAgent": "एजेंट शुरू करें",
+    "stopAgent": "एजेंट रोकें",
+    "taskLabel": "कार्य का विवरण",
+    "taskPlaceholder": "जांच का लक्ष्य, सत्यापित किए जाने वाले साक्ष्य या ऑडिट का वर्णन करें...",
+    "scopeLabel": "जांच संदर्भ",
+    "executionTrace": "एजेंट निष्पादन ट्रेस",
+    "logs": "एजेंट लॉग",
+    "approvalRequired": "अनुमोदन आवश्यक है",
+    "approve": "स्वीकृत करें और निष्पादित करें",
+    "reject": "कार्रवाई अस्वीकार करें",
+    "statusIdle": "एजेंट निष्क्रिय",
+    "statusRunning": "एजेंट प्रगति पर है...",
+    "statusCompleted": "निष्पादन पूर्ण",
+    "roles": {
+      "lead": "मुख्य जांच एजेंट",
+      "auditor": "विनियामक लेखा परीक्षक",
+      "gapAnalyzer": "नीति अंतर विश्लेषक",
+      "evidenceVerifier": "साक्ष्य सत्यापन एजेंट"
+    }
+  },
+  "regulations": {
+    "title": "विनियम लाइब्रेरी",
+    "subtitle": "वैश्विक नियामक रूपरेखाओं और वैधानिक दायित्वों का प्रबंधन करें।",
+    "searchPlaceholder": "विनियम खोजें...",
+    "filterJurisdiction": "सभी अधिकार क्षेत्र",
+    "filterSector": "सभी क्षेत्र",
+    "addRegulation": "विनियम जोड़ें",
+    "columns": {
+      "name": "विनियम का नाम",
+      "authority": "जारीकर्ता प्राधिकरण",
+      "jurisdiction": "अधिकार क्षेत्र",
+      "effectiveDate": "प्रभावी तिथि",
+      "status": "स्थिति",
+      "obligations": "दायित्व"
+    }
+  },
+  "policies": {
+    "title": "आंतरिक नीतियां",
+    "subtitle": "बाहरी वैधानिक आवश्यकताओं से जुड़ी कॉर्पोरेट नीतियां।",
+    "createPolicy": "नीति बनाएं",
+    "searchPlaceholder": "नीतियां खोजें...",
+    "uploadPolicy": "नीति अपलोड करें",
+    "columns": {
+      "name": "नीति का शीर्षक",
+      "category": "श्रेणी",
+      "version": "संस्करण",
+      "status": "स्थिति",
+      "lastReviewed": "अंतिम समीक्षा"
+    }
+  },
+  "audit": {
+    "title": "ऑडिट एवं निष्कर्ष",
+    "subtitle": "उपयोगकर्ता कार्यों, एजेंट संचालन और अनुपालन निष्कर्षों का संपूर्ण ऑडिट लॉग।",
+    "searchPlaceholder": "ऑडिट ट्रेल खोजें...",
+    "export": "ऑडिट लॉग निर्यात करें",
+    "columns": {
+      "timestamp": "समय मोहर",
+      "user": "उपयोगकर्ता / एजेंट",
+      "action": "की गई कार्रवाई",
+      "target": "लक्षित संसाधन",
+      "severity": "गंभीरता",
+      "details": "घटना विवरण"
+    }
+  },
+  "reports": {
+    "title": "अनुपालन रिपोर्ट",
+    "subtitle": "औपचारिक अनुपालन और ऑडिट रिपोर्ट तैयार करें, जांचें और निर्यात करें।",
+    "generate": "रिपोर्ट तैयार करें",
+    "exportPdf": "PDF निर्यात करें",
+    "exportCsv": "CSV निर्यात करें",
+    "templates": "रिपोर्ट टेम्पलेट"
+  },
+  "governance": {
+    "title": "कॉर्पोरेट प्रशासन",
+    "subtitle": "रूपरेखा निरीक्षण, जोखिम समितियां और नीति अनुमोदन प्रक्रियाएं।",
+    "committees": "शासन समितियां",
+    "reviews": "लंबित नीति समीक्षाएं"
+  },
+  "integrations": {
+    "title": "डेटा एवं स्टोरेज एकीकरण",
+    "subtitle": "बाहरी दस्तावेज़ रिपॉजिटरी और क्लाउड स्टोरेज कनेक्ट करें।",
+    "googleDrive": "Google Drive",
+    "oneDrive": "Microsoft OneDrive / SharePoint",
+    "box": "Box Enterprise",
+    "slack": "Slack Enterprise Grid",
+    "connect": "कनेक्ट करें",
+    "disconnect": "डिस्कनेक्ट करें",
+    "connected": "कनेक्टेड",
+    "notConnected": "कनेक्ट नहीं है"
+  },
+  "help": {
+    "title": "सहायता एवं प्रलेखन",
+    "subtitle": "दस्तावेज़, उपयोगकर्ता गाइड, शॉर्टकट और अक्सर पूछे जाने वाले प्रश्न देखें।",
+    "searchPlaceholder": "सहायता लेख, प्रश्न और शॉर्टकट खोजें...",
+    "categories": {
+      "gettingStarted": "आरंभ करें",
+      "investigations": "जांच और साक्ष्य",
+      "research": "अनुसंधान सहायक",
+      "themis": "Themis AI सहायक",
+      "security": "खाता और सुरक्षा"
+    },
+    "shortcutsTitle": "कीबोर्ड शॉर्टकट",
+    "passwordChangeStep": "अपना पासवर्ड बदलने के लिए, सेटिंग्स > सुरक्षा और लॉगिन पर जाएं, या ऊपर दाईं ओर खाता मेनू का उपयोग करें।"
+  },
+  "cookies": {
+    "bannerTitle": "गोपनीयता और प्राथमिकताएं",
+    "bannerDesc": "OpusLex बुनियादी अनुप्रयोग कार्यक्षमता बनाए रखने के लिए आवश्यक स्टोरेज का उपयोग करता है। कोई वैकल्पिक ट्रैकिंग सक्रिय नहीं है।",
+    "customize": "अनुकूलित करें",
+    "rejectOptional": "वैकल्पिक अस्वीकार करें",
+    "acceptAll": "सभी स्वीकार करें",
+    "modalTitle": "कुकी प्राथमिकताएं",
+    "necessaryTitle": "आवश्यक / कार्यात्मक",
+    "alwaysActive": "हमेशा सक्रिय",
+    "necessaryDesc": "मुख्य अनुप्रयोग के लिए आवश्यक। सत्र और प्राथमिकताओं को सहेजने के लिए उपयोग किया जाता है।",
+    "analyticsTitle": "एनालिटिक्स",
+    "notConfigured": "कॉन्फ़िगर नहीं है",
+    "analyticsDesc": "वर्तमान में कोई वैकल्पिक ट्रैकिंग तकनीक सक्रिय नहीं है।"
+  }
+}

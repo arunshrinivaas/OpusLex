@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.regulation import Regulation
-from app.routers.auth import get_current_user
+from app.routers.auth import get_current_user, require_roles
 from app.schemas.regulation import RegulationCreate
 
 router = APIRouter(prefix="/api/v1/regulations", tags=["Regulations"])
@@ -43,7 +43,7 @@ def get_regulation(regulation_id: int, db: Session = Depends(get_db)):
 def create_regulation(
     regulation: RegulationCreate,
     db: Session = Depends(get_db),
-    current_user=Depends(get_current_user),
+    current_user=Depends(require_roles("admin", "compliance_officer", "legal_analyst")),
 ):
     db_regulation = Regulation(
         title=regulation.title,

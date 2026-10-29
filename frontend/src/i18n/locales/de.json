@@ -1,0 +1,568 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "regulations": "Vorschriften",
+    "compliance": "Regelkonformität",
+    "policies": "Richtlinien",
+    "research": "Recherche",
+    "agents": "KI-Agenten",
+    "investigations": "Untersuchungen",
+    "integrations": "Integrationen",
+    "audit": "Audit & Befunde",
+    "reports": "Berichte",
+    "governance": "Governance",
+    "settings": "Einstellungen",
+    "help": "Hilfe"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "categories": {
+      "app": "APP",
+      "account": "KONTO",
+      "data_privacy": "DATEN & DATENSCHUTZ",
+      "integrations": "INTEGRATIONEN",
+      "advanced": "ERWEITERT"
+    },
+    "tabs": {
+      "appearance": "Erscheinungsbild",
+      "general": "Allgemein",
+      "accessibility": "Barrierefreiheit",
+      "notifications": "Benachrichtigungen",
+      "profile": "Profil",
+      "security": "Sicherheit & Login",
+      "data": "Datenkontrolle",
+      "storage": "Speicher",
+      "language": "Sprache",
+      "privacy": "Datenschutz",
+      "integrations": "Integrationen",
+      "advanced": "Erweitert",
+      "workspace": "Arbeitsbereich",
+      "navigation": "Navigation",
+      "assistant": "KI-Assistent"
+    },
+    "appearance": {
+      "headerTitle": "Erscheinungsbild",
+      "headerSub": "Passen Sie das Erscheinungsbild von OpusLex an.",
+      "fontSize": {
+        "title": "Schriftgröße",
+        "description": "Wählen Sie die Textgröße unter Beibehaltung der typografischen Hierarchie.",
+        "current": "Aktuell:"
+      },
+      "density": {
+        "title": "Dichte",
+        "description": "Steuern Sie die Abstände der Bedienelemente."
+      },
+      "theme": {
+        "title": "Design",
+        "description": "Wählen Sie Ihr bevorzugtes Farbschema.",
+        "comingSoon": "Demnächst verfügbar",
+        "light": "Hell",
+        "dark": "Dunkel",
+        "auto": "Automatisch",
+        "lightDesc": "Helle Benutzeroberfläche mit hoher Lesbarkeit.",
+        "darkDesc": "Dunkle Farbpalette zur Reduzierung der Augenbelastung.",
+        "autoDesc": "Synchronisiert sich automatisch mit dem Systemdesign.",
+        "autoDescription": "Folgt dem Systemdesign"
+      }
+    },
+    "general": {
+      "headerTitle": "Allgemein",
+      "headerSub": "Konfigurieren Sie das allgemeine Anwendungsverhalten.",
+      "landing": {
+        "title": "Standard-Startseite",
+        "description": "Wählen Sie den Bereich, der nach der Anmeldung geöffnet wird.",
+        "takesEffect": "Wird beim nächsten Login wirksam."
+      }
+    },
+    "accessibility": {
+      "headerTitle": "Barrierefreiheit",
+      "headerSub": "Passen Sie die Oberfläche an Ihre Bedürfnisse an.",
+      "reduceMotion": {
+        "label": "Bewegung reduzieren",
+        "description": "Minimiert Animationen und Übergänge in der gesamten Anwendung."
+      },
+      "largerTargets": {
+        "label": "Größere Klickziele",
+        "description": "Erhöht die Klickflächen für eine einfachere Bedienung."
+      },
+      "highContrast": {
+        "label": "Hoher Kontrast",
+        "description": "Erhöht Text- und Rahmenkontraste."
+      },
+      "osPreference": "Respektiert auch die Bewegungseinstellungen Ihres Betriebssystems."
+    },
+    "language": {
+      "headerTitle": "Sprache",
+      "headerSub": "Verwalten Sie die Anzeigesprache. Über 100 Sprachen mit nativer Schriftwahl.",
+      "english": "Englisch",
+      "spanish": "Spanisch",
+      "active": "Aktiv",
+      "select": "Sprache auswählen",
+      "searchPlaceholder": "110+ Sprachen durchsuchen...",
+      "coverageFull": "Vollständige Übersetzung",
+      "coveragePriority": "Prioritäts-Paket",
+      "coverageFallback": "Englischer Fallback (Übersetzung in Arbeit)",
+      "catalogCount": "{{count}} Sprachen verfügbar",
+      "noResults": "Keine passenden Sprachen gefunden."
+    },
+    "assistant": {
+      "headerTitle": "KI-Assistent",
+      "headerSub": "Konfigurieren Sie den Sprach- und Textassistenten, Tastenkombinationen und Berechtigungsstufen.",
+      "enableTitle": "KI-Assistent aktivieren",
+      "enableDesc": "Zeigt den schwebenden Assistenten-Orb an und erlaubt Sprach- und Textbefehle.",
+      "permissionsTitle": "Berechtigungsstufe des Assistenten",
+      "permissionsDesc": "Wird im Backend durchgesetzt, um unbefugte Änderungen zu verhindern.",
+      "level1": "Stufe 1: Lesen & Antworten (Nur Lesen, keine Änderungen)",
+      "level2": "Stufe 2: Vorschlagen (Erstellt Entwürfe ohne Ausführung)",
+      "level3": "Stufe 3: Mit Genehmigung ausführen (Erfordert ausdrückliche Bestätigung)",
+      "level4": "Stufe 4: Begrenzte Autonomie (Führt risikoarme Aktionen direkt aus)",
+      "voiceTitle": "Sprachausgabe & Audio",
+      "voiceDesc": "Konfigurieren Sie gesprochene Antworten und verfügbare Stimmen.",
+      "enableVoice": "Gesprochene Antworten aktiviert",
+      "voiceSelect": "Browser-Stimme",
+      "shortcutTitle": "Aktivierungs-Tastenkürzel",
+      "shortcutDesc": "Globales Tastenkürzel zum Umschalten des Assistenten.",
+      "privacyTitle": "Kontextfreigabe der Anwendung",
+      "privacyDesc": "Erlaubt dem Assistenten den Zugriff auf aktive Untersuchungsdaten."
+    },
+    "workspace": {
+      "headerTitle": "Arbeitsbereich",
+      "headerSub": "Informationen zu Ihrer aktiven OpusLex-Umgebung.",
+      "activeEnv": {
+        "title": "Aktive Umgebung",
+        "description": "Sie arbeiten in Ihrem zentralen OpusLex-Arbeitsbereich.",
+        "defaultLanding": "Der Startbereich kann konfiguriert werden in",
+        "generalLink": "Allgemein"
+      },
+      "identity": {
+        "title": "Arbeitsbereich-Identität",
+        "description": "Verwalten Sie den Namen Ihres Arbeitsbereichs.",
+        "nameLabel": "Name des Arbeitsbereichs",
+        "save": "Speichern",
+        "saving": "Speichern...",
+        "saved": "Gespeichert",
+        "emptyError": "Name darf nicht leer sein."
+      },
+      "usage": {
+        "title": "Nutzungsübersicht",
+        "description": "Aktuelle Kennzahlen Ihres Arbeitsbereichs.",
+        "documents": "Dokumente gesamt",
+        "investigations": "Aktive Untersuchungen",
+        "agentRuns": "Agenten-Ausführungen",
+        "loading": "Kennzahlen laden...",
+        "error": "Fehler beim Laden der Kennzahlen."
+      }
+    },
+    "storage": {
+      "headerTitle": "Speicher",
+      "headerSub": "Speicherinformationen des Arbeitsbereichs.",
+      "summary": {
+        "title": "Speicherübersicht",
+        "totalDocuments": "Dokumente gesamt"
+      },
+      "documents": {
+        "title": "Hochgeladene Dokumente",
+        "empty": "Noch keine Dokumente hochgeladen. Recherchen erscheinen hier.",
+        "deleteAction": "Löschen",
+        "confirmDelete": "Möchten Sie dieses Dokument wirklich löschen?",
+        "deletedSuccess": "Dokument erfolgreich gelöscht."
+      }
+    },
+    "security": {
+      "status": {
+        "configured": "Konfiguriert",
+        "notConfigured": "Nicht konfiguriert",
+        "linked": "Verknüpft",
+        "notLinked": "Nicht verknüpft",
+        "verified": "Verifiziert",
+        "notVerified": "Nicht verifiziert"
+      },
+      "action": {
+        "changePassword": "Passwort ändern",
+        "setPassword": "Passwort festlegen",
+        "link_phone": "Telefonnummer verknüpfen",
+        "verify_email": "E-Mail verifizieren"
+      }
+    }
+  },
+  "assistantUI": {
+    "title": "OpusLex Assistent",
+    "tooltip": "Assistent öffnen ({{shortcut}})",
+    "inputPlaceholder": "Compliance-Frage stellen oder Befehl eingeben...",
+    "send": "Senden",
+    "listening": "Spracheingabe wird gehört...",
+    "stopListening": "Zuhören beenden",
+    "mute": "Stumm schalten",
+    "unmute": "Sprachausgabe ein",
+    "clearHistory": "Chat leeren",
+    "close": "Schließen",
+    "taskWorkspace": "Aufgabenbereich",
+    "actionRequiresApproval": "Genehmigung erforderlich",
+    "approveAction": "Genehmigen & Ausführen",
+    "rejectAction": "Aktion abbrechen",
+    "actionExecuted": "Aktion erfolgreich ausgeführt",
+    "actionDenied": "Aktion durch Berechtigungsstufe verweigert",
+    "voiceUnavailable": "Spracherkennung in diesem Browser nicht verfügbar.",
+    "voiceDenied": "Mikrofonberechtigung verweigert. Textmodus aktiv.",
+    "contextBadge": "Kontext: {{section}}",
+    "switchToText": "Zu Text wechseln",
+    "switchToVoice": "Zu Sprache wechseln",
+    "voiceHudHint": "Sprechen Sie oder sagen Sie 'zu Text wechseln'",
+    "spotlightPlaceholder": "Compliance-Frage stellen oder Befehl eingeben...",
+    "returnToVoice": "Sprachmodus",
+    "explainPage": "Seite erklären"
+  },
+  "common": {
+    "search": "Suchen...",
+    "searchWorkspace": "Arbeitsbereich durchsuchen...",
+    "searchObligations": "Pflichten durchsuchen...",
+    "add": "Hinzufügen",
+    "create": "Erstellen",
+    "save": "Speichern",
+    "saving": "Speichern...",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "confirm": "Bestätigen",
+    "close": "Schließen",
+    "back": "Zurück",
+    "retry": "Wiederholen",
+    "loading": "Laden...",
+    "error": "Etwas ist schiefgelaufen.",
+    "allStatuses": "Alle Status",
+    "allRisks": "Alle Risiken",
+    "compliant": "Konform",
+    "nonCompliant": "Nicht konform",
+    "inProgress": "In Bearbeitung",
+    "notStarted": "Nicht begonnen",
+    "waived": "Erlassen",
+    "overdue": "Überfällig",
+    "low": "Niedrig",
+    "medium": "Mittel",
+    "high": "Hoch",
+    "critical": "Kritisch",
+    "saved": "Gespeichert"
+  },
+  "compliance": {
+    "title": "Compliance-Verfolgung",
+    "subtitle": "Pflichten und ihr aktueller Erfüllungsstatus.",
+    "addObligation": "Pflicht hinzufügen",
+    "total": "Gesamt",
+    "score": "Erfüllungsgrad",
+    "highRisk": "Hohes Risiko",
+    "emptyTitle": "Noch keine Compliance-Pflichten vorhanden",
+    "emptyFilterTitle": "Keine Pflichten entsprechen Ihren Filtern",
+    "emptyDesc": "Fügen Sie Compliance-Pflichten hinzu, um regulatorische Anforderungen zu überwachen.",
+    "modalTitle": "Compliance-Pflicht hinzufügen",
+    "fieldTitle": "Titel *",
+    "fieldRegulation": "Vorschrift *",
+    "fieldDepartment": "Abteilung *",
+    "fieldStatus": "Status",
+    "fieldRisk": "Risiko",
+    "fieldDueDate": "Fälligkeitsdatum",
+    "fieldDescription": "Beschreibung"
+  },
+  "auth": {
+    "welcome": "Willkommen bei OpusLex",
+    "signIn": "Anmelden",
+    "signUp": "Registrieren",
+    "email": "E-Mail-Adresse",
+    "password": "Passwort",
+    "fullName": "Vollständiger Name",
+    "logIn": "Einloggen",
+    "logOut": "Abmelden",
+    "createAccount": "Konto erstellen",
+    "alreadyHaveAccount": "Bereits ein Konto? Anmelden",
+    "dontHaveAccount": "Noch kein Konto? Registrieren",
+    "verifyCode": "Verifizierungscode",
+    "verify": "Verifizieren",
+    "rememberMe": "Angemeldet bleiben",
+    "forgotPassword": "Passwort vergessen?",
+    "continueGoogle": "Weiter mit Google",
+    "continueApple": "Weiter mit Apple",
+    "continueEmail": "Weiter mit E-Mail",
+    "invalidCredentials": "Ungültige E-Mail-Adresse oder Passwort",
+    "passwordMinLength": "Passwort muss mindestens 8 Zeichen lang sein",
+    "passwordsDoNotMatch": "Passwörter stimmen nicht überein",
+    "termsNotice": "Mit dem Fortfahren akzeptieren Sie die Nutzungsbedingungen und Datenschutzrichtlinien von OpusLex."
+  },
+  "dashboard": {
+    "welcomeBack": "Willkommen zurück",
+    "systemOperational": "Alle Systeme betriebsbereit",
+    "activeWorkspace": "Aktiver Arbeitsbereich",
+    "stats": {
+      "activeInvestigations": "Aktive Untersuchungen",
+      "documentsIndexed": "Indexierte Dokumente",
+      "complianceScore": "Compliance-Punktzahl",
+      "recentFindings": "Neueste Feststellungen",
+      "totalObligations": "Verpflichtungen gesamt",
+      "auditsPassed": "Bestandene Prüfungen"
+    },
+    "quickLaunch": {
+      "title": "Schnellaktionen",
+      "newInvestigation": "Neue Untersuchung",
+      "uploadDocument": "Dokument hochladen",
+      "askResearch": "Recherche starten",
+      "deployAgent": "Agent bereitstellen"
+    },
+    "recentInvestigations": {
+      "title": "Neueste Untersuchungen",
+      "viewAll": "Alle anzeigen",
+      "empty": "Keine aktiven Untersuchungen vorhanden. Erstellen Sie eine neue Untersuchung, um zu beginnen."
+    },
+    "activityFeed": {
+      "title": "Letzte Aktivitäten",
+      "empty": "Keine aktuellen Aktivitäten aufgezeichnet."
+    },
+    "topNav": {
+      "all": "Alle",
+      "reports": "Berichte",
+      "research": "Recherche",
+      "agents": "Agenten",
+      "searchPlaceholder": "Arbeitsbereich, Dokumente oder Befehle durchsuchen (⌘K)...",
+      "openAssistant": "Themis-Assistent öffnen",
+      "selectLanguage": "Sprache ändern"
+    },
+    "notifications": {
+      "title": "Benachrichtigungen",
+      "markAllRead": "Alle als gelesen markieren",
+      "empty": "Keine neuen Benachrichtigungen",
+      "clear": "Alle löschen"
+    },
+    "searchModal": {
+      "title": "Globale Suche",
+      "placeholder": "Untersuchungen, Dokumente, Agenten oder Einstellungen durchsuchen...",
+      "noResults": "Keine Ergebnisse gefunden für \"{{query}}\"",
+      "escToClose": "ESC zum Schließen drücken"
+    },
+    "profileModal": {
+      "title": "Kontoprofil",
+      "displayName": "Anzeigename",
+      "displayNamePlaceholder": "Vollständigen Namen eingeben",
+      "email": "E-Mail (Dauerhafte Kennung)",
+      "role": "Rolle",
+      "save": "Änderungen speichern",
+      "saving": "Wird gespeichert...",
+      "saved": "Änderungen erfolgreich gespeichert",
+      "emptyNameError": "Der vollständige Name darf nicht leer sein."
+    }
+  },
+  "investigations": {
+    "title": "Untersuchungen",
+    "subtitle": "Aktive Compliance-Fälle verwalten, Beweise prüfen und regulatorische Feststellungen verfolgen.",
+    "newInvestigation": "Neue Untersuchung",
+    "searchPlaceholder": "Untersuchungen nach Titel oder Beschreibung durchsuchen...",
+    "filterStatus": "Nach Status filtern",
+    "filterJurisdiction": "Rechtsordnung",
+    "allJurisdictions": "Alle Rechtsordnungen",
+    "columns": {
+      "title": "Titel",
+      "status": "Status",
+      "risk": "Risikostufe",
+      "jurisdiction": "Rechtsordnung",
+      "documents": "Dokumente",
+      "updated": "Zuletzt aktualisiert",
+      "actions": "Aktionen"
+    },
+    "statuses": {
+      "active": "Aktiv",
+      "review": "In Prüfung",
+      "closed": "Geschlossen",
+      "archived": "Archiviert"
+    },
+    "risks": {
+      "low": "Niedrig",
+      "medium": "Mittel",
+      "high": "Hoch",
+      "critical": "Kritisch"
+    },
+    "modal": {
+      "createTitle": "Neue Untersuchung erstellen",
+      "titleLabel": "Untersuchungstitel *",
+      "titlePlaceholder": "z. B. Jährliche Datenschutz-Compliance-Prüfung",
+      "descLabel": "Beschreibung",
+      "descPlaceholder": "Überblick über Umfang und Zielsetzungen angeben...",
+      "jurisdictionLabel": "Rechtsordnung",
+      "leadLabel": "Zugewiesene Leitung",
+      "targetDateLabel": "Ziel-Abschlussdatum",
+      "cancel": "Abbrechen",
+      "create": "Untersuchung erstellen"
+    },
+    "details": {
+      "overview": "Übersicht",
+      "documents": "Angehängte Dokumente",
+      "evidence": "Beweise & Feststellungen",
+      "timeline": "Zeitverlauf",
+      "notes": "Notizen",
+      "uploadDocument": "Dokument hochladen",
+      "generateReport": "Bericht erstellen",
+      "noDocuments": "Dieser Untersuchung sind noch keine Dokumente angehängt.",
+      "noEvidence": "Bisher keine Beweismittel erfasst."
+    },
+    "empty": {
+      "title": "Keine Untersuchungen gefunden",
+      "desc": "Erstellen Sie Ihre erste Untersuchung, um Compliance-Fälle und Beweise zu verfolgen."
+    }
+  },
+  "research": {
+    "title": "Recherche-Assistent",
+    "subtitle": "Compliance-Dokumente abfragen, regulatorische Anforderungen analysieren und Beweise zitieren.",
+    "tabs": {
+      "general": "Allgemeine Recherche",
+      "investigation": "Fallbezogene Recherche",
+      "comparison": "Regulatorischer Vergleich"
+    },
+    "inputPlaceholder": "Frage zu Vorschriften, Richtlinien oder angehängten Dokumenten stellen...",
+    "scope": "Suchbereich",
+    "scopeAll": "Gesamte Dokumentenbibliothek",
+    "scopeInvestigation": "Ausgewählte Untersuchung",
+    "selectInvestigation": "Untersuchung auswählen...",
+    "attachedDocs": "Angehängte Dokumente ({{count}})",
+    "autoDiscovered": "Aus ausgewählter Untersuchung ermittelt",
+    "strictGrounding": "Strikte Faktenbindung",
+    "askButton": "Recherche starten",
+    "stopButton": "Generierung stoppen",
+    "clearButton": "Zurücksetzen",
+    "copyButton": "Antwort kopieren",
+    "copied": "Kopiert!",
+    "sourcesTitle": "Quellen & Zitate",
+    "noSources": "Für diese allgemeine Abfrage sind keine direkten Dokumentenzitate erforderlich.",
+    "comparison": {
+      "title": "Dokumentenübergreifender regulatorischer Vergleich",
+      "subtitle": "Basisverträge oder Betriebsrichtlinien mit regulatorischen Standards vergleichen.",
+      "baseDoc": "Basisdokument",
+      "selectBase": "Basisvertrag oder Richtlinie auswählen...",
+      "targetDocs": "Zieldokumente / Vorschriften",
+      "runComparison": "Regulatorischen Vergleich ausführen",
+      "execSummary": "Management-Zusammenfassung",
+      "materialConflicts": "Wesentliche Konflikte",
+      "gaps": "Lücken & Mängel",
+      "actions": "Priorisierte Maßnahmen",
+      "comparing": "Dokumente werden analysiert und verglichen..."
+    },
+    "empty": {
+      "title": "Recherche-Arbeitsbereich bereit",
+      "desc": "Geben Sie eine Frage ein oder wählen Sie eine Untersuchung zur Analyse aus."
+    }
+  },
+  "agents": {
+    "title": "KI-Compliance-Agenten",
+    "subtitle": "Autonome mehrstufige Entscheidungsagenten zur Untersuchung, Prüfung und Berichterstattung bereitstellen.",
+    "runAgent": "Agent starten",
+    "stopAgent": "Agent stoppen",
+    "taskLabel": "Aufgabenbeschreibung",
+    "taskPlaceholder": "Beschreiben Sie das Untersuchungsziel, zu prüfende Beweise oder die Compliance-Prüfung...",
+    "scopeLabel": "Untersuchungskontext",
+    "executionTrace": "Ausführungsverlauf des Agenten",
+    "logs": "Agenten-Protokolle",
+    "approvalRequired": "Genehmigung erforderlich",
+    "approve": "Genehmigen & Ausführen",
+    "reject": "Aktion ablehnen",
+    "statusIdle": "Agent im Leerlauf",
+    "statusRunning": "Agent wird ausgeführt...",
+    "statusCompleted": "Ausführung abgeschlossen",
+    "roles": {
+      "lead": "Leitender Untersuchungsagent",
+      "auditor": "Regulatorischer Prüfer",
+      "gapAnalyzer": "Richtlinien-Lücken-Analyst",
+      "evidenceVerifier": "Beweisprüfungs-Agent"
+    }
+  },
+  "regulations": {
+    "title": "Vorschriftenbibliothek",
+    "subtitle": "Globale regulatorische Rahmenbedingungen und gesetzliche Vorgaben durchsuchen und verwalten.",
+    "searchPlaceholder": "Vorschriften durchsuchen...",
+    "filterJurisdiction": "Alle Rechtsordnungen",
+    "filterSector": "Alle Sektoren",
+    "addRegulation": "Vorschrift hinzufügen",
+    "columns": {
+      "name": "Name der Vorschrift",
+      "authority": "Herausgebende Behörde",
+      "jurisdiction": "Rechtsordnung",
+      "effectiveDate": "Inkrafttreten",
+      "status": "Status",
+      "obligations": "Verpflichtungen"
+    }
+  },
+  "policies": {
+    "title": "Interne Richtlinien",
+    "subtitle": "Auf externe gesetzliche Anforderungen abgestimmte Governance-Richtlinien.",
+    "createPolicy": "Richtlinie erstellen",
+    "searchPlaceholder": "Richtlinien durchsuchen...",
+    "uploadPolicy": "Richtlinie hochladen",
+    "columns": {
+      "name": "Richtlinientitel",
+      "category": "Kategorie",
+      "version": "Version",
+      "status": "Status",
+      "lastReviewed": "Zuletzt überprüft"
+    }
+  },
+  "audit": {
+    "title": "Prüfung & Feststellungen",
+    "subtitle": "Umfassendes Prüfprotokoll aller Benutzeraktionen, Agentenausführungen und Compliance-Erkenntnisse.",
+    "searchPlaceholder": "Prüfprotokoll durchsuchen...",
+    "export": "Prüfprotokoll exportieren",
+    "columns": {
+      "timestamp": "Zeitstempel",
+      "user": "Benutzer / Agent",
+      "action": "Ausgeführte Aktion",
+      "target": "Zielressource",
+      "severity": "Schweregrad",
+      "details": "Ereignisdetails"
+    }
+  },
+  "reports": {
+    "title": "Compliance-Berichte",
+    "subtitle": "Formelle Compliance- und Prüfberichte erstellen, überprüfen und exportieren.",
+    "generate": "Bericht erstellen",
+    "exportPdf": "PDF exportieren",
+    "exportCsv": "CSV exportieren",
+    "templates": "Berichtsvorlagen"
+  },
+  "governance": {
+    "title": "Unternehmensführung",
+    "subtitle": "Framework-Aufsicht, Risikoausschüsse und Richtliniengenehmigungsprozesse.",
+    "committees": "Governance-Ausschüsse",
+    "reviews": "Ausstehende Richtlinienprüfungen"
+  },
+  "integrations": {
+    "title": "Daten- & Speicherintegrationen",
+    "subtitle": "Verbindung zu externen Dokumentenablagen, Cloud-Speichern und Identitätsanbietern.",
+    "googleDrive": "Google Drive",
+    "oneDrive": "Microsoft OneDrive / SharePoint",
+    "box": "Box Enterprise",
+    "slack": "Slack Enterprise Grid",
+    "connect": "Verbinden",
+    "disconnect": "Trennen",
+    "connected": "Verbunden",
+    "notConnected": "Nicht verbunden"
+  },
+  "help": {
+    "title": "Hilfe & Dokumentation",
+    "subtitle": "Dokumentation, Benutzerhandbücher, Tastaturkürzel und FAQs erkunden.",
+    "searchPlaceholder": "Hilfeartikel, FAQs und Kürzel durchsuchen...",
+    "categories": {
+      "gettingStarted": "Erste Schritte",
+      "investigations": "Untersuchungen & Beweise",
+      "research": "Recherche-Assistent",
+      "themis": "Themis KI-Assistent",
+      "security": "Konto & Sicherheit"
+    },
+    "shortcutsTitle": "Tastaturkürzel",
+    "passwordChangeStep": "Um Ihr Passwort zu ändern, öffnen Sie Einstellungen > Sicherheit & Anmeldung oder nutzen Sie das Kontomenü oben rechts."
+  },
+  "cookies": {
+    "bannerTitle": "Datenschutz & Präferenzen",
+    "bannerDesc": "OpusLex verwendet den notwendigen Browserspeicher für zentrale Anwendungsfunktionen und Präferenzen. Es sind keine optionalen Tracking-Technologien konfiguriert.",
+    "customize": "Anpassen",
+    "rejectOptional": "Optionale ablehnen",
+    "acceptAll": "Alle akzeptieren",
+    "modalTitle": "Cookie-Einstellungen",
+    "necessaryTitle": "Notwendig / Funktional",
+    "alwaysActive": "Immer aktiv",
+    "necessaryDesc": "Erforderlich für zentrale Anwendungsfunktionen. Speichert Ihre Sitzungs- und Oberflächeneinstellungen.",
+    "analyticsTitle": "Analytik",
+    "notConfigured": "Nicht konfiguriert",
+    "analyticsDesc": "Derzeit sind keine optionalen Tracking-Technologien konfiguriert."
+  }
+}

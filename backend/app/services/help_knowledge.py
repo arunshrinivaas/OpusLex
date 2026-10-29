@@ -238,11 +238,11 @@ FAQ_SUGGESTIONS_TEXT = (
 )
 
 _FAQ_INTENT_PATTERNS = [
-    r"\bhelp\b.*\bwith\b.*\bfaq\b",
-    r"\bshow\b.*\bfaq\b",
-    r"\blist\b.*\bfaq\b",
-    r"\bview\b.*\bfaq\b",
-    r"^faq(s)?$",
+    r"\bhelp\b.*\bwith\b.*\bfaqs?\b",
+    r"\bshow\b.*\bfaqs?\b",
+    r"\blist\b.*\bfaqs?\b",
+    r"\bview\b.*\bfaqs?\b",
+    r"^faqs?$",
     r"\bwhat\b.*\b(can|do)\b.*\byou\b.*\bhelp\b.*\bwith\b",
     r"\bhow\b.*\bcan\b.*\byou\b.*\bhelp\b",
     r"\bsuggest\b.*\b(questions|topics|queries)\b",

@@ -127,13 +127,44 @@ async def supervisor_node(
     else:
         query_intent = "general_compliance_inquiry"
 
+    # 4. Task Class Routing (General vs RAG vs Tool vs Hybrid)
+    from app.services.intent_service import evaluate_arithmetic_query, classify_query
+    is_calc, _, _ = evaluate_arithmetic_query(question)
+    gen_check = classify_query(question)
+
+    tool_name = None
+    if "latest investigation" in lower_q or "find my investigation" in lower_q:
+        task_type = "tool"
+        tool_name = "get_latest_investigation"
+    elif ("prepare" in lower_q or "draft" in lower_q or "generate" in lower_q) and "report" in lower_q and ("evidence" in lower_q or "review" in lower_q or document_ids):
+        task_type = "hybrid"
+    elif is_calc or (gen_check["intent"] == "identity" and not document_ids):
+        task_type = "general"
+    elif (
+        gen_check["intent"] in ("general_knowledge", "identity")
+        and not scoped_doc_codes
+        and not scoped_pdf_names
+        and not gen_check.get("document_mention")
+        and not gen_check.get("clause_mention")
+        and not is_conflict_only
+        and not is_gaps_only
+        and not is_compact
+        and query_intent not in ("conflict_only", "gaps_only", "compact", "broad_assessment", "policy_lookup")
+        and not any(w in lower_q for w in ["attached", "document", "documents", "compliance", "investigation", "policy", "policies", "standard", "procedure", "conflict", "conflicts", "evidence gap", "evidence gaps", "retention", "violation", "violations", "legal hold", "credential hygiene", "incident commander", "proc-", "std-", "pol-"])
+    ):
+        task_type = "general"
+    else:
+        task_type = "rag"
+
     elapsed_ms = (time.perf_counter() - start_time) * 1000
     logger.info(
-        f"[GRAPH:supervisor] classified intent={query_intent}, "
+        f"[GRAPH:supervisor] classified task_type={task_type}, intent={query_intent}, "
         f"target_docs={target_document_ids} in {elapsed_ms:.2f}ms"
     )
 
     return {
+        "task_type": task_type,
+        "tool_name": tool_name,
         "target_document_ids": target_document_ids,
         "is_cross_doc": is_cross_doc,
         "is_conflict_only": is_conflict_only,

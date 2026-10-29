@@ -157,6 +157,13 @@ async def execute_research_query(
                 "Do not require uploaded documents or emit document-evidence limitation notices for general questions."
             ),
         )
+        from app.services.citation_validator import validate_and_sanitize_answer_citations
+        clean_ans, _, _ = validate_and_sanitize_answer_citations(
+            answer_text=answer,
+            db=db,
+            authorized_user_id=user_id,
+        )
+        answer = clean_ans
         session = ResearchQuery(
             user_id=user_id,
             question=cleaned_q,
@@ -194,6 +201,16 @@ async def execute_research_query(
             "for this inquiry. The available documents do not appear to contain relevant provisions."
         )
 
+    # Validate and sanitize citations before persisting session
+    from app.services.citation_validator import validate_and_sanitize_answer_citations
+    clean_answer, _, all_valid = validate_and_sanitize_answer_citations(
+        answer_text=answer,
+        db=db,
+        authorized_user_id=user_id,
+        allowed_document_ids=document_ids,
+    )
+    answer = clean_answer
+
     session = ResearchQuery(
         user_id=user_id,
         question=cleaned_q,
@@ -222,7 +239,7 @@ def list_user_research_sessions(
     """Retrieve research query sessions scoped to the authenticated user."""
     return (
         db.query(ResearchQuery)
-        .filter(or_(ResearchQuery.user_id == user_id, ResearchQuery.user_id.is_(None)))
+        .filter(ResearchQuery.user_id == user_id)
         .order_by(ResearchQuery.created_at.desc())
         .limit(limit)
         .all()

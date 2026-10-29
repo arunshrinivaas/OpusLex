@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { SegmentedControl } from "./SegmentedControl"
 import {
     CheckCircle,
@@ -105,11 +106,17 @@ function fmtDate(ts: string) {
     })
 }
 
-function statusBadge(status: string) {
+function statusBadge(status: string, t?: any) {
     let colorClass = "status-progress"
-    let label = "Pending"
-    if (status === "completed") { colorClass = "status-compliant"; label = "Completed"; }
-    if (status === "failed") { colorClass = "status-non-compliant"; label = "Failed"; }
+    let label = t ? t("common.inProgress", "Pending") : "Pending"
+    if (status === "completed") {
+        colorClass = "status-compliant"
+        label = t ? t("agents.statusCompleted", "Completed") : "Completed"
+    }
+    if (status === "failed") {
+        colorClass = "status-non-compliant"
+        label = t ? t("common.error", "Failed") : "Failed"
+    }
 
     return (
         <div className="status-dot-wrapper" title={label}>
@@ -128,10 +135,10 @@ function eventTypeIcon(type: string) {
     return <FileText size={12} className="shrink-0 text-neutral-500" />
 }
 
-function eventTypeLabel(type: string) {
-    if (type === "agent_finding") return "Agent finding"
-    if (type === "rag_query") return "RAG query"
-    if (type === "knowledge_shared") return "Knowledge shared"
+function eventTypeLabel(type: string, t?: any) {
+    if (type === "agent_finding") return t ? `${t("dashboard.topNav.agents", "Agent")} ${t("dashboard.stats.recentFindings", "finding")}` : "Agent finding"
+    if (type === "rag_query") return t ? `${t("nav.research", "RAG")} ${t("dashboard.topNav.research", "query")}` : "RAG query"
+    if (type === "knowledge_shared") return t ? `${t("investigations.details.evidence", "Knowledge shared")}` : "Knowledge shared"
     return type
 }
 
@@ -146,6 +153,7 @@ function FindingDetail({
     finding: Finding
     onClose: () => void
 }) {
+    const { t } = useTranslation()
     return (
         <div className="fixed inset-0 z-50 flex justify-end bg-black/20" onClick={onClose}>
             <div
@@ -156,7 +164,7 @@ function FindingDetail({
                 <div className="flex items-start justify-between border-b border-neutral-100 px-6 py-4">
                     <div className="flex-1 min-w-0 pr-4">
                         <div className="flex items-center gap-2 mb-1">
-                            {statusBadge(finding.status)}
+                            {statusBadge(finding.status, t)}
                             <span className="text-xs text-neutral-400">
                                 {finding.investigation_title}
                             </span>
@@ -181,7 +189,7 @@ function FindingDetail({
                     {finding.finding && (
                         <section>
                             <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-neutral-400">
-                                Finding
+                                {t("dashboard.stats.recentFindings", "Finding")}
                             </h3>
                             <div className="rounded-lg border border-neutral-100 bg-neutral-50 p-4 leading-6 text-neutral-700 whitespace-pre-wrap">
                                 {finding.finding}
@@ -193,7 +201,7 @@ function FindingDetail({
                     {finding.evidence.length > 0 && (
                         <section>
                             <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-neutral-400">
-                                Evidence ({finding.evidence.length})
+                                {t("investigations.details.evidence", "Evidence")} ({finding.evidence.length})
                             </h3>
                             <div className="space-y-2">
                                 {finding.evidence.map((ev, i) => (
@@ -215,7 +223,7 @@ function FindingDetail({
                     {finding.applicable_requirements.length > 0 && (
                         <section>
                             <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-neutral-400">
-                                Applicable Requirements ({finding.applicable_requirements.length})
+                                {t("compliance.subtitle", "Applicable Requirements")} ({finding.applicable_requirements.length})
                             </h3>
                             <div className="space-y-2">
                                 {finding.applicable_requirements.map((req, i) => (
@@ -234,7 +242,7 @@ function FindingDetail({
                     {finding.conflicts.length > 0 && (
                         <section>
                             <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-neutral-400">
-                                Conflicts ({finding.conflicts.length})
+                                {t("research.comparison.materialConflicts", "Conflicts")} ({finding.conflicts.length})
                             </h3>
                             <div className="space-y-2">
                                 {finding.conflicts.map((c, i) => (
@@ -253,7 +261,7 @@ function FindingDetail({
                     {finding.evidence_gaps.length > 0 && (
                         <section>
                             <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-neutral-400">
-                                Evidence Gaps ({finding.evidence_gaps.length})
+                                {t("research.comparison.gaps", "Evidence Gaps")} ({finding.evidence_gaps.length})
                             </h3>
                             <div className="space-y-2">
                                 {finding.evidence_gaps.map((gap, i) => (
@@ -270,7 +278,7 @@ function FindingDetail({
                     {finding.suggested_actions.length > 0 && (
                         <section>
                             <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-neutral-400">
-                                Suggested Actions ({finding.suggested_actions.length})
+                                {t("research.comparison.actions", "Suggested Actions")} ({finding.suggested_actions.length})
                             </h3>
                             <div className="space-y-2">
                                 {finding.suggested_actions.map((action, i) => (
@@ -287,7 +295,7 @@ function FindingDetail({
                     {finding.citations.length > 0 && (
                         <section>
                             <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-neutral-400">
-                                Citations ({finding.citations.length})
+                                {t("research.sourcesTitle", "Citations")} ({finding.citations.length})
                             </h3>
                             <div className="space-y-1">
                                 {finding.citations.map((cite, i) => (
@@ -306,7 +314,7 @@ function FindingDetail({
                     {finding.status === "pending" && !finding.finding && (
                         <div className="rounded-lg border border-dashed border-neutral-200 p-6 text-center text-neutral-400">
                             <Clock size={20} className="mx-auto mb-2 text-neutral-300" />
-                            <p className="text-sm">This agent run is still pending.</p>
+                            <p className="text-sm">{t("agents.statusIdle", "This agent run is still pending.")}</p>
                         </div>
                     )}
                 </div>
@@ -322,6 +330,7 @@ function FindingDetail({
 type Tab = "findings" | "timeline"
 
 function Audit() {
+    const { t } = useTranslation()
     const [activeTab, setActiveTab] = useState<Tab>("findings")
 
     // Findings state
@@ -458,12 +467,12 @@ function Audit() {
                     <div className="flex items-center gap-2">
                         <FileSearch size={15} className="text-neutral-500" />
                         <span className="text-xs font-medium uppercase tracking-[0.14em] text-neutral-400">
-                            Traceability Surface
+                            {t("audit.title", "Traceability Surface")}
                         </span>
                     </div>
-                    <h1 className="mt-2 text-xl font-semibold tracking-tight">Audit &amp; Findings</h1>
+                    <h1 className="mt-2 text-xl font-semibold tracking-tight">{t("audit.title", "Audit & Findings")}</h1>
                     <p className="mt-1 text-sm text-neutral-500">
-                        Structured findings from agent analysis, RAG queries, and intentional knowledge sharing.
+                        {t("audit.subtitle", "Structured findings from agent analysis, RAG queries, and intentional knowledge sharing.")}
                     </p>
                 </div>
             </div>
@@ -472,11 +481,11 @@ function Audit() {
             {summary && (
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
                     {[
-                        { label: "Total findings", value: summary.total_findings, icon: <Sparkles size={12} /> },
-                        { label: "Completed", value: summary.completed_findings, icon: <CheckCircle size={12} className="text-green-600" /> },
-                        { label: "Failed", value: summary.failed_findings, icon: <XCircle size={12} className="text-red-500" /> },
-                        { label: "RAG queries", value: summary.rag_query_count, icon: <MessageSquare size={12} /> },
-                        { label: "Knowledge shared", value: summary.knowledge_shared, icon: <Share2 size={12} /> },
+                        { label: `${t("compliance.total", "Total")} ${t("dashboard.stats.recentFindings", "findings")}`, value: summary.total_findings, icon: <Sparkles size={12} /> },
+                        { label: t("agents.statusCompleted", "Completed"), value: summary.completed_findings, icon: <CheckCircle size={12} className="text-green-600" /> },
+                        { label: t("common.error", "Failed"), value: summary.failed_findings, icon: <XCircle size={12} className="text-red-500" /> },
+                        { label: `${t("nav.research", "RAG")} ${t("dashboard.topNav.research", "queries")}`, value: summary.rag_query_count, icon: <MessageSquare size={12} /> },
+                        { label: t("investigations.details.evidence", "Knowledge shared"), value: summary.knowledge_shared, icon: <Share2 size={12} /> },
                     ].map((kpi) => (
                         <div key={kpi.label} className="rounded-xl border border-neutral-200 bg-white p-3">
                             <div className="flex items-center gap-1.5 text-neutral-500 mb-1">
@@ -492,8 +501,8 @@ function Audit() {
             {/* Tabs */}
             <SegmentedControl
                 options={[
-                    { value: "findings", label: "Findings" },
-                    { value: "timeline", label: "Audit Trail" },
+                    { value: "findings", label: t("investigations.details.evidence", "Findings") },
+                    { value: "timeline", label: t("audit.title", "Audit Trail") },
                 ]}
                 value={activeTab}
                 onChange={v => setActiveTab(v as Tab)}
@@ -512,7 +521,7 @@ function Audit() {
                             <input
                                 value={findingSearch}
                                 onChange={(e) => setFindingSearch(e.target.value)}
-                                placeholder="Search findings…"
+                                placeholder={t("audit.searchPlaceholder", "Search findings…")}
                                 className="w-44 bg-transparent text-sm outline-none placeholder:text-neutral-400"
                             />
                             {findingSearch && (
@@ -527,10 +536,10 @@ function Audit() {
                             onChange={(e) => setFindingStatus(e.target.value)}
                             className="rounded-lg border border-neutral-200 bg-white px-2.5 py-1.5 text-sm text-neutral-700 outline-none"
                         >
-                            <option value="">All statuses</option>
-                            <option value="completed">Completed</option>
-                            <option value="failed">Failed</option>
-                            <option value="pending">Pending</option>
+                            <option value="">{t("common.allStatuses", "All statuses")}</option>
+                            <option value="completed">{t("agents.statusCompleted", "Completed")}</option>
+                            <option value="failed">{t("common.error", "Failed")}</option>
+                            <option value="pending">{t("common.inProgress", "Pending")}</option>
                         </select>
 
                         <select
@@ -538,7 +547,7 @@ function Audit() {
                             onChange={(e) => setFindingInvId(e.target.value)}
                             className="rounded-lg border border-neutral-200 bg-white px-2.5 py-1.5 text-sm text-neutral-700 outline-none"
                         >
-                            <option value="">All investigations</option>
+                            <option value="">{t("investigations.allJurisdictions", "All investigations")}</option>
                             {investigations.map((inv) => (
                                 <option key={inv.id} value={String(inv.id)}>
                                     {inv.title}
@@ -547,7 +556,7 @@ function Audit() {
                         </select>
 
                         <span className="ml-auto text-xs text-neutral-400">
-                            {findingsLoading ? "Loading…" : `${findingsTotal} findings`}
+                            {findingsLoading ? t("common.loading", "Loading…") : `${findingsTotal} ${t("dashboard.stats.recentFindings", "findings")}`}
                         </span>
                     </div>
 
@@ -558,14 +567,14 @@ function Audit() {
                         </div>
                     ) : findingsLoading ? (
                         <div className="rounded-xl border border-neutral-200 bg-white p-8 text-center">
-                            <p className="text-sm text-neutral-400">Loading findings…</p>
+                            <p className="text-sm text-neutral-400">{t("common.loading", "Loading findings…")}</p>
                         </div>
                     ) : findings.length === 0 ? (
                         <div className="rounded-xl border border-dashed border-neutral-200 bg-white p-10 text-center">
                             <Sparkles size={20} className="mx-auto mb-3 text-neutral-300" />
-                            <p className="text-sm font-medium text-neutral-600">No findings yet</p>
+                            <p className="text-sm font-medium text-neutral-600">{t("dashboard.stats.recentFindings", "No findings yet")}</p>
                             <p className="mt-1 text-sm text-neutral-400">
-                                Run the Agent in an Investigation to generate structured compliance findings.
+                                {t("agents.subtitle", "Run the Agent in an Investigation to generate structured compliance findings.")}
                             </p>
                         </div>
                     ) : (
@@ -583,7 +592,7 @@ function Audit() {
                                                     {f.investigation_title}
                                                 </span>
                                                 <div className="flex items-start justify-end gap-1 shrink-0 h-4">
-                                                    {statusBadge(f.status)}
+                                                    {statusBadge(f.status, t)}
                                                 </div>
                                             </div>
                                             <p className="text-sm font-medium text-neutral-900 leading-snug">
@@ -602,15 +611,15 @@ function Audit() {
                                             </p>
                                             <div className="mt-1.5 flex items-center justify-end gap-2 text-xs text-neutral-400">
                                                 {f.evidence.length > 0 && (
-                                                    <span title="Evidence items">{f.evidence.length} ev</span>
+                                                    <span title={t("investigations.details.evidence", "Evidence")}>{f.evidence.length} ev</span>
                                                 )}
                                                 {f.conflicts.length > 0 && (
-                                                    <span title="Conflicts" className="text-red-400">
+                                                    <span title={t("research.comparison.materialConflicts", "Conflicts")} className="text-red-400">
                                                         {f.conflicts.length} conf
                                                     </span>
                                                 )}
                                                 {f.suggested_actions.length > 0 && (
-                                                    <span title="Suggested actions">{f.suggested_actions.length} act</span>
+                                                    <span title={t("research.comparison.actions", "Actions")}>{f.suggested_actions.length} act</span>
                                                 )}
                                             </div>
                                         </div>
@@ -634,10 +643,10 @@ function Audit() {
                             onChange={(e) => setTimelineEventType(e.target.value)}
                             className="rounded-lg border border-neutral-200 bg-white px-2.5 py-1.5 text-sm text-neutral-700 outline-none"
                         >
-                            <option value="">All event types</option>
-                            <option value="agent_finding">Agent findings</option>
-                            <option value="rag_query">RAG queries</option>
-                            <option value="knowledge_shared">Knowledge shared</option>
+                            <option value="">{t("common.allStatuses", "All event types")}</option>
+                            <option value="agent_finding">{t("dashboard.topNav.agents", "Agent findings")}</option>
+                            <option value="rag_query">{t("nav.research", "RAG queries")}</option>
+                            <option value="knowledge_shared">{t("investigations.details.evidence", "Knowledge shared")}</option>
                         </select>
 
                         <select
@@ -645,7 +654,7 @@ function Audit() {
                             onChange={(e) => setTimelineInvId(e.target.value)}
                             className="rounded-lg border border-neutral-200 bg-white px-2.5 py-1.5 text-sm text-neutral-700 outline-none"
                         >
-                            <option value="">All investigations</option>
+                            <option value="">{t("investigations.allJurisdictions", "All investigations")}</option>
                             {investigations.map((inv) => (
                                 <option key={inv.id} value={String(inv.id)}>
                                     {inv.title}
@@ -654,7 +663,7 @@ function Audit() {
                         </select>
 
                         <span className="ml-auto text-xs text-neutral-400">
-                            {timelineLoading ? "Loading…" : `${timelineTotal} events`}
+                            {timelineLoading ? t("common.loading", "Loading…") : `${timelineTotal} events`}
                         </span>
                     </div>
 
@@ -665,14 +674,14 @@ function Audit() {
                         </div>
                     ) : timelineLoading ? (
                         <div className="rounded-xl border border-neutral-200 bg-white p-8 text-center">
-                            <p className="text-sm text-neutral-400">Loading audit trail…</p>
+                            <p className="text-sm text-neutral-400">{t("common.loading", "Loading audit trail…")}</p>
                         </div>
                     ) : timeline.length === 0 ? (
                         <div className="rounded-xl border border-dashed border-neutral-200 bg-white p-10 text-center">
                             <FileSearch size={20} className="mx-auto mb-3 text-neutral-300" />
-                            <p className="text-sm font-medium text-neutral-600">No audit events</p>
+                            <p className="text-sm font-medium text-neutral-600">{t("audit.columns.details", "No audit events")}</p>
                             <p className="mt-1 text-sm text-neutral-400">
-                                Agent runs, RAG queries in investigations, and shared knowledge posts will appear here.
+                                {t("audit.subtitle", "Agent runs, RAG queries in investigations, and shared knowledge posts will appear here.")}
                             </p>
                         </div>
                     ) : (
@@ -689,14 +698,14 @@ function Audit() {
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 flex-wrap">
                                             <span className="text-xs font-medium text-neutral-700">
-                                                {eventTypeLabel(event.event_type)}
+                                                {eventTypeLabel(event.event_type, t)}
                                             </span>
                                             {event.investigation_title && (
                                                 <span className="text-xs text-neutral-400">
                                                     in {event.investigation_title}
                                                 </span>
                                             )}
-                                            {event.status && statusBadge(event.status)}
+                                            {event.status && statusBadge(event.status, t)}
                                         </div>
                                         {event.detail && (
                                             <p className="mt-0.5 text-xs text-neutral-500 leading-relaxed">

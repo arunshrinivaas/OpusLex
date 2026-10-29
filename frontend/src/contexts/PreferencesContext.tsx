@@ -1,9 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
+import { isSupportedLanguageCode, getLanguageByCode } from "../i18n/languages"
+
 export type FontSize = "xs" | "s" | "m" | "l" | "xl"
+export type TranscriptFontSize = "s" | "m" | "l" | "xl"
 export type Density = "comfortable" | "compact"
 export type LandingSection = "home" | "research" | "investigations" | "agents" | "audit" | "governance"
+export type ThemeMode = "light" | "dark" | "auto"
 
 export type NotificationCategory = "investigation" | "agent_run" | "knowledge" | "security"
 export type NotificationPrefs = Record<NotificationCategory, { inApp: boolean; email: boolean }>
@@ -18,10 +22,15 @@ const DEFAULT_NOTIFICATIONS: NotificationPrefs = {
 type PreferencesContextType = {
     fontSize: FontSize
     setFontSize: (size: FontSize) => void
+    transcriptFontSize: TranscriptFontSize
+    setTranscriptFontSize: (size: TranscriptFontSize) => void
     density: Density
     setDensity: (d: Density) => void
     landingSection: LandingSection
     setLandingSection: (s: LandingSection) => void
+    theme: ThemeMode
+    setTheme: (t: ThemeMode) => void
+    resolvedTheme: "light" | "dark"
     reduceMotion: boolean
     setReduceMotion: (v: boolean) => void
     largerTargets: boolean
@@ -52,12 +61,49 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
     const [fontSize, setFontSizeState] = useState<FontSize>(() =>
         readLS<FontSize>("pref_font_size", "m", ["xs", "s", "m", "l", "xl"])
     )
+    const [transcriptFontSize, setTranscriptFontSizeState] = useState<TranscriptFontSize>(() =>
+        readLS<TranscriptFontSize>("pref_transcript_font_size", "m", ["s", "m", "l", "xl"])
+    )
     const [density, setDensityState] = useState<Density>(() =>
         readLS<Density>("pref_density", "comfortable", ["comfortable", "compact"])
     )
     const [landingSection, setLandingSectionState] = useState<LandingSection>(() =>
         readLS<LandingSection>("pref_landing", "home", ["home", "research", "investigations", "agents", "audit", "governance"])
     )
+    const [theme, setThemeState] = useState<ThemeMode>(() =>
+        readLS<ThemeMode>("pref_theme", "auto", ["light", "dark", "auto"])
+    )
+    const [systemPrefersDark, setSystemPrefersDark] = useState<boolean>(() => {
+        if (typeof window === "undefined" || !window.matchMedia) return false
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+    })
+
+    // Listen to system preference changes dynamically when in Auto mode
+    useEffect(() => {
+        if (typeof window === "undefined" || !window.matchMedia) return
+        const mq = window.matchMedia("(prefers-color-scheme: dark)")
+        const handler = (e: MediaQueryListEvent) => {
+            setSystemPrefersDark(e.matches)
+        }
+        mq.addEventListener("change", handler)
+        return () => mq.removeEventListener("change", handler)
+    }, [])
+
+    const resolvedTheme: "light" | "dark" =
+        theme === "auto" ? (systemPrefersDark ? "dark" : "light") : theme
+
+    // Apply global theme classes and data attributes
+    useEffect(() => {
+        localStorage.setItem("pref_theme", theme)
+        document.documentElement.setAttribute("data-theme-pref", theme)
+        document.documentElement.setAttribute("data-theme-mode", resolvedTheme)
+        if (resolvedTheme === "dark") {
+            document.documentElement.classList.add("dark")
+        } else {
+            document.documentElement.classList.remove("dark")
+        }
+    }, [theme, resolvedTheme])
+
     const [reduceMotion, setReduceMotionState] = useState<boolean>(() => {
         const saved = localStorage.getItem("pref_reduce_motion")
         if (saved !== null) return saved === "true"
@@ -84,9 +130,11 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
         } catch {}
         return DEFAULT_NOTIFICATIONS
     })
-    const [language, setLanguageState] = useState<string>(() =>
-        readLS<string>("pref_language", "en", ["en", "es"])
-    )
+    const [language, setLanguageState] = useState<string>(() => {
+        const saved = localStorage.getItem("pref_language")
+        if (saved && isSupportedLanguageCode(saved)) return saved
+        return "en"
+    })
     const [workspaceName, setWorkspaceNameState] = useState<string | null>(() => {
         const stored = localStorage.getItem("pref_workspace_name")
         if (stored !== null) return stored
@@ -101,6 +149,12 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
         localStorage.setItem("font_size", fontSize)
         document.documentElement.setAttribute("data-theme-size", fontSize)
     }, [fontSize])
+
+    // Apply transcript font size
+    useEffect(() => {
+        localStorage.setItem("pref_transcript_font_size", transcriptFontSize)
+        document.documentElement.setAttribute("data-transcript-size", transcriptFontSize)
+    }, [transcriptFontSize])
 
     // Apply density
     useEffect(() => {
@@ -157,6 +211,11 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
     useEffect(() => {
         localStorage.setItem("pref_language", language)
         i18n.changeLanguage(language)
+        if (typeof document !== 'undefined') {
+            const entry = getLanguageByCode(language)
+            document.documentElement.dir = entry.direction || 'ltr'
+            document.documentElement.lang = language
+        }
     }, [language, i18n])
 
     // Apply workspace name
@@ -167,8 +226,10 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
     }, [workspaceName])
 
     const setFontSize = (size: FontSize) => setFontSizeState(size)
+    const setTranscriptFontSize = (size: TranscriptFontSize) => setTranscriptFontSizeState(size)
     const setDensity = (d: Density) => setDensityState(d)
     const setLandingSection = (s: LandingSection) => setLandingSectionState(s)
+    const setTheme = (t: ThemeMode) => setThemeState(t)
     const setReduceMotion = (v: boolean) => setReduceMotionState(v)
     const setLargerTargets = (v: boolean) => setLargerTargetsState(v)
     const setHighContrast = (v: boolean) => setHighContrastState(v)
@@ -180,8 +241,10 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
     return (
         <PreferencesContext.Provider value={{
             fontSize, setFontSize,
+            transcriptFontSize, setTranscriptFontSize,
             density, setDensity,
             landingSection, setLandingSection,
+            theme, setTheme, resolvedTheme,
             reduceMotion, setReduceMotion,
             largerTargets, setLargerTargets,
             highContrast, setHighContrast,

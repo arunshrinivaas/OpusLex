@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ======================================================
    OPUSLEX DESIGN SYSTEM — TYPOGRAPHY & PREFERENCES
    ====================================================== */
@@ -789,4 +791,495 @@ button {
   background: #000 !important;
   color: #ffffff !important;
   font-weight: 600 !important;
+}
+
+/* ======================================================
+   GLOBAL THEME SYSTEM — LIGHT, DARK & AUTO (SYSTEM)
+   ====================================================== */
+
+:root.dark,
+:root[data-theme-mode="dark"] {
+  color-scheme: dark;
+  color: #ececec;
+  background-color: #0d0d0d;
+}
+
+:root.dark body,
+html.dark body {
+  background-color: #0d0d0d !important;
+  color: #ececec !important;
+}
+
+:root.dark ::selection {
+  background: #333333;
+  color: #ffffff;
+}
+
+:root.dark ::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 4px;
+}
+
+:root.dark ::-webkit-scrollbar-thumb:hover {
+  background: #3a3a3a;
+}
+
+:root.dark ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ── Structural Surfaces (ChatGPT-grade near-black) ── */
+.dark aside,
+.dark aside.bg-white,
+.dark [data-theme-surface="sidebar"] {
+  background-color: #171717 !important;
+  border-color: #262626 !important;
+  color: #ececec !important;
+}
+
+.dark header,
+.dark header.bg-white,
+.dark [data-theme-surface="header"] {
+  background-color: #171717 !important;
+  border-color: #262626 !important;
+  color: #ececec !important;
+}
+
+.dark main {
+  background-color: #0d0d0d !important;
+  color: #ececec !important;
+}
+
+/* ── All Cards, Panels, Modals, Popovers, Dropdowns ── */
+.dark .bg-white,
+.dark [class*="bg-white"] {
+  background-color: #171717 !important;
+  border-color: #262626 !important;
+  color: #ececec !important;
+}
+
+.dark .bg-neutral-50,
+.dark [class*="bg-neutral-50"] {
+  background-color: #0d0d0d !important;
+}
+
+.dark .bg-neutral-50\/50,
+.dark [class*="bg-neutral-50/50"] {
+  background-color: #121212 !important;
+}
+
+.dark .bg-neutral-100,
+.dark [class*="bg-neutral-100"] {
+  background-color: #212121 !important;
+}
+
+.dark .bg-neutral-200 {
+  background-color: #2a2a2a !important;
+}
+
+.dark .border-neutral-100,
+.dark .border-neutral-200,
+.dark .border-neutral-300 {
+  border-color: #262626 !important;
+}
+
+/* ── Interactive Hovers ── */
+.dark .hover\:bg-neutral-50:hover,
+.dark .hover\:bg-neutral-100:hover,
+.dark .row-hover:hover {
+  background-color: #212121 !important;
+}
+
+.dark .hover\:border-neutral-300:hover,
+.dark .hover\:border-neutral-400:hover {
+  border-color: #383838 !important;
+}
+
+/* ── Typography & Text Contrast ── */
+.dark .text-neutral-900,
+.dark .text-neutral-800,
+.dark .text-neutral-700 {
+  color: #f5f5f5 !important;
+}
+
+.dark .text-neutral-600,
+.dark .text-neutral-500 {
+  color: #a3a3a3 !important;
+}
+
+.dark .text-neutral-400 {
+  color: #737373 !important;
+}
+
+.dark .text-neutral-300 {
+  color: #525252 !important;
+}
+
+.dark .text-neutral-200 {
+  color: #404040 !important;
+}
+
+/* ── Form Controls: Inputs, Textareas, Selects ── */
+.dark input:not([type="checkbox"]):not([type="radio"]),
+.dark textarea,
+.dark select {
+  background-color: #171717 !important;
+  color: #f5f5f5 !important;
+  border-color: #262626 !important;
+}
+
+.dark input:not([type="checkbox"]):not([type="radio"]):focus,
+.dark textarea:focus,
+.dark select:focus {
+  border-color: #404040 !important;
+  outline: none;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #737373 !important;
+}
+
+/* ── Settings, Cards & Components ── */
+.dark .settings-pill {
+  color: #a3a3a3 !important;
+}
+
+.dark .settings-pill:hover {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  color: #f5f5f5 !important;
+}
+
+.dark .settings-pill-active {
+  background-color: #262626 !important;
+  color: #ffffff !important;
+}
+
+.dark .glass-bubble {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: #262626 !important;
+}
+
+.dark .settings-container {
+  background: #171717 !important;
+  border-color: #262626 !important;
+}
+
+.dark .card-enterprise {
+  background-color: #171717 !important;
+  border-color: #262626 !important;
+  color: #ececec !important;
+}
+
+/* ── Navigation Pills & Tabs ── */
+.dark .nav-pill:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark .nav-pill.active {
+  background-color: rgba(255, 255, 255, 0.14) !important;
+  color: #ffffff !important;
+}
+
+.dark .tab-pill:hover:not(.tab-pill-active) {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+
+.dark .tab-pill-active {
+  background-color: #ffffff !important;
+  color: #111111 !important;
+}
+
+.dark .filter-chip {
+  background-color: #171717 !important;
+  border-color: #262626 !important;
+  color: #ececec !important;
+}
+
+.dark .filter-chip:hover {
+  background-color: #212121 !important;
+  border-color: #333333 !important;
+}
+
+.dark .filter-chip-active {
+  background-color: #ffffff !important;
+  border-color: #ffffff !important;
+  color: #111111 !important;
+}
+
+/* ── Primary & Secondary Buttons ── */
+.dark .btn-primary,
+.dark button.bg-neutral-900:not(.profile-tile):not(.status-dot),
+.dark a.bg-neutral-900 {
+  background-color: #f5f5f5 !important;
+  color: #171717 !important;
+  border-color: #f5f5f5 !important;
+}
+
+.dark .btn-primary:hover,
+.dark button.bg-neutral-900:not(.profile-tile):not(.status-dot):hover,
+.dark a.bg-neutral-900:hover {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.dark .btn-secondary {
+  background-color: #212121 !important;
+  color: #ececec !important;
+  border-color: #303030 !important;
+}
+
+.dark .btn-secondary:hover {
+  background-color: #2a2a2a !important;
+  border-color: #3d3d3d !important;
+}
+
+.dark .search-pill {
+  background-color: #171717 !important;
+  border-color: #262626 !important;
+  color: #ececec !important;
+}
+
+.dark .search-pill:hover {
+  background-color: #212121 !important;
+  border-color: #333333 !important;
+}
+
+.dark .search-pill:focus-within {
+  background-color: #171717 !important;
+  border-color: #FBC648 !important;
+  box-shadow: 0 0 0 3px rgba(251, 198, 72, 0.2) !important;
+}
+
+/* ── User Profile Initials Avatar in Dark Mode ── */
+.dark .profile-tile .bg-neutral-900 {
+  background-color: #262626 !important;
+  color: #f5f5f5 !important;
+}
+
+/* ── Preserved Accent Colors & Brand Yellow ── */
+.bg-brand-yellow,
+.bg-\[\#FBC648\],
+[data-brand="yellow"] {
+  background-color: #FBC648 !important;
+  color: #171717 !important;
+}
+
+.text-brand-yellow,
+.text-\[\#FBC648\] {
+  color: #FBC648 !important;
+}
+
+.border-brand-yellow,
+.border-\[\#FBC648\] {
+  border-color: #FBC648 !important;
+}
+
+/* ── Semantic Status Indicators, Badges & Risk Dots ── */
+.dark .text-green-600 { color: #10B981 !important; }
+.dark .text-blue-600 { color: #3B82F6 !important; }
+.dark .text-red-600, .dark .text-red-500 { color: #EF4444 !important; }
+.dark .text-orange-600 { color: #F97316 !important; }
+.dark .text-amber-600 { color: #F59E0B !important; }
+
+.dark .bg-green-50, .dark .bg-green-100 { background-color: rgba(16, 185, 129, 0.15) !important; color: #34D399 !important; }
+.dark .bg-red-50, .dark .bg-red-100 { background-color: rgba(239, 68, 68, 0.15) !important; color: #F87171 !important; }
+.dark .bg-blue-50, .dark .bg-blue-100 { background-color: rgba(59, 130, 246, 0.15) !important; color: #60A5FA !important; }
+.dark .bg-orange-50, .dark .bg-orange-100 { background-color: rgba(249, 115, 22, 0.15) !important; color: #FB923C !important; }
+.dark .bg-amber-50, .dark .bg-amber-100 { background-color: rgba(245, 158, 11, 0.15) !important; color: #FBBF24 !important; }
+
+.dark .border-green-200 { border-color: rgba(16, 185, 129, 0.3) !important; }
+.dark .border-red-200 { border-color: rgba(239, 68, 68, 0.3) !important; }
+.dark .border-blue-200 { border-color: rgba(59, 130, 246, 0.3) !important; }
+.dark .border-orange-200 { border-color: rgba(249, 115, 22, 0.3) !important; }
+.dark .border-amber-200 { border-color: rgba(245, 158, 11, 0.3) !important; }
+
+/* Status dot containers expand smoothly on hover in dark mode */
+.dark .group:hover .status-dot-container {
+  background-color: #212121 !important;
+  border-color: #333333 !important;
+}
+
+/* ======================================================
+   STANDARDIZED PILL CONTROLS & CHATGPT DARK REFINEMENT
+   ====================================================== */
+
+/* ── Pill Shape System for Action Controls ── */
+button:not(.menu-item):not(.tab-item):not(.status-dot):not([role="switch"]):not([role="tab"]):not(.unpill):not(.settings-pill-option):not(.card-enterprise):not(.content-tile):not(.card):not(.row-hover):not(.tile):not([data-card]):not([data-tile]):not(.card-header):not([class*="rounded"]):not([class*="w-full"]):not([class*="text-left"]),
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-pill {
+  border-radius: 9999px;
+}
+
+/* ── Content Tiles & Containers (Matching Exact Specified Geometry) ── */
+.card-enterprise,
+.content-tile,
+.card-row,
+button.card-enterprise,
+button.content-tile,
+[data-card],
+.metric-card,
+button[class*="rounded-xl"],
+.rounded-xl {
+  border-radius: 0.75rem !important; /* 12px regular soft corner */
+}
+
+button[class*="rounded-2xl"],
+.rounded-2xl {
+  border-radius: 1rem !important; /* 16px */
+}
+
+button[class*="rounded-lg"],
+.rounded-lg {
+  border-radius: 0.5rem !important; /* 8px */
+}
+
+button[class*="rounded-md"],
+.rounded-md {
+  border-radius: 0.375rem !important; /* 6px */
+}
+
+button[class*="rounded"]:not([class*="rounded-full"]):not([class*="rounded-none"]):not([class*="rounded-xl"]):not([class*="rounded-2xl"]):not([class*="rounded-lg"]):not([class*="rounded-md"]),
+button.rounded {
+  border-radius: 0.25rem !important; /* 4px */
+}
+
+button[class*="rounded-none"] {
+  border-radius: 0 !important;
+}
+
+button.row-hover,
+.row-hover {
+  border-radius: 0 !important;
+}
+
+/* ── Card Header & Interactive Tile Buttons (Follow Parent Geometry Exactly) ── */
+/* When collapsed (only child in rounded container), inherit full container curvature */
+div[class*="rounded-xl"] > button:only-child,
+.rounded-xl > button:only-child,
+[data-card] > button:only-child {
+  border-radius: 0.75rem !important;
+}
+
+div[class*="rounded-2xl"] > button:only-child,
+.rounded-2xl > button:only-child {
+  border-radius: 1rem !important;
+}
+
+div[class*="rounded-lg"] > button:only-child,
+.rounded-lg > button:only-child {
+  border-radius: 0.5rem !important;
+}
+
+div[class*="rounded-md"] > button:only-child,
+.rounded-md > button:only-child {
+  border-radius: 0.375rem !important;
+}
+
+/* When expanded (followed by accordion body content), top corners match container, bottom corners are square */
+div[class*="rounded-xl"] > button:first-child:not(:only-child),
+.rounded-xl > button:first-child:not(:only-child),
+[data-card] > button:first-child:not(:only-child) {
+  border-top-left-radius: 0.75rem !important;
+  border-top-right-radius: 0.75rem !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+div[class*="rounded-2xl"] > button:first-child:not(:only-child),
+.rounded-2xl > button:first-child:not(:only-child) {
+  border-top-left-radius: 1rem !important;
+  border-top-right-radius: 1rem !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+div[class*="rounded-lg"] > button:first-child:not(:only-child),
+.rounded-lg > button:first-child:not(:only-child) {
+  border-top-left-radius: 0.5rem !important;
+  border-top-right-radius: 0.5rem !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+/* Dropdown menu items and action rows inside floating menus stay flush rectangular */
+div[class*="shadow-"] > button,
+.dropdown-menu button {
+  border-radius: 0.25rem !important;
+}
+
+/* Accessible focus ring for tile buttons */
+div[class*="rounded-"] > button:focus-visible,
+button[class*="rounded-"]:focus-visible,
+[data-card] > button:focus-visible {
+  outline: 2px solid #0a0a0a;
+  outline-offset: -2px;
+}
+
+.dark div[class*="rounded-"] > button:focus-visible,
+.dark button[class*="rounded-"]:focus-visible,
+.dark [data-card] > button:focus-visible {
+  outline: 2px solid #f5f5f5;
+  outline-offset: -2px;
+}
+
+/* ── Pill Shape for Single-line Text Inputs & Selects ── */
+input[type="text"]:not(.raw-input),
+input[type="email"]:not(.raw-input),
+input[type="password"]:not(.raw-input),
+input[type="search"]:not(.raw-input),
+input[type="tel"]:not(.raw-input),
+input[type="date"]:not(.raw-input),
+.search-pill,
+select {
+  border-radius: 9999px;
+}
+
+/* ── Multiline Textareas maintain comfortable rounded-2xl ── */
+textarea {
+  border-radius: 1rem !important;
+}
+
+/* ── Subtle Separators in Dark Mode (no harsh white borders) ── */
+.dark hr,
+.dark .divide-neutral-100 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-neutral-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #262626 !important;
+}
+
+/* ── Subtle Surfaces (avoid conspicuous light cards) ── */
+.dark .bg-neutral-50 {
+  background-color: #171717 !important;
+}
+.dark .bg-neutral-100 {
+  background-color: #1c1c1c !important;
+}
+
+/* ── RTL Layout Support ── */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .text-left {
+  text-align: right;
+}
+
+[dir="rtl"] .text-right {
+  text-align: left;
+}
+
+[dir="rtl"] .origin-right {
+  transform-origin: left;
+}
+
+[dir="rtl"] .origin-left {
+  transform-origin: right;
+}
+
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
 }

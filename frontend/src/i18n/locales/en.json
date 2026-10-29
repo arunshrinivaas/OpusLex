@@ -37,7 +37,8 @@
       "integrations": "Integrations",
       "advanced": "Advanced",
       "workspace": "Workspace",
-      "navigation": "Navigation"
+      "navigation": "Navigation",
+      "assistant": "AI Assistant"
     },
     "appearance": {
       "headerTitle": "Appearance",
@@ -54,7 +55,14 @@
       "theme": {
         "title": "Theme",
         "description": "Select your preferred color theme.",
-        "comingSoon": "Coming soon"
+        "comingSoon": "Coming soon",
+        "light": "Light",
+        "dark": "Dark",
+        "auto": "Auto",
+        "lightDesc": "Clean light interface with high legibility.",
+        "darkDesc": "Restrained dark palette reducing eye fatigue in low light.",
+        "autoDesc": "Synchronizes automatically with your system appearance.",
+        "autoDescription": "Following system appearance"
       }
     },
     "general": {
@@ -85,11 +93,37 @@
     },
     "language": {
       "headerTitle": "Language",
-      "headerSub": "Manage the display language for this application.",
+      "headerSub": "Manage the display language for this application. Over 100 languages supported with native script selection.",
       "english": "English",
       "spanish": "Spanish",
       "active": "Active",
-      "select": "Select language"
+      "select": "Select language",
+      "searchPlaceholder": "Search 110+ languages by English or native name...",
+      "coverageFull": "Full Translation",
+      "coveragePriority": "Priority Bundle",
+      "coverageFallback": "English Fallback (Translation in Progress)",
+      "catalogCount": "{{count}} languages available",
+      "noResults": "No matching languages found."
+    },
+    "assistant": {
+      "headerTitle": "AI Assistant",
+      "headerSub": "Configure the English-first voice and text AI assistant, keyboard shortcuts, and backend permission levels.",
+      "enableTitle": "Enable AI Assistant",
+      "enableDesc": "Display the floating assistant orb and allow in-app voice and text commands.",
+      "permissionsTitle": "Assistant Permission Level",
+      "permissionsDesc": "Enforced on the backend to prevent unauthorized mutations.",
+      "level1": "Level 1: Read & Answer (Read-only, no mutations)",
+      "level2": "Level 2: Suggest (Prepares drafts and proposals without execution)",
+      "level3": "Level 3: Execute with Approval (Requires explicit confirmation before actions)",
+      "level4": "Level 4: Limited Autonomy (Executes low-risk actions directly; deletes require confirmation)",
+      "voiceTitle": "Voice & Speech Output",
+      "voiceDesc": "Configure spoken audio responses and available browser voices.",
+      "enableVoice": "Spoken responses enabled",
+      "voiceSelect": "Browser Voice",
+      "shortcutTitle": "Activation Shortcut",
+      "shortcutDesc": "Global within-app keyboard shortcut to toggle the assistant.",
+      "privacyTitle": "Application Context Sharing",
+      "privacyDesc": "Allow the assistant to access active investigation metadata to provide contextual compliance assistance."
     },
     "workspace": {
       "headerTitle": "Workspace",
@@ -150,5 +184,385 @@
         "verify_email": "Verify email"
       }
     }
+  },
+  "assistantUI": {
+    "title": "Themis Assistant",
+    "tooltip": "Open Themis ({{shortcut}})",
+    "inputPlaceholder": "Ask Themis anything about regulations, policies, or compliance...",
+    "send": "Send",
+    "listening": "Themis is listening...",
+    "stopListening": "Stop Listening",
+    "mute": "Mute Voice",
+    "unmute": "Enable Voice",
+    "clearHistory": "Clear Chat",
+    "close": "Close",
+    "taskWorkspace": "Task Workspace",
+    "actionRequiresApproval": "Approval Required",
+    "approveAction": "Approve & Execute",
+    "rejectAction": "Cancel Action",
+    "actionExecuted": "Action Executed Successfully",
+    "actionDenied": "Action Denied by Permission Level",
+    "voiceUnavailable": "Speech recognition unavailable in this browser. Text-only mode active.",
+    "voiceDenied": "Microphone permission denied. You can interact via text.",
+    "contextBadge": "Context: {{section}}",
+    "switchToText": "Text Mode",
+    "switchToVoice": "Voice Mode",
+    "voiceHudHint": "Speak naturally to Themis or click Text Mode",
+    "spotlightPlaceholder": "Ask Themis anything about regulations, policies, or compliance...",
+    "returnToVoice": "Voice Mode",
+    "explainPage": "Explain Page"
+  },
+  "common": {
+    "search": "Search...",
+    "searchWorkspace": "Search workspace...",
+    "searchObligations": "Search obligations...",
+    "add": "Add",
+    "create": "Create",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "close": "Close",
+    "back": "Back",
+    "retry": "Retry",
+    "loading": "Loading...",
+    "error": "Something went wrong.",
+    "allStatuses": "All statuses",
+    "allRisks": "All risks",
+    "compliant": "Compliant",
+    "nonCompliant": "Non-Compliant",
+    "inProgress": "In Progress",
+    "notStarted": "Not Started",
+    "waived": "Waived",
+    "overdue": "Overdue",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "critical": "Critical",
+    "saved": "Saved"
+  },
+  "compliance": {
+    "title": "Compliance Tracking",
+    "subtitle": "Obligations and their current compliance status.",
+    "addObligation": "Add Obligation",
+    "total": "Total",
+    "score": "Score",
+    "highRisk": "High Risk",
+    "emptyTitle": "No compliance obligations yet",
+    "emptyFilterTitle": "No obligations match your filters",
+    "emptyDesc": "Add compliance obligations to track regulatory requirements and their status.",
+    "modalTitle": "Add Compliance Obligation",
+    "fieldTitle": "Title *",
+    "fieldRegulation": "Regulation *",
+    "fieldDepartment": "Department *",
+    "fieldStatus": "Status",
+    "fieldRisk": "Risk",
+    "fieldDueDate": "Due Date",
+    "fieldDescription": "Description"
+  },
+  "auth": {
+    "welcome": "Welcome to OpusLex",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "email": "Email address",
+    "password": "Password",
+    "fullName": "Full name",
+    "logIn": "Log in",
+    "logOut": "Log out",
+    "createAccount": "Create account",
+    "alreadyHaveAccount": "Already have an account? Sign in",
+    "dontHaveAccount": "Don't have an account? Sign up",
+    "verifyCode": "Verification code",
+    "verify": "Verify",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "continueGoogle": "Continue with Google",
+    "continueApple": "Continue with Apple",
+    "continueEmail": "Continue with Email",
+    "invalidCredentials": "Invalid email or password",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "termsNotice": "By continuing, you agree to OpusLex's Terms of Service and Privacy Policy."
+  },
+  "dashboard": {
+    "welcomeBack": "Welcome back",
+    "systemOperational": "All Systems Operational",
+    "activeWorkspace": "Active Workspace",
+    "stats": {
+      "activeInvestigations": "Active Investigations",
+      "documentsIndexed": "Documents Indexed",
+      "complianceScore": "Compliance Score",
+      "recentFindings": "Recent Findings",
+      "totalObligations": "Total Obligations",
+      "auditsPassed": "Audits Passed"
+    },
+    "quickLaunch": {
+      "title": "Quick Actions",
+      "newInvestigation": "New Investigation",
+      "uploadDocument": "Upload Document",
+      "askResearch": "Ask Research",
+      "deployAgent": "Deploy Agent"
+    },
+    "recentInvestigations": {
+      "title": "Recent Investigations",
+      "viewAll": "View all",
+      "empty": "No active investigations. Create a new investigation to get started."
+    },
+    "activityFeed": {
+      "title": "Recent Activity",
+      "empty": "No recent activity recorded."
+    },
+    "topNav": {
+      "all": "All",
+      "reports": "Reports",
+      "research": "Research",
+      "agents": "Agents",
+      "searchPlaceholder": "Search workspace, documents, or commands (⌘K)...",
+      "openAssistant": "Open Themis Assistant",
+      "selectLanguage": "Change Language"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "markAllRead": "Mark all as read",
+      "empty": "No new notifications",
+      "clear": "Clear all"
+    },
+    "searchModal": {
+      "title": "Global Search",
+      "placeholder": "Search investigations, documents, agents, or settings...",
+      "noResults": "No results found for \"{{query}}\"",
+      "escToClose": "Press ESC to close"
+    },
+    "profileModal": {
+      "title": "Account Profile",
+      "displayName": "Display Name",
+      "displayNamePlaceholder": "Enter your full name",
+      "email": "Email (Permanent Identifier)",
+      "role": "Role",
+      "save": "Save Changes",
+      "saving": "Saving...",
+      "saved": "Changes saved successfully",
+      "emptyNameError": "Full Name cannot be empty."
+    }
+  },
+  "investigations": {
+    "title": "Investigations",
+    "subtitle": "Manage active compliance cases, review evidence, and track regulatory findings.",
+    "newInvestigation": "New Investigation",
+    "searchPlaceholder": "Search investigations by title or description...",
+    "filterStatus": "Filter by status",
+    "filterJurisdiction": "Jurisdiction",
+    "allJurisdictions": "All Jurisdictions",
+    "columns": {
+      "title": "Title",
+      "status": "Status",
+      "risk": "Risk Level",
+      "jurisdiction": "Jurisdiction",
+      "documents": "Documents",
+      "updated": "Last Updated",
+      "actions": "Actions"
+    },
+    "statuses": {
+      "active": "Active",
+      "review": "Under Review",
+      "closed": "Closed",
+      "archived": "Archived"
+    },
+    "risks": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "critical": "Critical"
+    },
+    "modal": {
+      "createTitle": "Create New Investigation",
+      "titleLabel": "Investigation Title *",
+      "titlePlaceholder": "e.g., Annual Data Privacy Compliance Review",
+      "descLabel": "Description",
+      "descPlaceholder": "Provide an overview of the scope and objectives...",
+      "jurisdictionLabel": "Jurisdiction",
+      "leadLabel": "Assigned Lead",
+      "targetDateLabel": "Target Completion Date",
+      "cancel": "Cancel",
+      "create": "Create Investigation"
+    },
+    "details": {
+      "overview": "Overview",
+      "documents": "Attached Documents",
+      "evidence": "Evidence & Findings",
+      "timeline": "Timeline",
+      "notes": "Notes",
+      "uploadDocument": "Upload Document",
+      "generateReport": "Generate Report",
+      "noDocuments": "No documents attached to this investigation yet.",
+      "noEvidence": "No evidence items recorded yet."
+    },
+    "empty": {
+      "title": "No investigations found",
+      "desc": "Create your first investigation to start tracking compliance cases and evidence."
+    }
+  },
+  "research": {
+    "title": "Research Assistant",
+    "subtitle": "Query compliance documents, analyze regulatory requirements, and cite evidence.",
+    "tabs": {
+      "general": "General Research",
+      "investigation": "Investigation Research",
+      "comparison": "Regulatory Comparison"
+    },
+    "inputPlaceholder": "Ask a question about regulations, policies, or attached documents...",
+    "scope": "Search Scope",
+    "scopeAll": "Entire Document Library",
+    "scopeInvestigation": "Selected Investigation",
+    "selectInvestigation": "Select an investigation...",
+    "attachedDocs": "Attached Documents ({{count}})",
+    "autoDiscovered": "Discovered from selected investigation",
+    "strictGrounding": "Strict Grounding",
+    "askButton": "Ask Research Assistant",
+    "stopButton": "Stop Generation",
+    "clearButton": "Clear",
+    "copyButton": "Copy Answer",
+    "copied": "Copied!",
+    "sourcesTitle": "Sources & Citations",
+    "noSources": "No direct document citations required for this general query.",
+    "comparison": {
+      "title": "Cross-Document Regulatory Comparison",
+      "subtitle": "Compare base contracts or operational policies against regulatory standards and mandates.",
+      "baseDoc": "Base Document",
+      "selectBase": "Select base agreement or policy...",
+      "targetDocs": "Target Documents / Regulations",
+      "runComparison": "Run Regulatory Comparison",
+      "execSummary": "Executive Summary",
+      "materialConflicts": "Material Conflicts",
+      "gaps": "Gaps & Deficiencies",
+      "actions": "Prioritized Actions",
+      "comparing": "Analyzing and comparing documents..."
+    },
+    "empty": {
+      "title": "Research Workspace Ready",
+      "desc": "Enter a query or select an investigation to analyze legal and compliance requirements."
+    }
+  },
+  "agents": {
+    "title": "AI Compliance Agents",
+    "subtitle": "Deploy autonomous multi-step reasoning agents to investigate, verify, and report.",
+    "runAgent": "Launch Agent",
+    "stopAgent": "Stop Agent",
+    "taskLabel": "Task Description",
+    "taskPlaceholder": "Describe the investigation goal, evidence to verify, or compliance audit...",
+    "scopeLabel": "Investigation Context",
+    "executionTrace": "Agent Execution Trace",
+    "logs": "Agent Logs",
+    "approvalRequired": "Approval Required",
+    "approve": "Approve & Execute",
+    "reject": "Reject Action",
+    "statusIdle": "Agent Idle",
+    "statusRunning": "Agent Executing...",
+    "statusCompleted": "Execution Complete",
+    "roles": {
+      "lead": "Investigation Lead Agent",
+      "auditor": "Regulatory Auditor",
+      "gapAnalyzer": "Policy Gap Analyzer",
+      "evidenceVerifier": "Evidence Verification Agent"
+    }
+  },
+  "regulations": {
+    "title": "Regulations Library",
+    "subtitle": "Browse and manage global regulatory frameworks and statutory mandates.",
+    "searchPlaceholder": "Search regulations...",
+    "filterJurisdiction": "All Jurisdictions",
+    "filterSector": "All Sectors",
+    "addRegulation": "Add Regulation",
+    "columns": {
+      "name": "Regulation Name",
+      "authority": "Issuing Authority",
+      "jurisdiction": "Jurisdiction",
+      "effectiveDate": "Effective Date",
+      "status": "Status",
+      "obligations": "Obligations"
+    }
+  },
+  "policies": {
+    "title": "Internal Policies",
+    "subtitle": "Corporate governance policies mapped to external statutory requirements.",
+    "createPolicy": "Create Policy",
+    "searchPlaceholder": "Search policies...",
+    "uploadPolicy": "Upload Policy",
+    "columns": {
+      "name": "Policy Title",
+      "category": "Category",
+      "version": "Version",
+      "status": "Status",
+      "lastReviewed": "Last Reviewed"
+    }
+  },
+  "audit": {
+    "title": "Audit & Findings",
+    "subtitle": "Comprehensive audit log of user actions, agent executions, and compliance discoveries.",
+    "searchPlaceholder": "Search audit trail...",
+    "export": "Export Audit Log",
+    "columns": {
+      "timestamp": "Timestamp",
+      "user": "User / Agent",
+      "action": "Action Performed",
+      "target": "Target Resource",
+      "severity": "Severity",
+      "details": "Event Details"
+    }
+  },
+  "reports": {
+    "title": "Compliance Reports",
+    "subtitle": "Generate, review, and export formal compliance and audit reports.",
+    "generate": "Generate Report",
+    "exportPdf": "Export PDF",
+    "exportCsv": "Export CSV",
+    "templates": "Report Templates"
+  },
+  "governance": {
+    "title": "Corporate Governance",
+    "subtitle": "Framework oversight, risk committees, and policy approval workflows.",
+    "committees": "Governance Committees",
+    "reviews": "Pending Policy Reviews"
+  },
+  "integrations": {
+    "title": "Data & Storage Integrations",
+    "subtitle": "Connect external document repositories, cloud storage, and enterprise identity providers.",
+    "googleDrive": "Google Drive",
+    "oneDrive": "Microsoft OneDrive / SharePoint",
+    "box": "Box Enterprise",
+    "slack": "Slack Enterprise Grid",
+    "connect": "Connect",
+    "disconnect": "Disconnect",
+    "connected": "Connected",
+    "notConnected": "Not Connected"
+  },
+  "help": {
+    "title": "Help & Documentation",
+    "subtitle": "Explore documentation, user guides, keyboard shortcuts, and FAQs.",
+    "searchPlaceholder": "Search help articles, FAQs, and shortcuts...",
+    "categories": {
+      "gettingStarted": "Getting Started",
+      "investigations": "Investigations & Evidence",
+      "research": "Research Assistant",
+      "themis": "Themis AI Assistant",
+      "security": "Account & Security"
+    },
+    "shortcutsTitle": "Keyboard Shortcuts",
+    "passwordChangeStep": "To change your password, go to Settings > Security & Login, or use the Account menu in the top right."
+  },
+  "cookies": {
+    "bannerTitle": "Privacy & Preferences",
+    "bannerDesc": "OpusLex uses necessary browser storage to maintain core application functionality and your preferences. No optional analytics or marketing tracking technologies are currently configured.",
+    "customize": "Customize",
+    "rejectOptional": "Reject optional",
+    "acceptAll": "Accept all",
+    "modalTitle": "Cookie preferences",
+    "necessaryTitle": "Necessary / Functional",
+    "alwaysActive": "Always active",
+    "necessaryDesc": "Required for core application functionality. Used to store your session and UI preferences.",
+    "analyticsTitle": "Analytics",
+    "notConfigured": "Not configured",
+    "analyticsDesc": "No optional tracking technologies are currently configured."
   }
 }

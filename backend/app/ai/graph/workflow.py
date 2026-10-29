@@ -18,10 +18,12 @@ from langgraph.graph import END, START, StateGraph
 
 from app.ai.graph.edges import conditional_review_edge, supervisor_routing_edge
 from app.ai.graph.nodes.analysis import analysis_node
+from app.ai.graph.nodes.general import general_node
 from app.ai.graph.nodes.persistence import persistence_node
 from app.ai.graph.nodes.research import research_node
 from app.ai.graph.nodes.supervisor import supervisor_node
 from app.ai.graph.nodes.synthesis import synthesis_node
+from app.ai.graph.nodes.tool import tool_node
 from app.ai.graph.nodes.verification import verification_node
 from app.ai.graph.state import AgentWorkflowState
 
@@ -37,6 +39,8 @@ def create_compliance_graph(checkpointer: Any | None = None):
 
     # 1. Add Agent Nodes
     builder.add_node("supervisor", supervisor_node)
+    builder.add_node("general_node", general_node)
+    builder.add_node("tool_node", tool_node)
     builder.add_node("research", research_node)
     builder.add_node("analysis", analysis_node)
     builder.add_node("verification", verification_node)
@@ -46,15 +50,20 @@ def create_compliance_graph(checkpointer: Any | None = None):
     # 2. Add Edges
     builder.add_edge(START, "supervisor")
 
-    # Conditional routing from supervisor (early exit if no documents attached)
+    # Conditional routing from supervisor (general vs tool vs RAG vs synthesis)
     builder.add_conditional_edges(
         "supervisor",
         supervisor_routing_edge,
         {
+            "general": "general_node",
+            "tool": "tool_node",
             "research": "research",
             "synthesis": "synthesis",
         },
     )
+
+    builder.add_edge("general_node", "persistence")
+    builder.add_edge("tool_node", "persistence")
 
     # Pipeline: Research -> Analysis -> Verification
     builder.add_edge("research", "analysis")

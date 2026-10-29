@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.compliance import Compliance
+from app.routers.auth import require_roles
 from app.schemas.compliance import ComplianceCreate
 
 router = APIRouter(prefix="/api/v1/compliance", tags=["Compliance"])
@@ -73,7 +74,11 @@ def get_compliance(
 
 
 @router.post("/", status_code=201)
-def create_compliance(compliance: ComplianceCreate, db: Session = Depends(get_db)):
+def create_compliance(
+    compliance: ComplianceCreate,
+    db: Session = Depends(get_db),
+    current_user=Depends(require_roles("admin", "compliance_officer", "risk_analyst")),
+):
     db_compliance = Compliance(
         title=compliance.title,
         regulation=compliance.regulation,

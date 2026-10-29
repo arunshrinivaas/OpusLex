@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef } from "react"
+import { useTranslation } from "react-i18next"
 import logoWhite from "../assets/OpusLexLogoWhite.png"
 import logoLight from "../assets/OpusLexLogoLight.png"
 
-import { Smartphone, ArrowLeft, Loader2, Mail } from "lucide-react"
+import { Smartphone, ArrowLeft, Loader2, Mail, Globe, Check } from "lucide-react"
 import { TermsPage, PrivacyPage, CookiesPage } from "./PolicyPages"
+import { usePreferences } from "../contexts/PreferencesContext"
+import { LANGUAGES } from "../i18n/languages"
+import { getApiUrl } from "../utils/api"
 
 type AuthProps = {
     onLoginSuccess: () => void
@@ -18,6 +22,11 @@ const VIDEO_SOURCES = [
 ]
 
 export default function Auth({ onLoginSuccess }: AuthProps) {
+    const { t } = useTranslation()
+    const { language, setLanguage } = usePreferences()
+    const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
+    const langDropdownRef = useRef<HTMLDivElement>(null)
+
     const [loginStage, setLoginStage] = useState<'initial' | 'providers' | 'email' | 'mfa' | 'email-otp' | 'email-otp-verify'>('initial')
     const [policyRoute, setPolicyRoute] = useState<'terms' | 'privacy' | 'cookies' | null>(null)
     const [email, setEmail] = useState("")
@@ -39,6 +48,16 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
     const [isGsiLoaded, setIsGsiLoaded] = useState(false)
     const [isAppleSdkLoaded, setIsAppleSdkLoaded] = useState(false)
     const googleButtonRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (langDropdownRef.current && !langDropdownRef.current.contains(e.target as Node)) {
+                setShowLanguageDropdown(false)
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside)
+        return () => document.removeEventListener("mousedown", handleClickOutside)
+    }, [])
 
     useEffect(() => {
         if (resendCooldown > 0) {
@@ -272,7 +291,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
         setMessage("Sending verification code…");
         setAuthLoading("email-otp");
         try {
-            const response = await fetch("http://127.0.0.1:8000/api/v1/auth/email-otp/send", {
+            const response = await fetch(getApiUrl("/api/v1/auth/email-otp/send"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email: email.trim() }),
@@ -306,7 +325,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
         setMessage("Verifying code…");
         setAuthLoading("email-otp-verify");
         try {
-            const response = await fetch("http://127.0.0.1:8000/api/v1/auth/email-otp/verify", {
+            const response = await fetch(getApiUrl("/api/v1/auth/email-otp/verify"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email: email.trim(), code: otpCode.trim() }),
@@ -343,7 +362,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
         setMessage("Signing in…");
         setAuthLoading("email");
         try {
-            const response = await fetch("http://127.0.0.1:8000/api/v1/auth/login", {
+            const response = await fetch(getApiUrl("/api/v1/auth/login"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
@@ -379,7 +398,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
         setMessage("Verifying code…");
         setAuthLoading("mfa");
         try {
-            const response = await fetch("http://127.0.0.1:8000/api/v1/auth/login/mfa", {
+            const response = await fetch(getApiUrl("/api/v1/auth/login/mfa"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ mfa_token: mfaToken, code: mfaCode.trim() }),
@@ -405,7 +424,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
         setMessage("Creating account…");
         setAuthLoading("email");
         try {
-            const response = await fetch("http://127.0.0.1:8000/api/v1/auth/register", {
+            const response = await fetch(getApiUrl("/api/v1/auth/register"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password, full_name: fullName }),
@@ -432,7 +451,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
             return;
         }
         try {
-            const res = await fetch("http://127.0.0.1:8000/api/v1/auth/google", {
+            const res = await fetch(getApiUrl("/api/v1/auth/google"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id_token: response.credential }),
@@ -493,7 +512,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
         }
 
         try {
-            const res = await fetch("http://127.0.0.1:8000/api/v1/auth/apple", {
+            const res = await fetch(getApiUrl("/api/v1/auth/apple"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
@@ -569,6 +588,43 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
             {/* Content Container */}
             <div className={`relative z-20 flex flex-col flex-1 w-full h-full safe-area-pt safe-area-pb transition-colors duration-700 ease-in-out ${textColorClass}`}>
 
+                {/* Quick Language Selector */}
+                <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30" ref={langDropdownRef}>
+                    <button
+                        id="auth-language-btn"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-white/20 bg-black/40 text-white backdrop-blur-md hover:bg-black/60 transition-colors shadow-lg"
+                        onClick={() => setShowLanguageDropdown(prev => !prev)}
+                        title={t("dashboard.topNav.selectLanguage", "Change Language")}
+                    >
+                        <Globe size={13} className="text-white/80" />
+                        <span className="uppercase text-[11px] font-semibold">{language}</span>
+                    </button>
+                    {showLanguageDropdown && (
+                        <div className="absolute right-0 top-[calc(100%+8px)] w-64 rounded-xl border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#1a1a1a] shadow-2xl z-50 overflow-hidden p-1.5 text-neutral-900 dark:text-white">
+                            <div className="px-3 py-2 border-b border-neutral-100 dark:border-[#262626] flex items-center justify-between">
+                                <span className="text-xs font-semibold">{t("settings.tabs.language", "Language")}</span>
+                            </div>
+                            <div className="max-h-64 overflow-y-auto py-1">
+                                {LANGUAGES.filter(l => l.coverage === 'full' || l.coverage === 'priority').map(l => (
+                                    <button
+                                        key={l.code}
+                                        onClick={() => { setLanguage(l.code); setShowLanguageDropdown(false); }}
+                                        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left text-xs transition-colors ${
+                                            language === l.code ? 'bg-neutral-100 dark:bg-[#262626] font-semibold text-neutral-900 dark:text-white' : 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-[#212121]'
+                                        }`}
+                                    >
+                                        <div className="flex flex-col">
+                                            <span>{l.name}</span>
+                                            <span className="text-[11px] text-neutral-400 font-normal" dir={l.direction || 'ltr'}>{l.nativeName}</span>
+                                        </div>
+                                        {language === l.code && <Check size={14} className="text-blue-600" />}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+
                 {/* Header (Logo & Tagline) */}
                 <div className="flex flex-col items-center pt-16 sm:pt-24 px-6 animate-in fade-in slide-in-from-top-4 duration-700">
                     <div className="transition-all duration-700">
@@ -578,7 +634,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                         </div>
                     </div>
                     <p className={`mt-5 text-[13px] font-medium tracking-wide text-center transition-colors duration-700 ${textColorClass} ${isDarkBackground ? 'drop-shadow-md' : ''}`}>
-                        Beyond books - instant legal clarity.
+                        Beyond books — instant legal clarity.
                     </p>
                 </div>
 
@@ -590,18 +646,17 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                     {loginStage === 'initial' && (
                         <div className="w-full flex flex-col items-center animate-in fade-in slide-in-from-bottom-4 duration-500">
                             <p className={`text-[11px] sm:text-[12px] text-center mb-6 leading-relaxed font-medium transition-colors duration-700 ${secondaryTextColorClass} ${isDarkBackground ? 'drop-shadow-sm' : ''}`}>
-                                By tapping Sign in or Create account, you agree to our{' '}
-                                <button onClick={() => setPolicyRoute('terms')} className="font-bold underline decoration-1 underline-offset-2 hover:opacity-70 transition-opacity">Terms of Service</button>.
-                                Learn how we process your data in our{' '}
-                                <button onClick={() => setPolicyRoute('privacy')} className="font-bold underline decoration-1 underline-offset-2 hover:opacity-70 transition-opacity">Privacy Policy</button> and{' '}
-                                <button onClick={() => setPolicyRoute('cookies')} className="font-bold underline decoration-1 underline-offset-2 hover:opacity-70 transition-opacity">Cookies Policy</button>.
+                                {t("auth.termsNotice", "By continuing, you agree to OpusLex's Terms of Service and Privacy Policy.")}{' '}
+                                <button onClick={() => setPolicyRoute('terms')} className="font-bold underline decoration-1 underline-offset-2 hover:opacity-70 transition-opacity">Terms</button> •{' '}
+                                <button onClick={() => setPolicyRoute('privacy')} className="font-bold underline decoration-1 underline-offset-2 hover:opacity-70 transition-opacity">Privacy</button> •{' '}
+                                <button onClick={() => setPolicyRoute('cookies')} className="font-bold underline decoration-1 underline-offset-2 hover:opacity-70 transition-opacity">Cookies</button>
                             </p>
 
                             <button
                                 onClick={() => { setLoginStage('email'); setIsRegistering(true); setMessage(""); }}
                                 className={primaryButtonClass}
                             >
-                                Create account
+                                {t("auth.createAccount", "Create account")}
                             </button>
 
                             <div className={`mt-7 flex items-center justify-center gap-3 text-[14px] font-bold tracking-wide transition-colors duration-700 ${textColorClass}`}>
@@ -609,14 +664,14 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                                     onClick={() => { setLoginStage('providers'); setMessage(""); }}
                                     className="hover:opacity-70 transition-opacity"
                                 >
-                                    Sign in
+                                    {t("auth.signIn", "Sign in")}
                                 </button>
                                 <span className="opacity-50 font-normal">|</span>
                                 <button
                                     onClick={() => { setLoginStage('email'); setIsRegistering(false); setMessage(""); }}
                                     className="hover:opacity-70 transition-opacity"
                                 >
-                                    Log in
+                                    {t("auth.logIn", "Log in")}
                                 </button>
                             </div>
                         </div>
@@ -627,15 +682,27 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                             <div className="w-full space-y-3 mb-6">
                                 <ProviderButton
                                     icon={<span className="text-xl"></span>}
-                                    label="Sign in with Apple"
+                                    label={t("auth.continueApple", "Sign in with Apple")}
                                     onClick={handleAppleSignIn}
                                 />
-                                <div className="w-full flex justify-center items-center min-h-[44px]">
-                                    <div ref={googleButtonRef} className="w-full flex justify-center"></div>
-                                </div>
+                                <ProviderButton
+                                    icon={<GoogleIcon />}
+                                    label={t("auth.continueGoogle", "Sign in with Google")}
+                                    onClick={() => {
+                                        if (!import.meta.env.VITE_GOOGLE_CLIENT_ID) {
+                                            setMessage("Google Sign-In is not configured.");
+                                        }
+                                    }}
+                                >
+                                    <div
+                                        ref={googleButtonRef}
+                                        className="absolute inset-0 opacity-0 z-10 flex items-center justify-center cursor-pointer pointer-events-auto rounded-full overflow-hidden"
+                                        style={{ transform: "scale(1.25)" }}
+                                    />
+                                </ProviderButton>
                                 <ProviderButton
                                     icon={<Mail size={20} strokeWidth={1.5} />}
-                                    label="Sign in with Email Code"
+                                    label={t("auth.continueEmail", "Sign in with Email Code")}
                                     onClick={() => {
                                         setLoginStage('email-otp');
                                         setMessage("");
@@ -644,6 +711,8 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                                 <ProviderButton
                                     icon={<Smartphone size={20} strokeWidth={1.5} />}
                                     label="Sign in with phone number"
+                                    disabled={true}
+                                    badge={t("settings.appearance.theme.comingSoon", "Coming Soon")}
                                 />
                             </div>
 
@@ -652,7 +721,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                                 className={`text-[14px] font-bold hover:opacity-70 transition-opacity flex items-center gap-1.5 ${textColorClass}`}
                             >
                                 <ArrowLeft size={16} />
-                                Back
+                                {t("common.back", "Back")}
                             </button>
 
                             {message && (
@@ -672,10 +741,10 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
 
                             <form onSubmit={isRegistering ? handleRegister : handleLogin} className="w-full flex flex-col gap-3 mb-6">
                                 {isRegistering && (
-                                    <AuthField type="text" placeholder="Enter your full name" value={fullName} onChange={setFullName} />
+                                    <AuthField type="text" placeholder={t("auth.fullName", "Full name")} value={fullName} onChange={setFullName} />
                                 )}
-                                <AuthField type="email" placeholder="name@company.com" value={email} onChange={setEmail} />
-                                <AuthField type="password" placeholder="Enter password" value={password} onChange={setPassword} />
+                                <AuthField type="email" placeholder={t("auth.email", "Email address")} value={email} onChange={setEmail} />
+                                <AuthField type="password" placeholder={t("auth.password", "Password")} value={password} onChange={setPassword} />
 
                                 <button
                                     type="submit"
@@ -683,7 +752,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                                     className={`${primaryButtonClass} mt-2`}
                                 >
                                     {authLoading === "email" && <Loader2 size={16} className="animate-spin text-black" />}
-                                    {authLoading === "email" ? "Processing..." : (isRegistering ? "Create account" : "Log in")}
+                                    {authLoading === "email" ? t("common.loading", "Processing...") : (isRegistering ? t("auth.createAccount", "Create account") : t("auth.logIn", "Log in"))}
                                 </button>
                             </form>
 
@@ -692,7 +761,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                                     onClick={() => { setLoginStage('email-otp'); setMessage(""); }}
                                     className={`mb-6 text-[14px] font-bold hover:opacity-70 transition-opacity ${textColorClass}`}
                                 >
-                                    Log in with Email Code
+                                    {t("auth.continueEmail", "Log in with Email Code")}
                                 </button>
                             )}
 
@@ -701,7 +770,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                                 className={`text-[14px] font-bold hover:opacity-70 transition-opacity flex items-center gap-1.5 ${textColorClass}`}
                             >
                                 <ArrowLeft size={16} />
-                                Back
+                                {t("common.back", "Back")}
                             </button>
 
                             {message && (
@@ -719,14 +788,14 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                     {loginStage === 'email-otp' && (
                         <div className="w-full flex flex-col items-center animate-in fade-in slide-in-from-right-4 duration-400">
                             <div className="text-center mb-5">
-                                <h3 className={`text-lg font-bold ${textColorClass}`}>Log in with Email Code</h3>
+                                <h3 className={`text-lg font-bold ${textColorClass}`}>{t("auth.continueEmail", "Log in with Email Code")}</h3>
                                 <p className={`mt-1.5 text-[12px] leading-relaxed font-medium transition-colors duration-700 ${secondaryTextColorClass}`}>
-                                    We'll send a 6-digit code to your email.
+                                    {t("auth.verifyCode", "We'll send a 6-digit code to your email.")}
                                 </p>
                             </div>
 
                             <form onSubmit={handleSendOtp} className="w-full flex flex-col gap-3 mb-6">
-                                <AuthField type="email" placeholder="name@company.com" value={email} onChange={setEmail} />
+                                <AuthField type="email" placeholder={t("auth.email", "Email address")} value={email} onChange={setEmail} />
 
                                 <button
                                     type="submit"
@@ -734,7 +803,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                                     className={`${primaryButtonClass} mt-2`}
                                 >
                                     {authLoading === "email-otp" && <Loader2 size={16} className="animate-spin text-black" />}
-                                    {authLoading === "email-otp" ? "Sending..." : "Send Code"}
+                                    {authLoading === "email-otp" ? t("common.loading", "Sending...") : t("auth.verify", "Send Code")}
                                 </button>
                             </form>
 
@@ -743,7 +812,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                                 className={`text-[14px] font-bold hover:opacity-70 transition-opacity flex items-center gap-1.5 ${textColorClass}`}
                             >
                                 <ArrowLeft size={16} />
-                                Back
+                                {t("common.back", "Back")}
                             </button>
 
                             {message && (
@@ -761,16 +830,16 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                     {loginStage === 'email-otp-verify' && (
                         <div className="w-full flex flex-col items-center animate-in fade-in slide-in-from-right-4 duration-400">
                             <div className="text-center mb-5">
-                                <h3 className={`text-lg font-bold ${textColorClass}`}>Enter Verification Code</h3>
+                                <h3 className={`text-lg font-bold ${textColorClass}`}>{t("auth.verifyCode", "Enter Verification Code")}</h3>
                                 <p className={`mt-1.5 text-[12px] leading-relaxed font-medium transition-colors duration-700 ${secondaryTextColorClass}`}>
-                                    Code sent to {email}
+                                    {email}
                                 </p>
                             </div>
 
                             <form onSubmit={handleVerifyOtp} className="w-full flex flex-col gap-3 mb-6">
                                 <AuthField
                                     type="text"
-                                    placeholder="6-digit code (e.g. 123456)"
+                                    placeholder={t("auth.verifyCode", "6-digit code")}
                                     value={otpCode}
                                     onChange={(v) => setOtpCode(v.replace(/\D/g, '').slice(0, 6))}
                                 />
@@ -781,7 +850,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                                     className={`${primaryButtonClass} mt-2`}
                                 >
                                     {authLoading === "email-otp-verify" && <Loader2 size={16} className="animate-spin text-black" />}
-                                    {authLoading === "email-otp-verify" ? "Verifying..." : "Verify"}
+                                    {authLoading === "email-otp-verify" ? t("common.loading", "Verifying...") : t("auth.verify", "Verify")}
                                 </button>
                             </form>
 
@@ -791,7 +860,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                                     disabled={resendCooldown > 0 || authLoading === "email-otp"}
                                     className={`text-[13px] font-bold hover:opacity-70 transition-opacity ${textColorClass} ${resendCooldown > 0 ? "opacity-50" : ""}`}
                                 >
-                                    {resendCooldown > 0 ? `Resend Code in ${resendCooldown}s` : "Resend Code"}
+                                    {resendCooldown > 0 ? `${t("common.retry", "Resend Code")} (${resendCooldown}s)` : t("common.retry", "Resend Code")}
                                 </button>
 
                                 <button
@@ -799,7 +868,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                                     className={`text-[14px] font-bold hover:opacity-70 transition-opacity flex items-center gap-1.5 ${textColorClass}`}
                                 >
                                     <ArrowLeft size={16} />
-                                    Change email
+                                    {t("common.back", "Change email")}
                                 </button>
                             </div>
 
@@ -818,16 +887,16 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                     {loginStage === 'mfa' && (
                         <div className="w-full flex flex-col items-center animate-in fade-in slide-in-from-right-4 duration-400">
                             <div className="text-center mb-5">
-                                <h3 className={`text-lg font-bold ${textColorClass}`}>Two-factor authentication</h3>
+                                <h3 className={`text-lg font-bold ${textColorClass}`}>{t("settings.tabs.security", "Two-factor authentication")}</h3>
                                 <p className={`mt-1.5 text-[12px] leading-relaxed font-medium transition-colors duration-700 ${secondaryTextColorClass}`}>
-                                    Enter the 6-digit verification code from your authenticator app.
+                                    {t("auth.verifyCode", "Enter the 6-digit verification code from your authenticator app.")}
                                 </p>
                             </div>
 
                             <form onSubmit={handleMfaVerify} className="w-full flex flex-col gap-3 mb-6">
                                 <AuthField
                                     type="text"
-                                    placeholder="6-digit code (e.g. 123456)"
+                                    placeholder={t("auth.verifyCode", "6-digit code")}
                                     value={mfaCode}
                                     onChange={(v) => setMfaCode(v.replace(/\D/g, '').slice(0, 6))}
                                 />
@@ -838,7 +907,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                                     className={`${primaryButtonClass} mt-2`}
                                 >
                                     {authLoading === "mfa" && <Loader2 size={16} className="animate-spin text-black" />}
-                                    {authLoading === "mfa" ? "Verifying..." : "Verify & Continue"}
+                                    {authLoading === "mfa" ? t("common.loading", "Verifying...") : t("auth.verify", "Verify & Continue")}
                                 </button>
                             </form>
 
@@ -847,7 +916,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                                 className={`text-[14px] font-bold hover:opacity-70 transition-opacity flex items-center gap-1.5 ${textColorClass}`}
                             >
                                 <ArrowLeft size={16} />
-                                Back to Log in
+                                {t("common.back", "Back to Log in")}
                             </button>
 
                             {message && (
@@ -872,21 +941,63 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
     )
 }
 
-function ProviderButton({ icon, label, onClick, disabled }: { icon: React.ReactNode; label: string; onClick?: () => void; disabled?: boolean }) {
+const GoogleIcon = () => (
+    <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
+        <path
+            fill="#4285F4"
+            d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3h3.86c2.26-2.09 3.685-5.17 3.685-9.09z"
+        />
+        <path
+            fill="#34A853"
+            d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.29v3.09C3.26 21.3 7.31 24 12 24z"
+        />
+        <path
+            fill="#FBBC05"
+            d="M5.27 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.61H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.39l3.98-3.1z"
+        />
+        <path
+            fill="#EA4335"
+            d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.61l3.98 3.1c.95-2.85 3.6-4.96 6.73-4.96z"
+        />
+    </svg>
+);
+
+function ProviderButton({
+    icon,
+    label,
+    onClick,
+    disabled,
+    badge,
+    children
+}: {
+    icon: React.ReactNode;
+    label: string;
+    onClick?: () => void;
+    disabled?: boolean;
+    badge?: string;
+    children?: React.ReactNode;
+}) {
     return (
-        <button
-            type="button"
-            onClick={onClick}
-            disabled={disabled}
-            className={`w-full rounded-full py-4 px-6 text-[15px] font-semibold transition-all active:scale-[0.98] bg-white text-black shadow-[0_4px_20px_rgba(0,0,0,0.15)] flex items-center justify-center relative hover:bg-neutral-50 ${disabled ? "opacity-70 pointer-events-none" : ""}`}
-        >
-            <span className="absolute left-6 flex items-center opacity-90">
-                {icon}
-            </span>
-            <span>{label}</span>
-            {!onClick && <span className="absolute right-6 text-[9px] uppercase tracking-wider font-bold opacity-40">Coming Soon</span>}
-        </button>
-    )
+        <div className="relative w-full h-[50px] overflow-hidden rounded-full">
+            <button
+                type="button"
+                onClick={onClick}
+                disabled={disabled}
+                className={`w-full h-full rounded-full px-6 text-[14px] font-semibold transition-all active:scale-[0.98] bg-white text-black shadow-[0_4px_16px_rgba(0,0,0,0.12)] flex items-center justify-center relative hover:bg-neutral-50 ${disabled ? "opacity-70 cursor-not-allowed" : "cursor-pointer"}`}
+            >
+                <span className="absolute left-6 flex items-center justify-center w-5 h-5 opacity-90">
+                    {icon}
+                </span>
+                <span>{label}</span>
+                {badge && (
+                    <span className="absolute right-6 text-[9px] uppercase tracking-wider font-bold opacity-40">
+                        {badge}
+                    </span>
+                )}
+            </button>
+            {children}
+        </div>
+    );
 }
 
 function AuthField({ type, placeholder, value, onChange }: {

@@ -25,3 +25,7 @@ dist-ssr
 
 # Uploaded documents
 backend/uploads/
+
+# Playwright
+/playwright-report/
+/test-results/

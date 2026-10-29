@@ -37,6 +37,7 @@ from app.schemas.auth import (
     EmailSendRequest,
     EmailVerifyRequest,
     EmailAccountVerifyRequest,
+    ProfileUpdateRequest,
 )
 from app.security import (
     create_access_token,
@@ -134,6 +135,25 @@ def get_current_user(
         )
 
     return user
+
+
+def get_current_user_optional(
+    credentials: HTTPAuthorizationCredentials | None = Depends(security),
+    db: Session = Depends(get_db),
+) -> User | None:
+    """Returns authenticated User if valid token present, else None without raising 401."""
+    if credentials is None:
+        return None
+    try:
+        payload = decode_access_token(credentials.credentials)
+        if payload is None or payload.get("type") == "mfa_challenge":
+            return None
+        user_id = payload.get("sub")
+        if user_id is None:
+            return None
+        return db.query(User).filter(User.id == int(user_id)).first()
+    except Exception:
+        return None
 
 
 def require_roles(*roles: str):
@@ -476,6 +496,38 @@ def change_password(
 
     return {
         "message": "Password changed successfully"
+    }
+
+
+@router.put("/profile")
+def update_profile(
+    payload: ProfileUpdateRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    trimmed_name = payload.full_name.strip()
+    if not trimmed_name:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Full name cannot be blank",
+        )
+    current_user.full_name = trimmed_name
+    db.commit()
+    db.refresh(current_user)
+
+    return {
+        "id": current_user.id,
+        "email": current_user.email,
+        "full_name": current_user.full_name,
+        "role": current_user.role,
+        "is_active": current_user.is_active,
+        "mfa_enabled": current_user.mfa_enabled,
+        "has_password": bool(current_user.password_hash),
+        "google_linked": bool(current_user.google_id),
+        "apple_linked": bool(current_user.apple_id),
+        "phone_linked": bool(current_user.phone_number),
+        "email_verified": current_user.email_verified,
+        "message": "Profile updated successfully",
     }
 
 

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { OpusLexBrand } from "./OpusLexBrand"
-import { usePreferences, type FontSize, type Density, type LandingSection, type NotificationCategory } from "../contexts/PreferencesContext"
+import { usePreferences, type FontSize, type Density, type LandingSection, type NotificationCategory, type ThemeMode } from "../contexts/PreferencesContext"
 import {
     Activity,
     Bell,
@@ -18,6 +18,7 @@ import {
     BarChart2,
     Copy,
     Check,
+    Globe,
 } from "lucide-react"
 
 
@@ -33,6 +34,12 @@ import Governance from "./Governance"
 import Integrations from "./Integrations"
 import Help from "./Help"
 import Reports from "./Reports"
+import LanguageSelector from "./LanguageSelector"
+import { LANGUAGES } from "../i18n/languages"
+import type { AssistantOrbState } from "./assistant/AssistantOrb"
+import AssistantPanel from "./assistant/AssistantPanel"
+import AssistantSettingsTab from "./assistant/AssistantSettingsTab"
+import { getAssistantShortcuts, isEditableElement } from "../utils/keyboardShortcuts"
 
 type Section =
     | "home"
@@ -215,12 +222,12 @@ function SettingsWorkspace({ user, onRefreshUser }: { user?: any; onRefreshUser?
         fontSize, setFontSize,
         density, setDensity,
         landingSection, setLandingSection,
+        theme, setTheme, resolvedTheme,
         reduceMotion, setReduceMotion,
         largerTargets, setLargerTargets,
         highContrast, setHighContrast,
         navConfig, setNavConfig,
         notificationPrefs, setNotificationPrefs,
-        language, setLanguage,
         workspaceName, setWorkspaceName,
     } = usePreferences()
     const { t } = useTranslation()
@@ -232,6 +239,56 @@ function SettingsWorkspace({ user, onRefreshUser }: { user?: any; onRefreshUser?
     const [passwordLoading, setPasswordLoading] = useState(false)
     const [passwordError, setPasswordError] = useState<string | null>(null)
     const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null)
+
+    // Profile state
+    const [editFullName, setEditFullName] = useState(user?.full_name || "")
+    const [profileLoading, setProfileLoading] = useState(false)
+    const [profileSuccess, setProfileSuccess] = useState<string | null>(null)
+    const [profileError, setProfileError] = useState<string | null>(null)
+
+    useEffect(() => {
+        if (user?.full_name) {
+            setEditFullName(user.full_name)
+        }
+    }, [user?.full_name])
+
+    const handleSaveProfile = async (e?: React.FormEvent) => {
+        if (e) e.preventDefault()
+        setProfileError(null)
+        setProfileSuccess(null)
+        const trimmed = editFullName.trim()
+        if (!trimmed) {
+            setProfileError("Full Name cannot be empty.")
+            return
+        }
+
+        const token = localStorage.getItem("access_token") ?? ""
+        setProfileLoading(true)
+        try {
+            const res = await fetch("http://127.0.0.1:8000/api/v1/auth/profile", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ full_name: trimmed })
+            })
+            const data = await res.json()
+            if (!res.ok) {
+                setProfileError(data.detail || "Failed to update profile.")
+                return
+            }
+            setProfileSuccess("Profile updated successfully.")
+            if (onRefreshUser) {
+                onRefreshUser()
+            }
+            setTimeout(() => setProfileSuccess(null), 3000)
+        } catch {
+            setProfileError("Network error. Please try again.")
+        } finally {
+            setProfileLoading(false)
+        }
+    }
 
     // 2FA state
     const [mfaEnabled, setMfaEnabled] = useState<boolean>(user?.mfa_enabled ?? false)
@@ -593,6 +650,10 @@ function SettingsWorkspace({ user, onRefreshUser }: { user?: any; onRefreshUser?
                 setMetricsLoading(true)
                 setMetricsError(false)
                 const token = localStorage.getItem("access_token")
+                if (!token) {
+                    setMetricsLoading(false)
+                    return
+                }
                 try {
                     const res = await fetch("http://127.0.0.1:8000/api/v1/workspace/overview", {
                         headers: { Authorization: `Bearer ${token}` }
@@ -600,6 +661,9 @@ function SettingsWorkspace({ user, onRefreshUser }: { user?: any; onRefreshUser?
                     if (res.ok) {
                         setWorkspaceMetrics(await res.json())
                     } else {
+                        if (res.status === 401) {
+                            localStorage.removeItem("access_token")
+                        }
                         setMetricsError(true)
                     }
                 } catch {
@@ -823,6 +887,12 @@ function SettingsWorkspace({ user, onRefreshUser }: { user?: any; onRefreshUser?
         { value: "compact",     label: "Compact",     desc: "Tighter, denser layout" },
     ]
 
+    const themeOptions: { value: ThemeMode; label: string; desc: string }[] = [
+        { value: "light", label: t("settings.appearance.theme.light"), desc: t("settings.appearance.theme.lightDesc") },
+        { value: "dark",  label: t("settings.appearance.theme.dark"),  desc: t("settings.appearance.theme.darkDesc") },
+        { value: "auto",  label: t("settings.appearance.theme.auto"),  desc: t("settings.appearance.theme.autoDesc") },
+    ]
+
     const categories = [
         {
             title: "GENERAL",
@@ -830,7 +900,8 @@ function SettingsWorkspace({ user, onRefreshUser }: { user?: any; onRefreshUser?
                 { id: "general",       label: "General" },
                 { id: "appearance",    label: "Appearance" },
                 { id: "accessibility", label: "Accessibility" },
-                { id: "language",      label: "Language" }
+                { id: "language",      label: "Language" },
+                { id: "assistant",     label: "AI Assistant" }
             ]
         },
         {
@@ -862,7 +933,7 @@ function SettingsWorkspace({ user, onRefreshUser }: { user?: any; onRefreshUser?
         }
     ]
 
-    const allConfigured = ["appearance", "general", "accessibility", "notifications", "profile", "security", "data", "storage", "language", "privacy", "advanced"]
+    const allConfigured = ["appearance", "general", "accessibility", "notifications", "profile", "security", "data", "storage", "language", "privacy", "advanced", "assistant"]
 
     return (
         <div className="flex h-[calc(100vh-4rem)] max-w-5xl mx-auto py-6">
@@ -923,9 +994,16 @@ function SettingsWorkspace({ user, onRefreshUser }: { user?: any; onRefreshUser?
                             </SettingsSection>
 
                             <SettingsSection title={t("settings.appearance.theme.title")} description={t("settings.appearance.theme.description")}>
-                                <div className="p-4 rounded-xl border border-neutral-200 bg-neutral-50 text-body text-neutral-500 text-center">
-                                    {t("settings.appearance.theme.comingSoon")}
-                                </div>
+                                <GlassSelector
+                                    options={themeOptions}
+                                    value={theme}
+                                    onChange={setTheme as (v: string) => void}
+                                />
+                                <p className="text-caption text-neutral-400 mt-2">
+                                    {theme === "auto"
+                                        ? `${t("settings.appearance.theme.autoDescription")} (${resolvedTheme === "dark" ? t("settings.appearance.theme.dark") : t("settings.appearance.theme.light")})`
+                                        : themeOptions.find(o => o.value === theme)?.desc}
+                                </p>
                             </SettingsSection>
                         </>
                     )}
@@ -994,28 +1072,15 @@ function SettingsWorkspace({ user, onRefreshUser }: { user?: any; onRefreshUser?
                     {activeTab === "language" && (
                         <>
                             <SettingsHeader title={t("settings.language.headerTitle")} sub={t("settings.language.headerSub")} />
-                            <div className="rounded-xl border border-neutral-200 bg-white p-2">
-                                <button
-                                    onClick={() => setLanguage("en")}
-                                    className={`w-full flex items-center justify-between p-3 rounded-lg text-left transition-colors ${language === "en" ? "bg-neutral-100" : "hover:bg-neutral-50"}`}
-                                    aria-pressed={language === "en"}
-                                >
-                                    <div>
-                                        <p className="text-body font-medium text-neutral-900">{t("settings.language.english")}</p>
-                                    </div>
-                                    {language === "en" && <span className="text-caption px-2 py-1 bg-neutral-900 rounded text-white font-medium">{t("settings.language.active")}</span>}
-                                </button>
-                                <button
-                                    onClick={() => setLanguage("es")}
-                                    className={`w-full flex items-center justify-between p-3 rounded-lg text-left transition-colors ${language === "es" ? "bg-neutral-100" : "hover:bg-neutral-50"}`}
-                                    aria-pressed={language === "es"}
-                                >
-                                    <div>
-                                        <p className="text-body font-medium text-neutral-900">{t("settings.language.spanish")}</p>
-                                    </div>
-                                    {language === "es" && <span className="text-caption px-2 py-1 bg-neutral-900 rounded text-white font-medium">{t("settings.language.active")}</span>}
-                                </button>
-                            </div>
+                            <LanguageSelector />
+                        </>
+                    )}
+
+                    {/* ── AI ASSISTANT ── */}
+                    {activeTab === "assistant" && (
+                        <>
+                            <SettingsHeader title={t("settings.assistant.headerTitle", "AI Assistant")} sub={t("settings.assistant.headerSub", "Configure AI Assistant voice, shortcuts, and permissions.")} />
+                            <AssistantSettingsTab />
                         </>
                     )}
 
@@ -1233,21 +1298,78 @@ function SettingsWorkspace({ user, onRefreshUser }: { user?: any; onRefreshUser?
                     {/* ── PROFILE ── */}
                     {activeTab === "profile" && (
                         <>
-                            <SettingsHeader title="Profile" sub="Your account information. Contact your administrator to update." />
-                            <div className="space-y-4">
-                                {[
-                                    { label: "Full Name",     value: user?.full_name },
-                                    { label: "Email Address", value: user?.email },
-                                    { label: "Role",          value: user?.role },
-                                ].map(({ label, value }) => (
-                                    <div key={label}>
-                                        <label className="block text-label font-medium text-neutral-500 uppercase tracking-wider mb-1.5">{label}</label>
-                                        <div className="px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-body text-neutral-700 capitalize">
-                                            {value || "Not available"}
-                                        </div>
+                            <SettingsHeader
+                                title="Account Profile"
+                                sub="Manage your display name and view workspace credentials."
+                            />
+                            {profileSuccess && (
+                                <div className="p-3 mb-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
+                                    <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                                    <span>{profileSuccess}</span>
+                                </div>
+                            )}
+                            {profileError && (
+                                <div className="p-3 mb-4 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-xs text-red-800 dark:text-red-300 flex items-center gap-2">
+                                    <X className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0" />
+                                    <span>{profileError}</span>
+                                </div>
+                            )}
+                            <form onSubmit={handleSaveProfile} className="space-y-5">
+                                <div>
+                                    <label htmlFor="profile-fullname-settings" className="block text-label font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-1.5">
+                                        Full Name / Display Name
+                                    </label>
+                                    <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+                                        <input
+                                            id="profile-fullname-settings"
+                                            type="text"
+                                            value={editFullName}
+                                            onChange={(e) => setEditFullName(e.target.value)}
+                                            placeholder="Enter your full name"
+                                            maxLength={255}
+                                            required
+                                            className="flex-1 rounded-full border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#1a1a1a] px-4 py-2.5 text-body text-neutral-900 dark:text-white focus:border-[#FBC648] focus:outline-none focus:ring-1 focus:ring-[#FBC648] transition-colors"
+                                        />
+                                        <button
+                                            type="submit"
+                                            disabled={profileLoading || editFullName.trim() === (user?.full_name || "")}
+                                            className="rounded-full bg-neutral-900 dark:bg-white px-5 py-2.5 text-xs font-semibold text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 disabled:opacity-40 transition-colors shrink-0"
+                                        >
+                                            {profileLoading ? "Saving..." : "Save Profile"}
+                                        </button>
                                     </div>
-                                ))}
-                            </div>
+                                    <p className="text-caption text-neutral-400 dark:text-neutral-500 mt-1.5">
+                                        Your display name appears across workspace navigation, audit log attribution, and investigations.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <label className="block text-label font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-1.5">
+                                        Email Address (Login Identifier)
+                                    </label>
+                                    <div className="px-4 py-3 bg-neutral-50 dark:bg-[#171717] border border-neutral-200 dark:border-[#262626] rounded-full text-body text-neutral-700 dark:text-neutral-300 flex items-center justify-between">
+                                        <span className="font-mono text-xs">{user?.email || "Not available"}</span>
+                                        <span className="text-[11px] font-medium text-neutral-400 dark:text-neutral-500 bg-neutral-200 dark:bg-[#262626] px-2.5 py-0.5 rounded-full">
+                                            Permanent ID
+                                        </span>
+                                    </div>
+                                    <p className="text-caption text-neutral-400 dark:text-neutral-500 mt-1.5">
+                                        The application uses verified email as the stable primary identifier for account uniqueness and session cryptography.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <label className="block text-label font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-1.5">
+                                        Role & Access Tier
+                                    </label>
+                                    <div className="px-4 py-3 bg-neutral-50 dark:bg-[#171717] border border-neutral-200 dark:border-[#262626] rounded-full text-body text-neutral-700 dark:text-neutral-300 flex items-center justify-between">
+                                        <span className="capitalize font-medium">{user?.role || "Viewer"}</span>
+                                        <span className="text-[11px] font-medium text-neutral-500 dark:text-neutral-400">
+                                            Assigned by Administrator
+                                        </span>
+                                    </div>
+                                </div>
+                            </form>
                         </>
                     )}
 
@@ -2136,6 +2258,7 @@ function HomeWorkspace({
         )
     }
 
+    const { t } = useTranslation()
     const [data, setData] = useState<OverviewData | null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState("")
@@ -2143,11 +2266,18 @@ function HomeWorkspace({
     useEffect(() => {
         const fetchOverview = async () => {
             const token = localStorage.getItem("access_token")
-            if (!token) return
+            if (!token) {
+                setLoading(false)
+                return
+            }
             try {
                 const res = await fetch("http://127.0.0.1:8000/api/v1/workspace/overview", {
                     headers: { Authorization: `Bearer ${token}` }
                 })
+                if (res.status === 401) {
+                    localStorage.removeItem("access_token")
+                    throw new Error("Session expired. Please log in again.")
+                }
                 if (!res.ok) throw new Error("Failed to load workspace overview")
                 setData(await res.json())
             } catch (err: any) {
@@ -2162,7 +2292,7 @@ function HomeWorkspace({
     if (loading) {
         return (
             <div className="flex min-h-[520px] items-center justify-center">
-                <p className="text-sm text-neutral-500">Loading workspace...</p>
+                <p className="text-sm text-neutral-500">{t("common.loading", "Loading workspace...")}</p>
             </div>
         )
     }
@@ -2181,13 +2311,13 @@ function HomeWorkspace({
                 <div className="mb-5 flex items-start justify-between">
                     <div>
                         <p className="text-xs font-medium uppercase tracking-[0.14em] text-neutral-400">
-                            Workspace
+                            {t("dashboard.activeWorkspace", "Workspace")}
                         </p>
                         <h1 className="mt-2 text-xl font-semibold tracking-tight">
-                            Good morning, {user?.full_name?.split(' ')[0] || "User"}
+                            {t("dashboard.welcomeBack", "Welcome back")}, {user?.full_name?.split(' ')[0] || "User"}
                         </h1>
                         <p className="mt-1 text-sm text-neutral-500">
-                            Your legal and compliance workspace.
+                            {t("dashboard.systemOperational", "Your legal and compliance workspace.")}
                         </p>
                     </div>
                     <button
@@ -2195,27 +2325,27 @@ function HomeWorkspace({
                         className="flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-xs text-neutral-600 hover:bg-neutral-50"
                     >
                         <Sparkles size={13} />
-                        Open Research
+                        {t("dashboard.quickLaunch.askResearch", "Open Research")}
                     </button>
                 </div>
 
                 <div className="grid gap-3 md:grid-cols-3">
                     <MetricCard
-                        label="Active Investigations"
+                        label={t("dashboard.stats.activeInvestigations", "Active Investigations")}
                         value={data?.metrics.active_investigations.toString() || "0"}
-                        detail="Investigations requiring attention"
+                        detail={t("dashboard.recentInvestigations.title", "Investigations requiring attention")}
                         onClick={onOpenInvestigations}
                     />
                     <MetricCard
-                        label="Total Documents"
+                        label={t("dashboard.stats.documentsIndexed", "Total Documents")}
                         value={data?.metrics.total_documents.toString() || "0"}
-                        detail="Stored in your workspace"
+                        detail={t("dashboard.stats.documentsIndexed", "Stored in your workspace")}
                         onClick={onOpenInvestigations}
                     />
                     <MetricCard
-                        label="Agent Runs"
+                        label={t("dashboard.stats.recentFindings", "Agent Runs")}
                         value={data?.metrics.total_agent_runs.toString() || "0"}
-                        detail="Total compliance analyses"
+                        detail={t("dashboard.stats.recentFindings", "Total compliance analyses")}
                         onClick={onOpenAgents}
                     />
                 </div>
@@ -2224,11 +2354,11 @@ function HomeWorkspace({
                     <div className="card-enterprise rounded-xl border border-neutral-200 bg-white">
                         <div className="flex items-center justify-between border-b border-neutral-100 px-4 py-3">
                             <div>
-                                <h2 className="text-sm font-semibold">Active Investigations</h2>
-                                <p className="mt-1 text-xs text-neutral-400">Investigations currently requiring attention</p>
+                                <h2 className="text-sm font-semibold">{t("dashboard.recentInvestigations.title", "Active Investigations")}</h2>
+                                <p className="mt-1 text-xs text-neutral-400">{t("dashboard.recentInvestigations.title", "Investigations currently requiring attention")}</p>
                             </div>
                             <button onClick={onOpenInvestigations} className="text-xs text-neutral-400 hover:text-neutral-700">
-                                View all
+                                {t("dashboard.recentInvestigations.viewAll", "View all")}
                             </button>
                         </div>
 
@@ -2267,7 +2397,7 @@ function HomeWorkspace({
                             </div>
                         ) : (
                             <div className="p-8 text-center text-neutral-500 text-xs">
-                                No active investigations found.
+                                {t("dashboard.recentInvestigations.empty", "No active investigations found.")}
                             </div>
                         )}
                     </div>
@@ -2275,8 +2405,8 @@ function HomeWorkspace({
                     <div className="card-enterprise rounded-xl border border-neutral-200 bg-white">
                         <div className="flex items-center justify-between border-b border-neutral-100 px-4 py-3">
                             <div>
-                                <h2 className="text-sm font-semibold">Recent Activity</h2>
-                                <p className="mt-1 text-xs text-neutral-400">Latest workspace activity</p>
+                                <h2 className="text-sm font-semibold">{t("dashboard.activityFeed.title", "Recent Activity")}</h2>
+                                <p className="mt-1 text-xs text-neutral-400">{t("dashboard.activityFeed.title", "Latest workspace activity")}</p>
                             </div>
                         </div>
 
@@ -2309,7 +2439,7 @@ function HomeWorkspace({
                             </div>
                         ) : (
                             <div className="p-8 text-center text-neutral-500 text-xs">
-                                No recent activity.
+                                {t("dashboard.activityFeed.empty", "No recent activity.")}
                             </div>
                         )}
                     </div>
@@ -2400,7 +2530,9 @@ function ActivityRow({
 
 function Dashboard() {
     const { t } = useTranslation()
-    const { navConfig, notificationPrefs } = usePreferences()
+    const { navConfig, notificationPrefs, language, setLanguage } = usePreferences()
+    const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
+    const langDropdownRef = useRef<HTMLDivElement>(null)
     // Initialise from user's preferred landing section
     const [activeSection, setActiveSection] = useState<Section>(() => {
         if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
@@ -2414,7 +2546,74 @@ function Dashboard() {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [showProfile, setShowProfile] = useState(false)
     const [showFaq, setShowFaq] = useState(false)
+    const [modalNameInput, setModalNameInput] = useState("")
+    const [modalSaving, setModalSaving] = useState(false)
+    const [modalError, setModalError] = useState<string | null>(null)
     const menuRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if (user?.full_name) {
+            setModalNameInput(user.full_name)
+        }
+    }, [user?.full_name])
+
+    // ── AI Assistant (Themis) State & OS-Aware Shortcuts ──────────────────
+    const [isAssistantOpen, setIsAssistantOpen] = useState(false)
+    const [assistantMode, setAssistantMode] = useState<"voice" | "text">("voice")
+    const [assistantOrbState, setAssistantOrbState] = useState<AssistantOrbState>("idle")
+    const [assistantEnabled] = useState(() => localStorage.getItem("pref_assistant_enabled") !== "false")
+    const [assistantPermissionLevel] = useState(() => parseInt(localStorage.getItem("pref_assistant_permission_level") || "1", 10))
+    const [assistantVoiceEnabled, setAssistantVoiceEnabled] = useState(() => localStorage.getItem("pref_assistant_voice_enabled") === "true")
+    const osShortcuts = useMemo(() => getAssistantShortcuts(), [])
+
+    // Dedicated OS-aware shortcut listener (suppressed in editable elements)
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.repeat || isEditableElement(e.target)) {
+                return
+            }
+
+            // Voice activation (⌥A on macOS / Alt+A on Windows)
+            if (osShortcuts.isVoiceShortcut(e)) {
+                e.preventDefault()
+                e.stopPropagation()
+                setIsAssistantOpen(prev => {
+                    if (prev && assistantMode === "voice") {
+                        return false
+                    }
+                    setAssistantMode("voice")
+                    return true
+                })
+                return
+            }
+
+            // Text/Spotlight activation (⌘K on macOS / Ctrl+K on Windows)
+            if (osShortcuts.isTextShortcut(e)) {
+                e.preventDefault()
+                e.stopPropagation()
+                setIsAssistantOpen(prev => {
+                    if (prev && assistantMode === "text") {
+                        return false
+                    }
+                    setAssistantMode("text")
+                    return true
+                })
+                return
+            }
+        }
+        window.addEventListener("keydown", handleKeyDown)
+        return () => window.removeEventListener("keydown", handleKeyDown)
+    }, [osShortcuts, assistantMode])
+
+    // Listen for "Hey Themis" wake-word event
+    useEffect(() => {
+        const handleTriggerVoice = () => {
+            setAssistantMode("voice")
+            setIsAssistantOpen(true)
+        }
+        window.addEventListener("themis:trigger_voice", handleTriggerVoice)
+        return () => window.removeEventListener("themis:trigger_voice", handleTriggerVoice)
+    }, [])
 
     // ── Global Search ──────────────────────────────────────────────────────
     const [searchOpen, setSearchOpen] = useState(false)
@@ -2436,11 +2635,11 @@ function Dashboard() {
 
     // ── Top-nav tabs bubble ────────────────────────────────────────────────
     // "All" = home, "Reports" = audit, "Research" = research, "Agents" = agents
-    const topNavTabs: {label: string; section: Section}[] = [
-        { label: "All",      section: "home" },
-        { label: "Reports",  section: "reports" },
-        { label: "Research", section: "research" },
-        { label: "Agents",   section: "agents" },
+    const topNavTabs: {label: string; section: Section; key: string}[] = [
+        { label: "All",      section: "home",     key: "all" },
+        { label: "Reports",  section: "reports",  key: "reports" },
+        { label: "Research", section: "research", key: "research" },
+        { label: "Agents",   section: "agents",   key: "agents" },
     ]
     const activeTopTab = topNavTabs.find(t => t.section === activeSection)?.label ?? "All"
     const [topNavHover, setTopNavHover] = useState<number | null>(null)
@@ -2574,12 +2773,19 @@ function Dashboard() {
     // Load recent activity into notifications
     useEffect(() => {
         const token = localStorage.getItem("access_token") ?? ""
-        if (!token) return
+        if (!token) {
+            setNotificationsLoading(false)
+            return
+        }
         setNotificationsLoading(true)
         setNotificationsError(null)
 
         fetch("http://127.0.0.1:8000/api/v1/workspace/overview", { headers: { Authorization: `Bearer ${token}` } })
             .then(r => {
+                if (r.status === 401) {
+                    localStorage.removeItem("access_token")
+                    throw new Error("Unauthorized")
+                }
                 if (!r.ok) throw new Error("Failed to load workspace activity")
                 return r.json()
             })
@@ -2659,6 +2865,9 @@ function Dashboard() {
             })
             if (res.ok) {
                 setUser(await res.json())
+            } else if (res.status === 401) {
+                localStorage.removeItem("access_token")
+                setUser(null)
             }
         } catch (e) {}
     }, [])
@@ -2678,6 +2887,9 @@ function Dashboard() {
             if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
                 setShowNotifications(false)
             }
+            if (langDropdownRef.current && !langDropdownRef.current.contains(event.target as Node)) {
+                setShowLanguageDropdown(false)
+            }
         }
         document.addEventListener("mousedown", handleClickOutside)
         return () => document.removeEventListener("mousedown", handleClickOutside)
@@ -2690,9 +2902,11 @@ function Dashboard() {
                 setShowProfile(false)
                 setSearchOpen(false)
                 setShowNotifications(false)
+                setIsAssistantOpen(false)
+                setShowLanguageDropdown(false)
             }
-            // Cmd+K or Ctrl+K opens search
-            if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+            // Press '/' outside editable fields to open workspace search
+            if (e.key === "/" && !isEditableElement(e.target) && !isAssistantOpen) {
                 e.preventDefault()
                 setSearchOpen(true)
                 setTimeout(() => searchInputRef.current?.focus(), 50)
@@ -2700,7 +2914,7 @@ function Dashboard() {
         }
         document.addEventListener("keydown", handleKeyDown)
         return () => document.removeEventListener("keydown", handleKeyDown)
-    }, [])
+    }, [isAssistantOpen])
 
     const handleLogout = () => {
         localStorage.removeItem("access_token")
@@ -2740,8 +2954,8 @@ function Dashboard() {
     }, [navConfig])
 
     return (
-        <div className="h-[100dvh] overflow-hidden bg-neutral-50 text-neutral-900 flex">
-            <aside className="flex flex-col h-[100dvh] w-[240px] shrink-0 border-r border-neutral-200 bg-white">
+        <div className="h-[100dvh] overflow-hidden bg-neutral-50 dark:bg-[#0d0d0d] text-neutral-900 dark:text-[#ececec] flex transition-colors">
+            <aside className="flex flex-col h-[100dvh] w-[240px] shrink-0 border-r border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#171717] transition-colors">
                     {/* Brand lockup */}
                     <button
                         className="flex shrink-0 items-center px-5 py-4 transition hover:opacity-80"
@@ -2752,7 +2966,7 @@ function Dashboard() {
 
                     <div className="flex-1 overflow-y-auto px-3 py-2">
                         <div className="mb-2">
-                            <p className="px-2 pb-2 text-caption font-semibold uppercase tracking-wider text-neutral-400">
+                            <p className="px-2 pb-2 text-caption font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
                                 Workspace
                             </p>
                         </div>
@@ -2762,10 +2976,10 @@ function Dashboard() {
                                 <button
                                     key={item.id}
                                     onClick={() => setActiveSection(item.id)}
-                                    className={`nav-pill flex w-full items-center gap-3 px-3 py-2 text-left text-body ${
+                                    className={`nav-pill flex w-full items-center gap-3 px-3 py-2 text-left text-body transition-colors ${
                                         activeSection === item.id
-                                            ? "active font-medium text-neutral-900"
-                                            : "text-neutral-500 hover:text-neutral-900"
+                                            ? "active font-medium text-neutral-900 dark:text-white"
+                                            : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
                                     }`}
                                 >
                                     {item.icon}
@@ -2775,68 +2989,72 @@ function Dashboard() {
                         </nav>
                     </div>
 
-                    <div className="shrink-0 border-t border-neutral-200 p-3 relative" ref={menuRef}>
-                        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="profile-tile flex w-full items-center gap-3 p-2 text-left group">
-                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-sm font-medium text-white shadow-sm" style={{ aspectRatio: '1/1' }}>
+                    <div className="shrink-0 border-t border-neutral-200 dark:border-[#262626] p-3 relative" ref={menuRef}>
+                        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="profile-tile flex w-full items-center gap-3 p-2 text-left group rounded-xl hover:bg-neutral-100 dark:hover:bg-[#212121] transition-colors">
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-neutral-900 dark:bg-[#262626] text-sm font-medium text-white shadow-sm" style={{ aspectRatio: '1/1' }}>
                                 {initials}
                             </div>
 
                             <div className="min-w-0 flex-1">
-                                <p className="truncate text-body font-medium text-neutral-900">
+                                <p className="truncate text-body font-medium text-neutral-900 dark:text-white">
                                     {user?.full_name || "Loading..."}
                                 </p>
-                                <p className="truncate text-caption text-neutral-500">
+                                <p className="truncate text-caption text-neutral-500 dark:text-neutral-400">
                                     OpusLex Workspace{user?.role ? ` • ${user.role.charAt(0).toUpperCase() + user.role.slice(1)}` : ""}
                                 </p>
                             </div>
 
-                            <ChevronRight size={16} className="text-neutral-400 group-hover:text-neutral-600" style={{ transition: "color 160ms ease" }} />
+                            <ChevronRight size={16} className="text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-600 dark:group-hover:text-neutral-300" style={{ transition: "color 160ms ease" }} />
                         </button>
 
                         {isMenuOpen && (
-                            <div className="absolute bottom-[calc(100%+8px)] left-3 w-[calc(100%-24px)] rounded-xl border border-neutral-200 bg-white shadow-xl p-1.5 z-50 overflow-hidden">
-                                <div className="px-3 py-2.5 border-b border-neutral-100 mb-1.5">
-                                    <p className="text-body font-medium text-neutral-900 truncate">{user?.full_name}</p>
-                                    <p className="text-caption text-neutral-500 truncate">{user?.email}</p>
+                            <div className="absolute bottom-[calc(100%+8px)] left-3 w-[calc(100%-24px)] rounded-xl border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#1a1a1a] shadow-xl p-1.5 z-50 overflow-hidden transition-colors">
+                                <div className="px-3 py-2.5 border-b border-neutral-100 dark:border-[#262626] mb-1.5">
+                                    <p className="text-body font-medium text-neutral-900 dark:text-white truncate">{user?.full_name}</p>
+                                    <p className="text-caption text-neutral-500 dark:text-neutral-400 truncate">{user?.email}</p>
                                 </div>
                                 <div className="p-1 space-y-0.5">
-                                    <button onClick={() => { setShowProfile(true); setIsMenuOpen(false); }} className="menu-item w-full text-left px-2.5 py-2 text-body text-neutral-700">{t("settings.tabs.profile")}</button>
-                                    <button onClick={() => { setActiveSection("settings"); setIsMenuOpen(false); }} className="menu-item w-full text-left px-2.5 py-2 text-body text-neutral-700">{t("nav.settings")}</button>
-                                    <button onClick={() => { setActiveSection("help"); setIsMenuOpen(false); }} className="menu-item w-full text-left px-2.5 py-2 text-body text-neutral-700">{t("nav.help")}</button>
+                                    <button onClick={() => { setIsAssistantOpen(true); setAssistantMode("voice"); setIsMenuOpen(false); }} className="menu-item w-full text-left px-2.5 py-2 text-body text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-[#262626] rounded-lg transition-colors flex items-center justify-between">
+                                        <span>Themis Assistant</span>
+                                        <span className="text-[10px] font-mono text-neutral-400 bg-neutral-100 dark:bg-[#262626] px-1.5 py-0.5 rounded-full border border-neutral-200 dark:border-[#333]">{osShortcuts.voiceKeyLabel}</span>
+                                    </button>
+                                    <button onClick={() => { setShowProfile(true); setIsMenuOpen(false); }} className="menu-item w-full text-left px-2.5 py-2 text-body text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-[#262626] rounded-lg transition-colors">{t("settings.tabs.profile")}</button>
+                                    <button onClick={() => { setActiveSection("settings"); setIsMenuOpen(false); }} className="menu-item w-full text-left px-2.5 py-2 text-body text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-[#262626] rounded-lg transition-colors">{t("nav.settings")}</button>
+                                    <button onClick={() => { setActiveSection("help"); setIsMenuOpen(false); }} className="menu-item w-full text-left px-2.5 py-2 text-body text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-[#262626] rounded-lg transition-colors">{t("nav.help")}</button>
                                 </div>
-                                <div className="mt-1.5 p-1 border-t border-neutral-100">
-                                    <button onClick={handleLogout} className="menu-item menu-item-danger w-full text-left px-2.5 py-2 text-body text-red-600 font-medium">Log out</button>
+                                <div className="mt-1.5 p-1 border-t border-neutral-100 dark:border-[#262626]">
+                                    <button onClick={handleLogout} className="menu-item menu-item-danger w-full text-left px-2.5 py-2 text-body text-red-600 dark:text-red-400 font-medium hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors">{t("auth.logOut", "Log out")}</button>
                                 </div>
                             </div>
                         )}
                     </div>
             </aside>
             <main className="min-w-0 flex-1 flex flex-col h-[100dvh]">
-                <header className="shrink-0 flex h-16 items-center justify-between border-b border-neutral-200 bg-white px-5">
+                <header className="shrink-0 flex h-16 items-center justify-between border-b border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#171717] px-5 transition-colors">
                     <div className="flex items-center gap-5">
                         {/* ── Search pill + overlay ── */}
                         <div className="relative" ref={searchRef}>
                             <button
                                 id="global-search-trigger"
                                 onClick={() => { setSearchOpen(true); setTimeout(() => searchInputRef.current?.focus(), 50) }}
-                                className="search-pill flex items-center gap-2 px-3 py-2 cursor-text"
+                                className="search-pill flex items-center gap-2 px-3 py-2 cursor-text bg-neutral-50 dark:bg-[#212121] border border-neutral-200 dark:border-[#262626] rounded-full"
                             >
                                 <Search size={13} className="text-neutral-400" />
-                                <span className="w-36 bg-transparent text-xs text-neutral-400 select-none">Search workspace…</span>
-                                <span className="rounded border border-neutral-200 bg-neutral-50 px-1.5 py-0.5 text-xs text-neutral-400">⌘K</span>
+                                <span className="w-36 bg-transparent text-xs text-neutral-400 dark:text-neutral-500 select-none truncate">{t("dashboard.topNav.searchPlaceholder", "Search workspace…")}</span>
+                                <span className="rounded-full border border-neutral-200 dark:border-[#333333] bg-neutral-100 dark:bg-[#171717] px-2 py-0.5 text-xs text-neutral-400 dark:text-neutral-500 font-mono">/</span>
                             </button>
 
                             {searchOpen && (
-                                <div className="absolute top-[calc(100%+6px)] left-0 w-[420px] rounded-xl border border-neutral-200 bg-white shadow-xl z-50 overflow-hidden">
-                                    <div className="flex items-center gap-2 border-b border-neutral-100 px-3 py-2.5">
+                                <div className="absolute top-[calc(100%+6px)] left-0 w-[420px] rounded-xl border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#1a1a1a] shadow-xl z-50 overflow-hidden transition-colors">
+                                    <div className="flex items-center gap-2 border-b border-neutral-100 dark:border-[#262626] px-3 py-2.5">
                                         <Search size={13} className="shrink-0 text-neutral-400" />
                                         <input
                                             ref={searchInputRef}
                                             id="global-search-input"
                                             value={searchQuery}
                                             onChange={e => setSearchQuery(e.target.value)}
-                                            placeholder="Search investigations, policies, regulations…"
-                                            className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-400"
+                                            placeholder={t("dashboard.searchModal.placeholder", "Search investigations, policies, regulations…")}
+                                            className="flex-1 bg-transparent text-sm text-neutral-900 dark:text-white outline-none placeholder:text-neutral-400 dark:placeholder:text-neutral-500"
                                             autoComplete="off"
                                         />
                                         {searchQuery && (
@@ -2848,53 +3066,53 @@ function Dashboard() {
 
                                     <div className="py-1 max-h-72 overflow-y-auto">
                                         {searchLoading ? (
-                                            <p className="px-4 py-3 text-xs text-neutral-400">Searching…</p>
+                                            <p className="px-4 py-3 text-xs text-neutral-400">{t("common.loading", "Searching…")}</p>
                                         ) : searchError ? (
                                             <p className="px-4 py-3 text-xs text-red-500">{searchError}</p>
                                         ) : searchQuery && searchResults.length === 0 ? (
-                                            <p className="px-4 py-3 text-xs text-neutral-400">No results found for "{searchQuery}".</p>
+                                            <p className="px-4 py-3 text-xs text-neutral-400">{t("dashboard.searchModal.noResults", { query: searchQuery, defaultValue: `No results found for "${searchQuery}".` })}</p>
                                         ) : searchResults.length > 0 ? (
                                             searchResults.map((r, i) => (
                                                 <button
                                                     key={i}
                                                     onClick={() => { navTo(r.section); setSearchQuery("") }}
-                                                    className="flex w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-neutral-50"
+                                                    className="flex w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-neutral-50 dark:hover:bg-[#212121] transition-colors"
                                                 >
                                                     <span className="text-base">{r.icon}</span>
                                                     <div className="min-w-0 flex-1">
-                                                        <p className="truncate text-sm font-medium text-neutral-800">{r.label}</p>
-                                                        <p className="truncate text-xs text-neutral-400">{r.detail}</p>
+                                                        <p className="truncate text-sm font-medium text-neutral-800 dark:text-neutral-200">{r.label}</p>
+                                                        <p className="truncate text-xs text-neutral-400 dark:text-neutral-500">{r.detail}</p>
                                                     </div>
-                                                    <ChevronRight size={12} className="ml-auto shrink-0 text-neutral-300" />
+                                                    <ChevronRight size={12} className="ml-auto shrink-0 text-neutral-300 dark:text-neutral-600" />
                                                 </button>
                                             ))
                                         ) : (
                                             <div className="px-4 py-3 space-y-1">
-                                                <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-2">Quick navigation</p>
+                                                <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-2">{t("dashboard.searchModal.title", "Quick navigation")}</p>
                                                 {[
-                                                    { label: "Investigations", section: "investigations" as Section, icon: "👤" },
-                                                    { label: "Policies",       section: "policies"       as Section, icon: "📄" },
-                                                    { label: "Regulations",    section: "regulations"    as Section, icon: "⚖️" },
-                                                    { label: "Governance",     section: "governance"     as Section, icon: "🏛️" },
-                                                    { label: "Audit & Findings", section: "audit"        as Section, icon: "🔍" },
-                                                    { label: "Research",       section: "research"       as Section, icon: "📚" },
+                                                    { label: t("nav.investigations", "Investigations"), section: "investigations" as Section, icon: "👤" },
+                                                    { label: t("nav.policies", "Policies"),             section: "policies"       as Section, icon: "📄" },
+                                                    { label: t("nav.regulations", "Regulations"),       section: "regulations"    as Section, icon: "⚖️" },
+                                                    { label: t("nav.governance", "Governance"),         section: "governance"     as Section, icon: "🏛️" },
+                                                    { label: t("nav.audit", "Audit & Findings"),        section: "audit"          as Section, icon: "🔍" },
+                                                    { label: t("nav.research", "Research"),             section: "research"       as Section, icon: "📚" },
                                                 ].map(s => (
                                                     <button
                                                         key={s.section}
                                                         onClick={() => navTo(s.section)}
-                                                        className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-neutral-50"
+                                                        className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-neutral-50 dark:hover:bg-[#212121] transition-colors"
                                                     >
                                                         <span className="text-sm">{s.icon}</span>
-                                                        <span className="text-sm text-neutral-700">{s.label}</span>
-                                                        <ChevronRight size={11} className="ml-auto text-neutral-300" />
+                                                        <span className="text-sm text-neutral-700 dark:text-neutral-300">{s.label}</span>
+                                                        <ChevronRight size={11} className="ml-auto text-neutral-300 dark:text-neutral-600" />
                                                     </button>
                                                 ))}
                                             </div>
                                         )}
                                     </div>
 
-                                    <div className="border-t border-neutral-100 px-4 py-2">
-                                        <span className="text-xs text-neutral-400">Esc to close</span>
+                                    <div className="border-t border-neutral-100 dark:border-[#262626] px-4 py-2">
+                                        <span className="text-xs text-neutral-400 dark:text-neutral-500">{t("dashboard.searchModal.escToClose", "Esc to close")}</span>
                                     </div>
                                 </div>
                             )}
@@ -2915,22 +3133,82 @@ function Dashboard() {
                                     onMouseEnter={() => setTopNavHover(i)}
                                     className={[
                                         "settings-pill relative z-10 px-3.5 py-1.5 text-sm whitespace-nowrap transition-colors",
-                                        activeTopTab === tab.label ? "font-semibold text-neutral-900" : "text-neutral-500 hover:text-neutral-800",
+                                        activeTopTab === tab.label ? "font-semibold text-neutral-900 dark:text-white" : "text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-300",
                                     ].join(" ")}
                                 >
-                                    {tab.label}
+                                    {t(`dashboard.topNav.${tab.key}`, tab.label)}
                                 </button>
                             ))}
                         </div>
                     </div>
 
                     <div className="flex items-center gap-2">
+                        {/* Quick Language Selector */}
+                        <div className="relative" ref={langDropdownRef}>
+                            <button
+                                id="header-language-btn"
+                                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-medium border border-neutral-200 dark:border-[#262626] bg-neutral-50 dark:bg-[#1a1a1a] text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-500 transition-colors"
+                                onClick={() => setShowLanguageDropdown(prev => !prev)}
+                                title={t("dashboard.topNav.selectLanguage", "Change Language")}
+                            >
+                                <Globe size={13} className="text-neutral-500 dark:text-neutral-400" />
+                                <span className="uppercase text-[11px] font-semibold">{language}</span>
+                            </button>
+                            {showLanguageDropdown && (
+                                <div className="absolute right-0 top-[calc(100%+6px)] w-64 rounded-xl border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#1a1a1a] shadow-xl z-50 overflow-hidden p-1.5">
+                                    <div className="px-3 py-2 border-b border-neutral-100 dark:border-[#262626] flex items-center justify-between">
+                                        <span className="text-xs font-semibold text-neutral-900 dark:text-white">{t("settings.tabs.language", "Language")}</span>
+                                        <button
+                                            onClick={() => { setActiveSection("settings"); setShowLanguageDropdown(false); }}
+                                            className="text-[11px] text-blue-600 dark:text-blue-400 hover:underline"
+                                        >
+                                            {t("dashboard.recentInvestigations.viewAll", "View all")}
+                                        </button>
+                                    </div>
+                                    <div className="max-h-64 overflow-y-auto py-1">
+                                        {LANGUAGES.filter(l => l.coverage === 'full' || l.coverage === 'priority').map(l => (
+                                            <button
+                                                key={l.code}
+                                                onClick={() => { setLanguage(l.code); setShowLanguageDropdown(false); }}
+                                                className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left text-xs transition-colors ${
+                                                    language === l.code ? 'bg-neutral-100 dark:bg-[#262626] font-semibold text-neutral-900 dark:text-white' : 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-[#212121]'
+                                                }`}
+                                            >
+                                                <div className="flex flex-col">
+                                                    <span>{l.name}</span>
+                                                    <span className="text-[11px] text-neutral-400 font-normal" dir={l.direction || 'ltr'}>{l.nativeName}</span>
+                                                </div>
+                                                {language === l.code && <Check size={13} className="text-neutral-900 dark:text-white shrink-0 ml-2" />}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Themis Assistant header trigger */}
+                        <button
+                            id="header-themis-btn"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-neutral-200 dark:border-[#262626] bg-neutral-50 dark:bg-[#1a1a1a] text-neutral-700 dark:text-neutral-300 hover:border-[#FBC648] hover:text-[#FBC648] transition-colors"
+                            onClick={() => {
+                                setIsAssistantOpen(prev => !prev)
+                                setAssistantMode("voice")
+                            }}
+                            title={`Themis Assistant (${osShortcuts.voiceKeyLabel} for Voice, ${osShortcuts.textKeyLabel} for Spotlight)`}
+                        >
+                            <Sparkles size={13} className="text-[#FBC648]" />
+                            <span className="hidden sm:inline">{t("assistantUI.title", "Themis")}</span>
+                            <span className="text-[10px] font-mono text-neutral-400 dark:text-neutral-500 bg-white dark:bg-[#262626] px-1.5 py-0.5 rounded-full border border-neutral-200 dark:border-[#333333]">
+                                {osShortcuts.voiceKeyLabel}
+                            </span>
+                        </button>
+
                         {/* Help */}
                         <button
                             id="header-help-btn"
                             className="btn-icon relative flex h-8 w-8 items-center justify-center"
                             onClick={() => setShowFaq(true)}
-                            title="Help & FAQ"
+                            title={t("nav.help", "Help & FAQ")}
                         >
                             <HelpCircle size={15} />
                         </button>
@@ -2941,7 +3219,7 @@ function Dashboard() {
                                 id="header-notifications-btn"
                                 className="btn-icon relative flex h-8 w-8 items-center justify-center"
                                 onClick={handleToggleNotifications}
-                                title="Recent activity"
+                                title={t("dashboard.notifications.title", "Recent activity")}
                             >
                                 <Bell size={15} />
                                 {hasUnread && (
@@ -2950,20 +3228,20 @@ function Dashboard() {
                             </button>
 
                             {showNotifications && (
-                                <div className="absolute right-0 top-[calc(100%+6px)] w-80 rounded-xl border border-neutral-200 bg-white shadow-xl z-50 overflow-hidden">
-                                    <div className="flex items-center justify-between border-b border-neutral-100 px-4 py-3">
-                                        <h3 className="text-sm font-semibold text-neutral-900">Recent Activity</h3>
+                                <div className="absolute right-0 top-[calc(100%+6px)] w-80 rounded-xl border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#1a1a1a] shadow-xl z-50 overflow-hidden">
+                                    <div className="flex items-center justify-between border-b border-neutral-100 dark:border-[#262626] px-4 py-3">
+                                        <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">{t("dashboard.notifications.title", "Recent Activity")}</h3>
                                         <span className="text-xs text-neutral-400">{notifications.length} events</span>
                                     </div>
                                     <div className="max-h-80 overflow-y-auto">
                                         {notificationsLoading ? (
-                                            <p className="px-4 py-6 text-center text-xs text-neutral-400">Loading activity…</p>
+                                            <p className="px-4 py-6 text-center text-xs text-neutral-400">{t("common.loading", "Loading activity…")}</p>
                                         ) : notificationsError ? (
                                             <p className="px-4 py-6 text-center text-xs text-red-500">{notificationsError}</p>
                                         ) : notifications.length === 0 ? (
-                                            <p className="px-4 py-6 text-center text-xs text-neutral-400">No recent activity.</p>
+                                            <p className="px-4 py-6 text-center text-xs text-neutral-400">{t("dashboard.notifications.empty", "No recent activity.")}</p>
                                         ) : (
-                                            <div className="divide-y divide-neutral-100">
+                                            <div className="divide-y divide-neutral-100 dark:divide-[#262626]">
                                                 {notifications.map((n) => {
                                                     let dest: Section = "home"
                                                     if (n.type === "investigation") dest = "investigations"
@@ -2974,13 +3252,13 @@ function Dashboard() {
                                                         <button
                                                             key={n.id}
                                                             onClick={() => { navTo(dest); setShowNotifications(false) }}
-                                                            className="flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-neutral-50"
+                                                            className="flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-neutral-50 dark:hover:bg-[#212121] transition-colors"
                                                         >
-                                                            <div className="mt-0.5 h-5 w-5 shrink-0 rounded-full bg-neutral-100 flex items-center justify-center text-xs">
+                                                            <div className="mt-0.5 h-5 w-5 shrink-0 rounded-full bg-neutral-100 dark:bg-[#262626] flex items-center justify-center text-xs">
                                                                 {n.type === "agent_run" ? "⚡" : n.type === "knowledge" ? "📚" : n.type === "document" ? "📄" : "🔍"}
                                                             </div>
                                                             <div className="min-w-0 flex-1">
-                                                                <p className="text-xs font-medium text-neutral-800 truncate">{n.title}</p>
+                                                                <p className="text-xs font-medium text-neutral-800 dark:text-neutral-200 truncate">{n.title}</p>
                                                                 <p className="mt-0.5 text-xs text-neutral-400 truncate">{n.detail}</p>
                                                             </div>
                                                             <span className="shrink-0 text-xs text-neutral-400">{n.time}</span>
@@ -2990,12 +3268,12 @@ function Dashboard() {
                                             </div>
                                         )}
                                     </div>
-                                    <div className="border-t border-neutral-100 px-4 py-2">
+                                    <div className="border-t border-neutral-100 dark:border-[#262626] px-4 py-2">
                                         <button
                                             onClick={() => { navTo("audit"); setShowNotifications(false) }}
-                                            className="text-xs text-neutral-500 hover:text-neutral-800"
+                                            className="text-xs text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200"
                                         >
-                                            View full audit trail →
+                                            {t("audit.title", "View full audit trail")} →
                                         </button>
                                     </div>
                                 </div>
@@ -3072,53 +3350,134 @@ function Dashboard() {
                     )}
 
                     {showProfile && (
-                        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20">
-                            <div className="w-full max-w-sm rounded-xl border border-neutral-200 bg-white p-6 shadow-xl">
-                                <h2 className="text-lg font-semibold text-neutral-900 mb-4">Profile</h2>
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-xs">
+                            <div className="w-full max-w-sm rounded-2xl border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#171717] p-6 shadow-2xl transition-colors">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">{t("dashboard.profileModal.title", "Account Profile")}</h2>
+                                    <button
+                                        onClick={() => setShowProfile(false)}
+                                        className="h-8 w-8 rounded-full flex items-center justify-center text-neutral-400 hover:text-neutral-600 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-[#262626] transition-colors"
+                                    >
+                                        <X size={16} />
+                                    </button>
+                                </div>
+                                {modalError && (
+                                    <p className="text-xs text-red-600 dark:text-red-400 mb-3 bg-red-50 dark:bg-red-950/40 p-2.5 rounded-lg border border-red-200 dark:border-red-900/50">
+                                        {modalError}
+                                    </p>
+                                )}
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">Full Name</label>
-                                        <p className="text-sm font-medium">{user?.full_name}</p>
+                                        <label className="block text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-1">{t("dashboard.profileModal.displayName", "Display Name")}</label>
+                                        <input
+                                            type="text"
+                                            value={modalNameInput}
+                                            onChange={(e) => setModalNameInput(e.target.value)}
+                                            placeholder={t("dashboard.profileModal.displayNamePlaceholder", "Enter your name")}
+                                            className="w-full rounded-full border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#212121] px-4 py-2 text-sm text-neutral-900 dark:text-white focus:border-[#FBC648] focus:outline-none"
+                                        />
                                     </div>
                                     <div>
-                                        <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">Email</label>
-                                        <p className="text-sm font-medium">{user?.email}</p>
+                                        <label className="block text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-1">{t("dashboard.profileModal.email", "Email (Permanent Identifier)")}</label>
+                                        <div className="px-4 py-2 rounded-full bg-neutral-50 dark:bg-[#212121] border border-neutral-200 dark:border-[#262626] text-sm font-mono text-neutral-700 dark:text-neutral-300">
+                                            {user?.email}
+                                        </div>
                                     </div>
                                     <div>
-                                        <label className="block text-xs text-neutral-500 uppercase tracking-wider mb-1">Role</label>
-                                        <p className="text-sm font-medium capitalize">{user?.role}</p>
+                                        <label className="block text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-1">{t("dashboard.profileModal.role", "Role")}</label>
+                                        <div className="px-4 py-2 rounded-full bg-neutral-50 dark:bg-[#212121] border border-neutral-200 dark:border-[#262626] text-sm capitalize text-neutral-700 dark:text-neutral-300">
+                                            {user?.role}
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="mt-6 flex justify-end pt-4 border-t border-neutral-100">
-                                    <button className="rounded bg-neutral-900 px-4 py-1.5 text-xs text-white" onClick={() => setShowProfile(false)}>Close</button>
+                                <div className="mt-6 flex justify-end gap-2 pt-4 border-t border-neutral-100 dark:border-[#262626]">
+                                    <button
+                                        className="rounded-full border border-neutral-200 dark:border-[#333333] px-4 py-2 text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-[#212121] transition-colors"
+                                        onClick={() => setShowProfile(false)}
+                                    >
+                                        {t("common.cancel", "Cancel")}
+                                    </button>
+                                    <button
+                                        disabled={modalSaving || modalNameInput.trim() === (user?.full_name || "")}
+                                        className="rounded-full bg-neutral-900 dark:bg-white px-5 py-2 text-xs font-semibold text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 disabled:opacity-40 transition-colors"
+                                        onClick={async () => {
+                                            const trimmed = modalNameInput.trim();
+                                            if (!trimmed) {
+                                                setModalError(t("dashboard.profileModal.emptyNameError", "Full Name cannot be empty."));
+                                                return;
+                                            }
+                                            setModalSaving(true);
+                                            setModalError(null);
+                                            try {
+                                                const token = localStorage.getItem("access_token") ?? "";
+                                                const res = await fetch("http://127.0.0.1:8000/api/v1/auth/profile", {
+                                                    method: "PUT",
+                                                    headers: {
+                                                        "Content-Type": "application/json",
+                                                        Authorization: `Bearer ${token}`
+                                                    },
+                                                    body: JSON.stringify({ full_name: trimmed })
+                                                });
+                                                if (!res.ok) {
+                                                    const data = await res.json();
+                                                    throw new Error(data.detail || "Failed to update profile");
+                                                }
+                                                const updated = await res.json();
+                                                setUser((prev: any) => prev ? { ...prev, full_name: updated.full_name } : updated);
+                                                setShowProfile(false);
+                                            } catch (err: any) {
+                                                setModalError(err.message || "Failed to update profile.");
+                                            } finally {
+                                                setModalSaving(false);
+                                            }
+                                        }}
+                                    >
+                                        {modalSaving ? t("dashboard.profileModal.saving", "Saving...") : t("dashboard.profileModal.save", "Save Changes")}
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     )}
 
                     {showFaq && (
-                        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20">
-                            <div className="w-full max-w-md rounded-xl border border-neutral-200 bg-white p-6 shadow-xl">
-                                <h2 className="text-lg font-semibold text-neutral-900 mb-4">Frequently Asked Questions</h2>
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-xs">
+                            <div className="w-full max-w-md rounded-2xl border border-neutral-200 dark:border-[#262626] bg-white dark:bg-[#171717] p-6 shadow-2xl transition-colors">
+                                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-4">Frequently Asked Questions</h2>
                                 <div className="space-y-4">
                                     <div>
-                                        <h3 className="text-sm font-medium text-neutral-900 mb-1">What is OpusLex?</h3>
-                                        <p className="text-sm text-neutral-600">OpusLex is a legal compliance and research assistant that helps you stay on top of regulations, policies, and internal audits using AI.</p>
+                                        <h3 className="text-sm font-medium text-neutral-900 dark:text-white mb-1">What is OpusLex?</h3>
+                                        <p className="text-sm text-neutral-600 dark:text-neutral-400">OpusLex is a legal compliance and research assistant that helps you stay on top of regulations, policies, and internal audits using AI.</p>
                                     </div>
                                     <div>
-                                        <h3 className="text-sm font-medium text-neutral-900 mb-1">How does the AI Agent work?</h3>
-                                        <p className="text-sm text-neutral-600">Our agents securely analyze your workspace documents against global regulatory frameworks to highlight risks and compliance gaps.</p>
+                                        <h3 className="text-sm font-medium text-neutral-900 dark:text-white mb-1">How does the Themis Assistant work?</h3>
+                                        <p className="text-sm text-neutral-600 dark:text-neutral-400">Themis provides contextual legal research, citations, and action executions with four authorization tiers and explicit confirmations.</p>
                                     </div>
                                     <div>
-                                        <h3 className="text-sm font-medium text-neutral-900 mb-1">Where is my data stored?</h3>
-                                        <p className="text-sm text-neutral-600">Your data remains in your designated workspace environment and is never used to train our base models.</p>
+                                        <h3 className="text-sm font-medium text-neutral-900 dark:text-white mb-1">Where is my data stored?</h3>
+                                        <p className="text-sm text-neutral-600 dark:text-neutral-400">Your data remains in your designated workspace environment and is never used to train base models.</p>
                                     </div>
                                 </div>
-                                <div className="mt-6 flex justify-end pt-4 border-t border-neutral-100">
-                                    <button className="rounded bg-neutral-900 px-4 py-1.5 text-xs text-white" onClick={() => setShowFaq(false)}>Close</button>
+                                <div className="mt-6 flex justify-end pt-4 border-t border-neutral-100 dark:border-[#262626]">
+                                    <button className="rounded-full bg-neutral-900 dark:bg-white px-5 py-2 text-xs font-semibold text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors" onClick={() => setShowFaq(false)}>Close</button>
                                 </div>
                             </div>
                         </div>
+                    )}
+
+                    {/* ── AI Assistant (Themis) Centered Overlay & Spotlight ── */}
+                    {assistantEnabled && (
+                        <AssistantPanel
+                            isOpen={isAssistantOpen}
+                            onClose={() => setIsAssistantOpen(false)}
+                            mode={assistantMode}
+                            setMode={setAssistantMode}
+                            orbState={assistantOrbState}
+                            setOrbState={setAssistantOrbState}
+                            activeSection={activeSection}
+                            permissionLevel={assistantPermissionLevel}
+                            voiceEnabled={assistantVoiceEnabled}
+                            onToggleVoice={() => setAssistantVoiceEnabled(prev => !prev)}
+                        />
                     )}
                 </div>
             </main>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { FileText, Search, Plus, X, ChevronDown, ChevronUp, Pencil, Trash2 } from "lucide-react"
 
 const API = "http://127.0.0.1:8000"
@@ -18,18 +19,31 @@ type LoadState = "loading" | "empty" | "error" | "ok"
 
 const STATUS_OPTIONS = ["Draft", "Active", "Under Review", "Archived", "Deprecated"]
 
-function statusBadge(status: string) {
+function statusBadge(status: string, t: any) {
     let colorClass = "status-progress"
-    if (status === "Active") colorClass = "status-compliant"
-    if (status === "Draft" || status === "Under Review") colorClass = "status-progress"
-    if (status === "Deprecated") colorClass = "status-non-compliant"
-    if (status === "Archived") colorClass = "status-risk"
+    let statusLabel = status
+    if (status === "Active") {
+        colorClass = "status-compliant"
+        statusLabel = t("investigations.statuses.active", "Active")
+    } else if (status === "Draft") {
+        colorClass = "status-progress"
+        statusLabel = t("common.inProgress", "Draft")
+    } else if (status === "Under Review") {
+        colorClass = "status-progress"
+        statusLabel = t("investigations.statuses.review", "Under Review")
+    } else if (status === "Deprecated") {
+        colorClass = "status-non-compliant"
+        statusLabel = t("investigations.statuses.closed", "Deprecated")
+    } else if (status === "Archived") {
+        colorClass = "status-risk"
+        statusLabel = t("investigations.statuses.archived", "Archived")
+    }
 
     return (
         <div className="status-dot-wrapper" title={status}>
             <div className="status-dot-container">
                 <div className={`status-dot ${colorClass}`} />
-                <span className="status-label">{status}</span>
+                <span className="status-label">{statusLabel}</span>
             </div>
         </div>
     )
@@ -44,6 +58,7 @@ function PolicyFormModal({
     onDone: () => void
     existing?: Policy
 }) {
+    const { t } = useTranslation()
     const isEdit = !!existing
     const [form, setForm] = useState({
         title: existing?.title ?? "",
@@ -103,7 +118,7 @@ function PolicyFormModal({
             <div className="w-full max-w-lg rounded-xl border border-neutral-200 bg-white shadow-xl">
                 <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-4">
                     <h2 className="text-sm font-semibold text-neutral-900">
-                        {isEdit ? "Edit Policy" : "New Policy"}
+                        {isEdit ? t("policies.createPolicy", "Edit Policy") : t("policies.createPolicy", "New Policy")}
                     </h2>
                     <button onClick={onClose} className="rounded p-1 text-neutral-400 hover:bg-neutral-100">
                         <X size={14} />
@@ -115,7 +130,7 @@ function PolicyFormModal({
                     )}
                     <div>
                         <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                            Title *
+                            {t("compliance.fieldTitle", "Title *")}
                         </label>
                         <input
                             required
@@ -128,7 +143,7 @@ function PolicyFormModal({
                     <div className="grid grid-cols-2 gap-3">
                         <div>
                             <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                                Department *
+                                {t("compliance.fieldDepartment", "Department *")}
                             </label>
                             <input
                                 required
@@ -140,7 +155,7 @@ function PolicyFormModal({
                         </div>
                         <div>
                             <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                                Version
+                                {t("policies.columns.version", "Version")}
                             </label>
                             <input
                                 value={form.version}
@@ -153,7 +168,7 @@ function PolicyFormModal({
                     <div className="grid grid-cols-2 gap-3">
                         <div>
                             <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                                Status
+                                {t("compliance.fieldStatus", "Status")}
                             </label>
                             <select
                                 value={form.status}
@@ -167,7 +182,7 @@ function PolicyFormModal({
                         </div>
                         <div>
                             <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                                Effective Date
+                                {t("regulations.columns.effectiveDate", "Effective Date")}
                             </label>
                             <input
                                 type="date"
@@ -179,7 +194,7 @@ function PolicyFormModal({
                     </div>
                     <div>
                         <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-1">
-                            Description
+                            {t("compliance.fieldDescription", "Description")}
                         </label>
                         <textarea
                             rows={3}
@@ -195,14 +210,14 @@ function PolicyFormModal({
                             onClick={onClose}
                             className="rounded-lg px-3 py-1.5 text-xs text-neutral-500 hover:bg-neutral-50"
                         >
-                            Cancel
+                            {t("common.cancel", "Cancel")}
                         </button>
                         <button
                             type="submit"
                             disabled={saving}
                             className="rounded-lg bg-neutral-900 px-4 py-1.5 text-xs text-white disabled:opacity-50 hover:bg-neutral-700"
                         >
-                            {saving ? "Saving…" : isEdit ? "Save Changes" : "Create Policy"}
+                            {saving ? t("common.saving", "Saving…") : isEdit ? t("dashboard.profileModal.save", "Save Changes") : t("policies.createPolicy", "Create Policy")}
                         </button>
                     </div>
                 </form>
@@ -220,6 +235,7 @@ function PolicyCard({
     onEdit: (p: Policy) => void
     onDeleted: () => void
 }) {
+    const { t } = useTranslation()
     const [expanded, setExpanded] = useState(false)
     const [deleting, setDeleting] = useState(false)
 
@@ -257,7 +273,7 @@ function PolicyCard({
                             </span>
                         </div>
                         <div className="flex items-start justify-end gap-1 shrink-0">
-                            {statusBadge(policy.status)}
+                            {statusBadge(policy.status, t)}
                         </div>
                     </div>
                     <div className="mt-1 flex items-center gap-3 text-xs text-neutral-400 flex-wrap">
@@ -265,7 +281,7 @@ function PolicyCard({
                         {policy.effective_date && (
                             <>
                                 <span>·</span>
-                                <span>Effective {new Date(policy.effective_date).toLocaleDateString()}</span>
+                                <span>{t("regulations.columns.effectiveDate", "Effective Date")}: {new Date(policy.effective_date).toLocaleDateString()}</span>
                             </>
                         )}
                     </div>
@@ -274,7 +290,7 @@ function PolicyCard({
                     <button
                         onClick={() => onEdit(policy)}
                         className="rounded p-1.5 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700"
-                        title="Edit"
+                        title={t("settings.storage.documents.title", "Edit")}
                     >
                         <Pencil size={11} />
                     </button>
@@ -282,7 +298,7 @@ function PolicyCard({
                         onClick={handleDelete}
                         disabled={deleting}
                         className="rounded p-1.5 text-neutral-400 hover:bg-red-50 hover:text-red-500 disabled:opacity-50"
-                        title="Delete"
+                        title={t("common.delete", "Delete")}
                     >
                         <Trash2 size={11} />
                     </button>
@@ -303,6 +319,7 @@ function PolicyCard({
 }
 
 function Policies() {
+    const { t } = useTranslation()
     const [policies, setPolicies] = useState<Policy[]>([])
     const [total, setTotal] = useState(0)
     const [loadState, setLoadState] = useState<LoadState>("loading")
@@ -363,11 +380,11 @@ function Policies() {
 
             <header className="flex shrink-0 items-center justify-between border-b border-neutral-200 px-6 py-4">
                 <div>
-                    <h1 className="text-xl font-semibold text-neutral-900">Policy Management</h1>
+                    <h1 className="text-xl font-semibold text-neutral-900">{t("policies.title", "Internal Policies")}</h1>
                     <p className="mt-1 text-sm text-neutral-500">
-                        Internal policies tracked in this workspace.
+                        {t("policies.subtitle", "Corporate governance policies mapped to external statutory requirements.")}
                         {loadState === "ok" && (
-                            <span className="ml-1 text-neutral-400">({total} total)</span>
+                            <span className="ml-1 text-neutral-400">({total} {t("compliance.total", "Total").toLowerCase()})</span>
                         )}
                     </p>
                 </div>
@@ -376,7 +393,7 @@ function Policies() {
                     className="flex items-center gap-1.5 rounded-lg bg-neutral-900 px-3 py-2 text-xs font-medium text-white hover:bg-neutral-700"
                 >
                     <Plus size={12} />
-                    New Policy
+                    {t("policies.createPolicy", "Create Policy")}
                 </button>
             </header>
 
@@ -388,7 +405,7 @@ function Policies() {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         className="flex-1 bg-transparent text-xs outline-none placeholder:text-neutral-400"
-                        placeholder="Search policies…"
+                        placeholder={t("policies.searchPlaceholder", "Search policies…")}
                     />
                     {search && (
                         <button onClick={() => setSearch("")}>
@@ -401,7 +418,7 @@ function Policies() {
                     onChange={(e) => setStatusFilter(e.target.value)}
                     className="rounded-lg border border-neutral-200 bg-white px-2 py-2 text-xs text-neutral-600 outline-none"
                 >
-                    <option value="">All statuses</option>
+                    <option value="">{t("common.allStatuses", "All statuses")}</option>
                     {STATUS_OPTIONS.map((s) => (
                         <option key={s} value={s}>
                             {s}
@@ -412,7 +429,7 @@ function Policies() {
                     value={departmentFilter}
                     onChange={(e) => setDepartmentFilter(e.target.value)}
                     className="rounded-lg border border-neutral-200 px-2 py-2 text-xs text-neutral-600 outline-none placeholder:text-neutral-400 w-32"
-                    placeholder="Department…"
+                    placeholder={`${t("compliance.fieldDepartment", "Department")}…`}
                 />
             </div>
 
@@ -420,20 +437,20 @@ function Policies() {
             <div className="flex-1 overflow-y-auto p-6">
                 {loadState === "loading" && (
                     <div className="flex h-full items-center justify-center text-sm text-neutral-400">
-                        Loading policies…
+                        {t("common.loading", "Loading policies…")}
                     </div>
                 )}
 
                 {loadState === "error" && (
                     <div className="flex h-full flex-col items-center justify-center text-center">
                         <FileText size={36} className="mb-3 text-neutral-200" />
-                        <p className="text-sm font-medium text-neutral-700">Could not load policies</p>
+                        <p className="text-sm font-medium text-neutral-700">{t("common.error", "Something went wrong.")}</p>
                         <p className="mt-1 text-xs text-neutral-400">{error}</p>
                         <button
                             onClick={fetchPolicies}
                             className="mt-4 rounded-lg border border-neutral-200 px-3 py-1.5 text-xs text-neutral-600 hover:bg-neutral-50"
                         >
-                            Retry
+                            {t("common.retry", "Retry")}
                         </button>
                     </div>
                 )}
@@ -443,13 +460,13 @@ function Policies() {
                         <FileText size={36} className="mb-3 text-neutral-200" />
                         <h3 className="text-sm font-medium text-neutral-700">
                             {search || statusFilter || departmentFilter
-                                ? "No policies match your filters"
-                                : "No policies yet"}
+                                ? t("compliance.emptyFilterTitle", "No obligations match your filters")
+                                : t("compliance.emptyTitle", "No policies yet")}
                         </h3>
                         <p className="mt-1 text-xs text-neutral-400">
                             {search || statusFilter || departmentFilter
-                                ? "Try adjusting your search or filters."
-                                : "Create your first policy to begin tracking organizational obligations."}
+                                ? t("compliance.emptyDesc", "Try adjusting your search or filters.")
+                                : t("compliance.emptyDesc", "Create your first policy to begin tracking organizational obligations.")}
                         </p>
                         {!search && !statusFilter && !departmentFilter && (
                             <button
@@ -457,7 +474,7 @@ function Policies() {
                                 className="mt-4 flex items-center gap-1.5 rounded-lg bg-neutral-900 px-3 py-1.5 text-xs text-white hover:bg-neutral-700"
                             >
                                 <Plus size={12} />
-                                New Policy
+                                {t("policies.createPolicy", "Create Policy")}
                             </button>
                         )}
                     </div>
